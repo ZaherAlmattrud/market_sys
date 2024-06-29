@@ -4,6 +4,7 @@
         <v-navigation-drawer
           location="right"
           permanent
+          :width="175"
         >
           <template v-slot:prepend>
             <v-list-item
