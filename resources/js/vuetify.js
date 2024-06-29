@@ -33,6 +33,8 @@ const customeTheme = {
 };
 
 const vuetify = createVuetify({
+
+    
     components,
     directives,
     theme: {
@@ -40,7 +42,10 @@ const vuetify = createVuetify({
         themes: {
             customeTheme,
         },
+        
     },
 });
 
 export default vuetify;
+
+ 
