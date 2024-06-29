@@ -3,8 +3,10 @@ import "vuetify/styles";
 import { createVuetify } from "vuetify";
 import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
+ 
 
 const customeTheme = {
+   
     dark: false,
     colors: {
         primary: "#673AB7",
@@ -44,6 +46,8 @@ const vuetify = createVuetify({
         },
         
     },
+
+  
 });
 
 export default vuetify;

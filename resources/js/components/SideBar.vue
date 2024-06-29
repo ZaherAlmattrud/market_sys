@@ -17,15 +17,16 @@
           <v-divider></v-divider>
   
           <v-list density="compact" nav >
-            <v-list-item  prepend-icon="mdi-list-box-outline" title="الرئيسية" value="home"></v-list-item>
-            <v-list-item prepend-icon="mdi-pipe-valve" title="الصحية" value="account"></v-list-item>
-            <v-list-item prepend-icon="mdi-account-box-outline" title="الزبائن" value="users"></v-list-item>
-            <v-list-item prepend-icon="mdi-briefcase-account-outline" title="الحسابات" value="accounts"></v-list-item>
-            <v-list-item prepend-icon="mdi-account-group-outline" title="الموردين" value="supplers"></v-list-item>
-            <v-list-item prepend-icon="mdi-invoice-text-multiple-outline" title="الفواتير" value="invoices"></v-list-item>
-            <v-list-item prepend-icon="mdi-map-marker-multiple-outline" title="المناطق" value="areas"></v-list-item>
-            <v-list-item prepend-icon="mdi-shape-plus-outline" title="الأصناف" value="category"></v-list-item>
-            <v-list-item prepend-icon="mdi-account-lock-outline" title="الخروج" value="logOut"></v-list-item>
+            <RouterLink to="/"> <v-list-item  prepend-icon="mdi-list-box-outline" title="الرئيسية" value="home"></v-list-item></RouterLink>
+           
+            <RouterLink to="/"> <v-list-item prepend-icon="mdi-pipe-valve" title="الصحية" value="account"></v-list-item></RouterLink>
+            <RouterLink to="/"> <v-list-item prepend-icon="mdi-account-box-outline" title="الزبائن" value="users"></v-list-item></RouterLink>
+                <RouterLink to="/"> <v-list-item prepend-icon="mdi-briefcase-account-outline" title="الحسابات" value="accounts"></v-list-item></RouterLink>
+                    <RouterLink to="/"> <v-list-item prepend-icon="mdi-account-group-outline" title="الموردين" value="supplers"></v-list-item></RouterLink>
+                        <RouterLink to="/"> <v-list-item prepend-icon="mdi-invoice-text-multiple-outline" title="الفواتير" value="invoices"></v-list-item></RouterLink>
+                            <RouterLink to="/"> <v-list-item prepend-icon="mdi-map-marker-multiple-outline" title="المناطق" value="areas"></v-list-item></RouterLink>
+                                <RouterLink to="/"> <v-list-item prepend-icon="mdi-shape-plus-outline" title="الأصناف" value="category"></v-list-item></RouterLink>
+                                    <RouterLink to="/"> <v-list-item prepend-icon="mdi-account-lock-outline" title="الخروج" value="logOut"></v-list-item></RouterLink>
          
           </v-list>
         </v-navigation-drawer>
