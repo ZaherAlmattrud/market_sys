@@ -1,6 +1,6 @@
  
 <template>
-    
+    بروفايل
 </template>
 <script>
 
@@ -10,7 +10,7 @@
       
     }),
     components:{
-     
+      
     }
   }
 
