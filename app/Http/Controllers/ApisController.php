@@ -16,17 +16,17 @@ class ApisController extends Controller
         return response()->json($data);
     }
 
+ 
+
     public function createArea(Request $request){
 
         $data = $request->all();
 
-        Log::info('Create');
-        Log::info('Data');
-        Log::info(  $data );
-
         $res = DB::table('areas')->insert([
             'name' => $data['name']
         ]);
+
+        ;
 
         return response()->json( $res);
     }

@@ -15,6 +15,7 @@ Route::get('/getAllAreas', [ApisController::class, 'getAllAreas']);
 Route::post('/createArea' ,[ApisController::class , 'createArea']);
 Route::put('/updateArea/{id}', [ApisController::class, 'updateArea']);
 Route::delete('/deleteArea/{id}' ,[ApisController::class , 'deleteArea']);
+ 
 
 
 
