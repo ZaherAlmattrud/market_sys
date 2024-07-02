@@ -8,11 +8,12 @@
         <v-data-table :headers="headers" :items="filteredItems" item-key="id" class="elevation-1">
             <template v-slot:top>
                 <v-toolbar flat>
-                    <v-toolbar-title>الموردين</v-toolbar-title>
+                    <v-toolbar-title>المستخدمين</v-toolbar-title>
                     <v-spacer></v-spacer>
                     <v-dialog v-model="dialog" max-width="500px">
                         <template v-slot:activator="{ on, attrs }">
-                            <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on" @click="dialog = true">مورد جديد</v-btn>
+                            <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on"
+                                @click="dialog = true">مستخدم جديد</v-btn>
                         </template>
                         <v-card>
                             <v-card-title>
@@ -22,12 +23,26 @@
                                 <v-container>
                                     <v-row>
                                         <v-col cols="12" sm="6" md="4">
-                                            <v-text-field v-model="editedItem.name" label="الأسم"></v-text-field>
+                                            <v-text-field v-model="editedItem.user_name" label="الأسم"></v-text-field>
+                                        </v-col>
+
+
+                                        <v-col cols="12" sm="6" md="4">
+
+
+
+                                            <v-select v-model="editedItem.area" :items="areas" item-title="name"
+                                                item-value="id" label="المنطقة" persistent-hint single-line></v-select>
+
+
+
                                         </v-col>
                                         <v-col cols="12" sm="6" md="4">
-                                            
 
-                                                <v-select v-model="editedItem.area" :items="areas" label="البلدة"></v-select>
+
+                                            <v-select v-model="editedItem.user_type" :items="user_types"
+                                                item-title="name" item-value="id" label="المنطقة" persistent-hint
+                                                single-line></v-select>
                                         </v-col>
                                     </v-row>
                                 </v-container>
@@ -53,18 +68,24 @@
 </template>
 
 <script>
+
+
 export default {
     data() {
         return {
 
-            areas : [ 'حزرما' ,'النشابية' ,'نولة'],
+            id: 0,
+            user_types: [],
+            areas: [],
+            itemsArray: [],
             search: '',
             dialog: false,
             dialogDelete: false,
             headers: [
 
-                { title: 'التسلسل', key: 'num', sortable: false },
-                { title: 'الأسم', key: 'name', sortable: false },
+                { title: 'التسلسل', key: 'id', sortable: false },
+                { title: 'الأسم', key: 'user_name', sortable: false },
+                { title: 'نوع المستخدم', key: 'user_type', sortable: false },
                 { title: 'البلدة', key: 'area', sortable: false },
                 { title: 'الحساب', key: 'account', sortable: false },
                 { title: 'العمليات', key: 'actions', sortable: false },
@@ -73,64 +94,36 @@ export default {
             ],
             items: [
 
-                {
 
-                    'num': 1,
-                    'name': 'Zaher',
-                    'area' : 'حزرما',
-                    'account': 95
 
-                },
-                {
-
-                    'num': 1,
-                    'name': 'Zaher',
-                    'account': 95
-
-                },
-                {
-
-                    'num': 1,
-                    'name': 'Zaher',
-                    'account': 95
-
-                },
-                {
-
-                    'num': 1,
-                    'name': 'Zaher',
-                    'account': 95
-
-                },
-                {
-
-                    'num': 1,
-                    'name': 'Zaher',
-                    'account': 95
-
-                },
             ],
             editedIndex: -1,
             editedItem: {
-                num: 0,
-                name: '',
+                id: 0,
+                user_name: '',
+                user_type: '',
+                area: '',
                 account: 0,
+
             },
             defaultItem: {
-                num: 0,
-                name: '',
+                id: 0,
+                user_name: '',
+                user_type: '',
+                area: '',
                 account: 0,
+
             },
         };
     },
     computed: {
         formTitle() {
-            return this.editedIndex === -1 ? 'زبون جديد' : 'تحديث معلومات زبون';
+            return this.editedIndex === -1 ? 'مستخدم جديد' : 'تحديث معلومات مستخدم';
         },
         filteredItems() {
             return this.items.filter((item) => {
                 return (
-                    item.name.toLowerCase().includes(this.search.toLowerCase())
+                    item.user_name.toLowerCase().includes(this.search.toLowerCase())
                 );
             });
         },
@@ -144,18 +137,47 @@ export default {
             val || this.closeDelete()
         },
     },
+    async beforeCreate() {
+
+
+        const response = await axios.get('/api/getAllUsers');
+        this.items = response.data; // users
+
+        const response_1 = await axios.get('/api/getAllAreas');
+        this.areas = response_1.data;
+
+        const response_2 = await axios.get('/api/getAllUserTypes');
+        this.user_types = response_2.data;
+
+    },
     methods: {
+
         filterItems() {
             // This will automatically filter items as search input changes
         },
         editItem(item) {
+
+            this.id = item.id;
             this.editedIndex = this.items.indexOf(item);
             this.editedItem = Object.assign({}, item);
+
+
             this.dialog = true;
+
+
+            // this.editedIndex = this.items.indexOf(item);
+            // this.editedItem = Object.assign({}, item);
+            // this.dialog = true;
         },
-        deleteItem(item) {
+        async deleteItem(item) {
+
+            // const index = this.items.indexOf(item);
+            // confirm('Are you sure you want to delete this item?') && this.items.splice(index, 1);
+            console.log("delete api");
+            console.log(item);
             const index = this.items.indexOf(item);
-            confirm('Are you sure you want to delete this item?') && this.items.splice(index, 1);
+            this.items.splice(index, 1);
+            await axios.delete(`/api/deleteUser/${item.id}`);
         },
         close() {
             this.dialog = false;
@@ -166,12 +188,37 @@ export default {
         },
         save() {
 
+            // this.dialog = true;
+            // if (this.editedIndex > -1) {
+            //     Object.assign(this.items[this.editedIndex], this.editedItem);
+            // } else {
+            //     this.items.push(this.editedItem);
+            // }
+            // this.close();
+
+
+
+
             this.dialog = true;
-            if (this.editedIndex > -1) {
-                Object.assign(this.items[this.editedIndex], this.editedItem);
-            } else {
+
+            if (this.id == 0) { // create new area
+
+                console.log('create');
+                // add to local data array
+                const response = axios.post('/api/createUser', this.editedItem); // add to data base
                 this.items.push(this.editedItem);
+
+
+
+            } else { // update current area
+
+                console.log('update');
+                Object.assign(this.items[this.editedIndex], this.editedItem); // update local data
+                const response = axios.put('/api/updateUser/' + this.id, this.editedItem); // update in data base
+
+
             }
+
             this.close();
         },
     },

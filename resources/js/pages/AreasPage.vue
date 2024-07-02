@@ -154,10 +154,7 @@ export default {
             // this.close();
 
 
-            const response = axios.get('/api/getAreaMaxId'); // 
-
-            console.log("response data");
-            console.log(response.data);
+          
 
 
             this.dialog = true;

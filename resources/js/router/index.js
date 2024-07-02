@@ -5,7 +5,7 @@ import ProductPage from "@/pages/ProductsPage.vue"
 import CustomerPage from "@/pages/CustomerPage.vue"
 import HealthyPage from "@/pages/HealthyPage.vue"
 import AccountsPage from "@/pages/AccountsPage.vue"
-import SupplersPage from "@/pages/SupplersPage.vue"
+import UsersPage from "@/pages/UsersPage.vue"
 import InvoicesPage from "@/pages/InvoicesPage.vue"
 import AreasPage from "@/pages/AreasPage.vue"
 import CategoryPage from "@/pages/CategoryPage.vue"
@@ -18,7 +18,7 @@ const routes = [
   { path: '/customers', component: CustomerPage , meta: { requiresAuth: true }, },
   { path: '/healthy', component: HealthyPage , meta: { requiresAuth: true }, },
   { path: '/accounts', component: AccountsPage , meta: { requiresAuth: true }, },
-  { path: '/supplers', component: SupplersPage , meta: { requiresAuth: true }, },
+  { path: '/users', component: UsersPage , meta: { requiresAuth: true }, },
   { path: '/invoices', component: InvoicesPage , meta: { requiresAuth: true }, },
   { path: '/areas', component: AreasPage , meta: { requiresAuth: true }, },
   { path: '/category', component: CategoryPage , meta: { requiresAuth: true }, },

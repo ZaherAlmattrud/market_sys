@@ -10,12 +10,25 @@ Route::get('/user', function (Request $request) {
 
 
 
+//================================================================================//
 
 Route::get('/getAllAreas', [ApisController::class, 'getAllAreas']);
 Route::post('/createArea' ,[ApisController::class , 'createArea']);
 Route::put('/updateArea/{id}', [ApisController::class, 'updateArea']);
 Route::delete('/deleteArea/{id}' ,[ApisController::class , 'deleteArea']);
+
+//================================================================================//
+
+Route::get('/getAllUserTypes', [ApisController::class, 'getAllUserTypes']);
  
+//================================================================================//
+
+Route::get('/getAllUsers' , [ApisController::class, 'getAllUsers']);
+Route::post('/createUser' ,[ApisController::class , 'createUser']);
+Route::put('/updateUser/{id}', [ApisController::class, 'updateUser']);
+Route::delete('/deleteUser/{id}' ,[ApisController::class , 'deleteUser']);
+
+//===============================================================================
 
 
 

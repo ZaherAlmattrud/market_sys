@@ -17,12 +17,13 @@
           <RouterLink to="/healthy"> <v-list-item prepend-icon="mdi-pipe-valve" title="الصحية"
               value="account"></v-list-item>
           </RouterLink>
-          <RouterLink to="/customers"> <v-list-item prepend-icon="mdi-account-box-outline" title="الزبائن"
+          <!-- <RouterLink to="/customers"> <v-list-item prepend-icon="mdi-account-box-outline" title="الزبائن"
+              value="users"></v-list-item></RouterLink> -->
+              <RouterLink to="/users"> <v-list-item prepend-icon="mdi-account-group-outline" title="المستخدمين"
               value="users"></v-list-item></RouterLink>
           <RouterLink to="/accounts"> <v-list-item prepend-icon="mdi-briefcase-account-outline" title="الحسابات"
               value="accounts"></v-list-item></RouterLink>
-          <RouterLink to="/supplers"> <v-list-item prepend-icon="mdi-account-group-outline" title="الموردين"
-              value="supplers"></v-list-item></RouterLink>
+        
           <RouterLink to="/invoices"> <v-list-item prepend-icon="mdi-invoice-text-multiple-outline" title="الفواتير"
               value="invoices"></v-list-item></RouterLink>
           <RouterLink to="/areas"> <v-list-item prepend-icon="mdi-map-marker-multiple-outline" title="المناطق"
