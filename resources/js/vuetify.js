@@ -4,6 +4,7 @@ import { createVuetify } from "vuetify";
 import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
  
+ 
 
 const customeTheme = {
    
@@ -37,7 +38,7 @@ const customeTheme = {
 const vuetify = createVuetify({
 
     
-    components,
+    components ,
     directives,
     theme: {
         defaultTheme: "customeTheme",
@@ -46,6 +47,8 @@ const vuetify = createVuetify({
         },
         
     },
+
+   
 
   
 });

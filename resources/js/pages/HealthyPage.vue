@@ -88,43 +88,6 @@ export default {
 
             ],
             items: [
-
-                {
-
-                    'name': 'بوري 1/2 حديد',
-                    'price': 50000,
-                    'date' : '22-8-2024',
-                    'sell': 60000
-
-                },
-                {
-
-                    'num': 1,
-                    'name': 'Zaher',
-                    'account': 95
-
-                },
-                {
-
-                    'num': 1,
-                    'name': 'Zaher',
-                    'account': 95
-
-                },
-                {
-
-                    'num': 1,
-                    'name': 'Zaher',
-                    'account': 95
-
-                },
-                {
-
-                    'num': 1,
-                    'name': 'Zaher',
-                    'account': 95
-
-                },
             ],
             editedIndex: -1,
             editedItem: {

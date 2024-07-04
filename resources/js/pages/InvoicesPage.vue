@@ -12,7 +12,8 @@
                     <v-spacer></v-spacer>
                     <v-dialog v-model="dialog" max-width="500px">
                         <template v-slot:activator="{ on, attrs }">
-                            <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on" @click="dialog = true"> فاتورة جديدة</v-btn>
+                            <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on" @click="dialog = true">
+                                فاتورة جديدة</v-btn>
                         </template>
                         <v-card>
                             <v-card-title>
@@ -22,24 +23,34 @@
                                 <v-container>
                                     <v-row>
                                         <v-col cols="12" sm="6" md="6">
-                                            <v-select v-model="editedItem.area" :items="areas" label="صاحب الفاتورة"></v-select>
-                                      
-                                             </v-col>
-                                        <v-col cols="12" sm="6" md="6">
-                                            
-                                            <v-text-field v-model="editedItem.name" label="الرصيد الإجمالي"></v-text-field>
-                                         </v-col>
-                                    </v-row>
-                                    <v-row>
-                                        <v-col cols="12" sm="6" md="6">
-                                            <v-text-field v-model="editedItem.name" label="التاريخ"></v-text-field>
+
+                                            <v-select v-model="editedItem.account_id" :items="users" item-title="user_name"
+                                                item-value="id" label="صاحب الفاتورة" persistent-hint
+                                                single-line></v-select>
+
+
                                         </v-col>
                                         <v-col cols="12" sm="6" md="6">
-                                            <v-file-input v-model="editedItem.img" label="الملف" outlined dense
-                                             ></v-file-input>
-                                            
 
-                                       </v-col>
+                                            <v-text-field v-model="editedItem.total"
+                                                label="الرصيد الإجمالي"></v-text-field>
+                                        </v-col>
+                                    </v-row>
+                                    <v-row>
+
+                                        <v-col cols="12" sm="6" md="6">
+                                            <v-file-input v-model="editedItem.file" label="الملف" outlined
+                                                dense></v-file-input>
+
+
+                                        </v-col>
+
+                                        <v-col cols="12" sm="6" md="6">
+                                            <v-text-field v-model="editedItem.num"
+                                                label="رقم الفاتورة المطبوع"></v-text-field>
+
+
+                                        </v-col>
                                     </v-row>
                                 </v-container>
                             </v-card-text>
@@ -65,49 +76,55 @@ export default {
     data() {
         return {
 
-            areas : [ 'حزرما' ,'النشابية' ,'نولة'],
+            users: [],
+            areas: [],
             search: '',
             dialog: false,
             dialogDelete: false,
+
+
+
             headers: [
 
                 { title: 'التسلسل', key: 'id', sortable: false },
-                { title: 'رقم الفاتورة', key: 'account', sortable: false },
-                { title: 'التاريخ', key: 'date', sortable: false },
-                { title: 'صاحب الفاتورة', key: 'person_name', sortable: false },
+                { title: 'نوع الفاتورة', key: 'invoice_type', sortable: false },
+                { title: 'صاحب الفاتورة', key: 'account_id', sortable: false },
                 { title: 'الرصيد الإجمالي', key: 'total', sortable: false },
+                { title: 'رقم الفاتورة المطبوع', key: 'num', sortable: false },
+                { title: 'التاريخ', key: 'date', sortable: false },
+                { title: 'الملف', key: 'file', sortable: false },
                 { title: 'العمليات', key: 'actions', sortable: false },
 
 
             ],
             items: [
 
-                {
 
-                    'id': 1,
-                    'account': 564 ,
-                    'date' : '2024-5-9',
-                    'person_name': 'Zaher',
-                    'total' : '2500000' 
 
-                }
-            
             ],
+
+            id: 0,
             editedIndex: -1,
             editedItem: {
-                'id': 1,
-                    'account': 2500000 ,
-                    'person_name': 'Zaher',
-                    'total' : 'حزرما',
-                    
+
+                'id': 0,
+                'invoice_type': '',
+                'date': '',
+                'num': '',
+                'account_id': '',
+                'total': '',
+                'file': '',
+
+
             },
             defaultItem: {
-                'id': 1,
-                    'account': '' ,
-                    'person_name': '',
-                    'total' : '',
-                    'paid' : '' ,
-                    'debts' : '' ,
+                'id': 0,
+                'invoice_type': '',
+                'date': '',
+                'num': '',
+                'account_id': '',
+                'total': '',
+                'file': '',
             },
         };
     },
@@ -117,10 +134,21 @@ export default {
         },
         filteredItems() {
             return this.items.filter((item) => {
-                return (
-                    item.person_name.toLowerCase().includes(this.search.toLowerCase())
-                );
+
+               
+
+                    return (
+
+                    item.account_id.includes(this.search.toLowerCase())
+
+                    );
+
+                 
+
+
+
             });
+
         },
     },
 
@@ -132,23 +160,53 @@ export default {
             val || this.closeDelete()
         },
     },
+
+    async beforeCreate() {
+
+        const response = await axios.get('/api/getAllInvoices');
+        console.log("Data Reponse");
+
+        this.items = response.data;
+
+
+        const response2 = await axios.get('/api/getAllUsers');
+
+        console.log("Rrrrrrrrr");
+        console.log(response2);
+        this.users = response2.data;
+
+    },
     methods: {
 
-        moveToAccountDetails(item){
+        moveToAccountDetails(item) {
 
-            this.$router.push({ name: 'accountDetails', params: { accountId: 1 } });
-        } ,
+            // this.$router.push({ name: 'accountDetails', params: { accountId: 1 } });
+        },
         filterItems() {
             // This will automatically filter items as search input changes
         },
         editItem(item) {
+            // this.editedIndex = this.items.indexOf(item);
+            // this.editedItem = Object.assign({}, item);
+            // this.dialog = true;
+
+            this.id = item.id;
             this.editedIndex = this.items.indexOf(item);
             this.editedItem = Object.assign({}, item);
+
+
             this.dialog = true;
         },
-        deleteItem(item) {
+        async deleteItem(item) {
+
+            // const index = this.items.indexOf(item);
+            // confirm('Are you sure you want to delete this item?') && this.items.splice(index, 1);
+
+            console.log("delete api");
+            console.log(item);
             const index = this.items.indexOf(item);
-            confirm('Are you sure you want to delete this item?') && this.items.splice(index, 1);
+            this.items.splice(index, 1);
+            await axios.delete(`/api/deleteInvoice/${item.id}`);
         },
         close() {
             this.dialog = false;
@@ -159,12 +217,34 @@ export default {
         },
         save() {
 
+            // this.dialog = true;
+            // if (this.editedIndex > -1) {
+            //     Object.assign(this.items[this.editedIndex], this.editedItem);
+            // } else {
+            //     this.items.push(this.editedItem);
+            // }
+            // this.close();
+
             this.dialog = true;
-            if (this.editedIndex > -1) {
-                Object.assign(this.items[this.editedIndex], this.editedItem);
-            } else {
+
+            if (this.id == 0) { // create new area
+
+                console.log('create');
+                // add to local data array
+                const response = axios.post('/api/createInvoice', this.editedItem); // add to data base
                 this.items.push(this.editedItem);
+
+
+
+            } else { // update current area
+
+                console.log('update');
+                Object.assign(this.items[this.editedIndex], this.editedItem); // update local data
+                const response = axios.put('/api/updateInvoice/' + this.id, this.editedItem); // update in data base
+
+
             }
+
             this.close();
         },
     },

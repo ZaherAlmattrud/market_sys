@@ -8,12 +8,12 @@
         <v-data-table :headers="headers" :items="filteredItems" item-key="id" class="elevation-1">
             <template v-slot:top>
                 <v-toolbar flat>
-                    <v-toolbar-title>المستخدمين</v-toolbar-title>
+                    <v-toolbar-title>المدفوعات</v-toolbar-title>
                     <v-spacer></v-spacer>
                     <v-dialog v-model="dialog" max-width="500px">
                         <template v-slot:activator="{ on, attrs }">
-                            <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on"
-                                @click="dialog = true">مستخدم جديد</v-btn>
+                            <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on" @click="dialog = true">دفع
+                                جديد</v-btn>
                         </template>
                         <v-card>
                             <v-card-title>
@@ -23,26 +23,25 @@
                                 <v-container>
                                     <v-row>
                                         <v-col cols="12" sm="6" md="4">
-                                            <v-text-field v-model="editedItem.user_name" label="الأسم"></v-text-field>
+                                            <v-text-field v-model="editedItem.total" label="المبلغ"></v-text-field>
                                         </v-col>
-
 
                                         <v-col cols="12" sm="6" md="4">
 
 
+                                            <!-- <v-text-field v-model="editedItem.account_id" label="الحساب"></v-text-field> -->
 
-                                            <v-select v-model="editedItem.area" :items="areas" item-title="name"
-                                                item-value="id" label="المنطقة" persistent-hint single-line></v-select>
-
+                                            <v-select v-model="editedItem.account_id" :items="users"
+                                                item-title="user_name" item-value="id" label="صاحب الحساب"
+                                                persistent-hint single-line></v-select>
 
 
                                         </v-col>
+
                                         <v-col cols="12" sm="6" md="4">
 
 
-                                            <v-select v-model="editedItem.user_type" :items="user_types"
-                                                item-title="name" item-value="id" label="نوع المستخدم" persistent-hint
-                                                single-line></v-select>
+                                            <v-text-field v-model="editedItem.notes" label="الملاحظات"></v-text-field>
                                         </v-col>
                                     </v-row>
                                 </v-container>
@@ -74,6 +73,8 @@ export default {
     data() {
         return {
 
+
+            users: [],
             id: 0,
             user_types: [],
             areas: [],
@@ -81,13 +82,14 @@ export default {
             search: '',
             dialog: false,
             dialogDelete: false,
+
             headers: [
 
                 { title: 'التسلسل', key: 'id', sortable: false },
-                { title: 'الأسم', key: 'user_name', sortable: false },
-                { title: 'نوع المستخدم', key: 'user_type', sortable: false },
-                { title: 'البلدة', key: 'area', sortable: false },
-                { title: 'الحساب', key: 'account', sortable: false },
+                { title: 'رقم الحساب', key: 'account_id', sortable: false },
+                { title: 'المبلغ', key: 'total', sortable: false },
+                { title: 'التاريخ', key: 'date', sortable: false },
+                { title: 'الملاحظات', key: 'notes', sortable: false },
                 { title: 'العمليات', key: 'actions', sortable: false },
 
 
@@ -100,32 +102,56 @@ export default {
             editedIndex: -1,
             editedItem: {
                 id: 0,
-                user_name: '',
-                user_type: '',
-                area: '',
-                account: 0,
+                account_id: '',
+                total: '',
+                notes: '',
+                date: '',
 
             },
             defaultItem: {
                 id: 0,
-                user_name: '',
-                user_type: '',
-                area: '',
-                account: 0,
+                account_id: '',
+                total: '',
+                notes: '',
+                date: '',
 
             },
         };
     },
     computed: {
+
+        formattedDate() {
+            return this.date ? new Date(this.date).toLocaleDateString() : '';
+        },
         formTitle() {
-            return this.editedIndex === -1 ? 'مستخدم جديد' : 'تحديث معلومات مستخدم';
+            return this.editedIndex === -1 ? 'دفعة جديدة' : 'تحديث معلومات دفعة';
         },
         filteredItems() {
+
             return this.items.filter((item) => {
-                return (
-                    item.user_name.toLowerCase().includes(this.search.toLowerCase())
-                );
+
+
+                if (this.search != '') {
+
+                    return (
+
+                        item.account_id == this.search
+
+                    );
+
+                } else {
+
+                    return (
+
+                        true
+
+                    );
+
+
+                }
+
             });
+
         },
     },
 
@@ -140,16 +166,15 @@ export default {
     async beforeCreate() {
 
 
-        const response = await axios.get('/api/getAllUsers');
-        this.items = response.data; // users
+        const response2 = await axios.get('/api/getAllUsers');
+        this.users = response2.data; // users
 
-        const response_1 = await axios.get('/api/getAllAreas');
-        this.areas = response_1.data;
-
-        const response_2 = await axios.get('/api/getAllUserTypes');
-        this.user_types = response_2.data;
+        const response = await axios.get('/api/getAllPaids');
+        this.items = response.data;
 
     },
+
+    
     methods: {
 
         filterItems() {
@@ -177,7 +202,7 @@ export default {
             console.log(item);
             const index = this.items.indexOf(item);
             this.items.splice(index, 1);
-            await axios.delete(`/api/deleteUser/${item.id}`);
+            await axios.delete(`/api/deletePaid/${item.id}`);
         },
         close() {
             this.dialog = false;
@@ -205,7 +230,7 @@ export default {
 
                 console.log('create');
                 // add to local data array
-                const response = axios.post('/api/createUser', this.editedItem); // add to data base
+                const response = axios.post('/api/createPaid', this.editedItem); // add to data base
                 this.items.push(this.editedItem);
 
 
@@ -214,7 +239,7 @@ export default {
 
                 console.log('update');
                 Object.assign(this.items[this.editedIndex], this.editedItem); // update local data
-                const response = axios.put('/api/updateUser/' + this.id, this.editedItem); // update in data base
+                const response = axios.put('/api/updatePaid/' + this.id, this.editedItem); // update in data base
 
 
             }

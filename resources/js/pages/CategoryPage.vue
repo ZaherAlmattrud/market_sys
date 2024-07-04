@@ -12,7 +12,8 @@
                     <v-spacer></v-spacer>
                     <v-dialog v-model="dialog" max-width="500px">
                         <template v-slot:activator="{ on, attrs }">
-                            <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on" @click="dialog = true">صنف جديد</v-btn>
+                            <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on" @click="dialog = true">صنف
+                                جديد</v-btn>
                         </template>
                         <v-card>
                             <v-card-title>
@@ -21,19 +22,19 @@
                             <v-card-text>
                                 <v-container>
                                     <v-row>
-                                    <v-col cols="12" md="12" sm="12">
-                                        <v-text-field v-model="editedItem.name" label="الاسم"></v-text-field>
-                                    </v-col>
-                                 
+                                        <v-col cols="12" md="12" sm="12">
+                                            <v-text-field v-model="editedItem.name" label="الاسم"></v-text-field>
+                                        </v-col>
 
-                                </v-row>
-                                <v-row>
-                                  
-                                    <v-col cols="12" md="12" sm="12">
-                                        <v-text-field v-model="editedItem.descount" label="الحسم"></v-text-field>
-                                    </v-col>
 
-                                </v-row>
+                                    </v-row>
+                                    <v-row>
+
+                                        <v-col cols="12" md="12" sm="12">
+                                            <v-text-field v-model="editedItem.descount" label="الحسم"></v-text-field>
+                                        </v-col>
+
+                                    </v-row>
                                 </v-container>
                             </v-card-text>
                             <v-card-actions>
@@ -50,7 +51,7 @@
 
                 <v-icon larg @click="deleteItem(item)">mdi-delete</v-icon>
 
-              
+
             </template>
         </v-data-table>
     </v-container>
@@ -60,8 +61,8 @@
 export default {
     data() {
         return {
-
-            areas : [ 'حزرما' ,'النشابية' ,'نولة'],
+            id: 0,
+            areas: ['حزرما', 'النشابية', 'نولة'],
             search: '',
             dialog: false,
             dialogDelete: false,
@@ -74,29 +75,17 @@ export default {
 
             ],
             items: [
-
-                {
-
-                    'name': 'سعد بلاست - بواري',
-                    'descount': 0.05,
-                   
-
-                },
-              
-               
-              
-              
             ],
             editedIndex: -1,
             editedItem: {
-                num: 0,
+                id: 0,
                 name: '',
-                account: 0,
+                descount: '',
             },
             defaultItem: {
-                num: 0,
+                id: 0,
                 name: '',
-                account: 0,
+                descount: '',
             },
         };
     },
@@ -121,18 +110,39 @@ export default {
             val || this.closeDelete()
         },
     },
+
+    async beforeCreate() {
+
+
+        const response = await axios.get('/api/getAllCategories');
+        this.items = response.data; // users;
+
+    },
     methods: {
         filterItems() {
             // This will automatically filter items as search input changes
         },
         editItem(item) {
+
+            this.id = item.id;
             this.editedIndex = this.items.indexOf(item);
             this.editedItem = Object.assign({}, item);
-            this.dialog = true;
+
+
+            this.dialog = true ;
+            // this.editedIndex = this.items.indexOf(item);
+            // this.editedItem = Object.assign({}, item);
+            // this.dialog = true;
         },
-        deleteItem(item) {
+        async deleteItem(item) {
+            // const index = this.items.indexOf(item);
+            // confirm('Are you sure you want to delete this item?') && this.items.splice(index, 1);
+
+            console.log("delete api");
+            console.log(item);
             const index = this.items.indexOf(item);
-            confirm('Are you sure you want to delete this item?') && this.items.splice(index, 1);
+            this.items.splice(index, 1);
+            await axios.delete(`/api/deleteCategory/${item.id}`);
         },
         close() {
             this.dialog = false;
@@ -143,12 +153,34 @@ export default {
         },
         save() {
 
+            // this.dialog = true;
+            // if (this.editedIndex > -1) {
+            //     Object.assign(this.items[this.editedIndex], this.editedItem);
+            // } else {
+            //     this.items.push(this.editedItem);
+            // }
+            // this.close();
+
             this.dialog = true;
-            if (this.editedIndex > -1) {
-                Object.assign(this.items[this.editedIndex], this.editedItem);
-            } else {
+
+            if (this.id == 0) { // create new area
+
+                console.log('create');
+                // add to local data array
+                const response = axios.post('/api/createCategory', this.editedItem); // add to data base
                 this.items.push(this.editedItem);
+
+
+
+            } else { // update current area
+
+                console.log('update');
+                Object.assign(this.items[this.editedIndex], this.editedItem); // update local data
+                const response = axios.put('/api/updateCategory/' + this.id, this.editedItem); // update in data base
+
+
             }
+
             this.close();
         },
     },

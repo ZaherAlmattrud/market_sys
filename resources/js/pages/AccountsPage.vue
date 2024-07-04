@@ -12,7 +12,8 @@
                     <v-spacer></v-spacer>
                     <v-dialog v-model="dialog" max-width="500px">
                         <template v-slot:activator="{ on, attrs }">
-                            <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on" @click="dialog = true"> حساب جديد</v-btn>
+                            <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on" @click="dialog = false">
+                                حساب جديد</v-btn>
                         </template>
                         <v-card>
                             <v-card-title>
@@ -21,14 +22,11 @@
                             <v-card-text>
                                 <v-container>
                                     <v-row>
-                                        <v-col cols="12" sm="6" md="4">
-                                            <v-text-field v-model="editedItem.name" label="الأسم"></v-text-field>
+                                        <v-col cols="12" sm="12" md="12">
+                                            <v-text-field v-model="editedItem.account"
+                                                label="رقم الحساب"></v-text-field>
                                         </v-col>
-                                        <v-col cols="12" sm="6" md="4">
-                                            
 
-                                                <v-select v-model="editedItem.area" :items="areas" label="البلدة"></v-select>
-                                        </v-col>
                                     </v-row>
                                 </v-container>
                             </v-card-text>
@@ -42,6 +40,7 @@
                 </v-toolbar>
             </template>
             <template v-slot:item.actions="{ item }">
+                <v-icon larg @click="editItem(item)">mdi-pencil</v-icon>
                 <v-icon larg @click="moveToAccountDetails(item)">mdi-account-eye-outline</v-icon>
             </template>
         </v-data-table>
@@ -53,50 +52,48 @@ export default {
     data() {
         return {
 
-            areas : [ 'حزرما' ,'النشابية' ,'نولة'],
+            id: 0,
             search: '',
             dialog: false,
             dialogDelete: false,
             headers: [
 
-                { title: 'التسلسل', key: 'id', sortable: false },
-                { title: 'رقم الحساب', key: 'account', sortable: false },
+                { title: 'التسلسل', key: 'id', sortable: true },
+                { title: 'رقم الحساب', key: 'account', sortable: true },
                 { title: 'صاحب الحساب', key: 'person_name', sortable: false },
-                { title: 'الرصيد الإجمالي', key: 'total', sortable: false },
+                { title: 'نوع الحساب', key: 'account_user_type', sortable: false },
+                { title: 'الرصيد الإجمالي', key: 'total', sortable: true },
+                { title: 'المقبوض', key: 'arrested', sortable: false },
+                { title: 'المدفوع', key: 'paid', sortable: false },
+                { title: ' المتبقي ', key: 'debts', sortable: true },
                 { title: 'العمليات', key: 'actions', sortable: false },
 
 
             ],
             items: [
 
-                {
 
-                    'id': 1,
-                    'account': 564 ,
-                    'person_name': 'Zaher',
-                    'total' : '2500000',
-                    'paid' : 1000 ,
-                    'debts' : '2499000' ,
 
-                }
-            
             ],
             editedIndex: -1,
             editedItem: {
-                'id': 1,
-                    'account': 2500000 ,
-                    'person_name': 'Zaher',
-                    'total' : 'حزرما',
-                    'paid' : 1000 ,
-                    'debts' : '2499000' ,
+                'id': '',
+                'account': 0,
+                'person_name': '',
+                'account_user_type': '',
+                'total': '',
+                'paid': 0,
+                'debts': '',
+
             },
             defaultItem: {
                 'id': 1,
-                    'account': 2500000 ,
-                    'person_name': 'Zaher',
-                    'total' : 'حزرما',
-                    'paid' : 1000 ,
-                    'debts' : '' ,
+                'account': 2500000,
+                'person_name': 'Zaher',
+                'account_user_type': '',
+                'total': 'حزرما',
+                'paid': 1000,
+                'debts': '',
             },
         };
     },
@@ -121,18 +118,40 @@ export default {
             val || this.closeDelete()
         },
     },
+
+    async beforeCreate() {
+
+
+        const response = await axios.get('/api/getAllAccounts');
+        this.items = response.data; // users
+
+
+
+    },
+
     methods: {
 
-        moveToAccountDetails(item){
+        moveToAccountDetails(item) {
 
-            this.$router.push({ name: 'accountDetails', params: { accountId: 1 } });
-        } ,
+            console.log("=======================");
+
+            console.log(item.id);
+
+            this.$router.push({ name: 'accountDetails', params: { accountId: item.id} });
+        },
         filterItems() {
             // This will automatically filter items as search input changes
         },
         editItem(item) {
+            // this.editedIndex = this.items.indexOf(item);
+            // this.editedItem = Object.assign({}, item);
+            // this.dialog = true;
+
+            this.id = item.id;
             this.editedIndex = this.items.indexOf(item);
             this.editedItem = Object.assign({}, item);
+
+
             this.dialog = true;
         },
         deleteItem(item) {
@@ -148,12 +167,35 @@ export default {
         },
         save() {
 
+            // this.dialog = true;
+            // if (this.editedIndex > -1) {
+            //     Object.assign(this.items[this.editedIndex], this.editedItem);
+            // } else {
+            //     this.items.push(this.editedItem);
+            // }
+            // this.close();
+
+
             this.dialog = true;
-            if (this.editedIndex > -1) {
-                Object.assign(this.items[this.editedIndex], this.editedItem);
-            } else {
-                this.items.push(this.editedItem);
+
+            if (this.id == 0) { // create new area
+
+                console.log('create');
+                // // add to local data array
+                // const response = axios.post('/api/createUser', this.editedItem); // add to data base
+                // this.items.push(this.editedItem);
+
+
+
+            } else { // update current area
+
+                console.log('update');
+                Object.assign(this.items[this.editedIndex], this.editedItem); // update local data
+                const response = axios.put('/api/updateAccount/' + this.id, this.editedItem); // update in data base
+
+
             }
+
             this.close();
         },
     },
