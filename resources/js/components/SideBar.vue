@@ -21,17 +21,21 @@
               value="users"></v-list-item></RouterLink> -->
           <RouterLink to="/users"> <v-list-item prepend-icon="mdi-account-group-outline" title="المستخدمين"
               value="users"></v-list-item></RouterLink>
+          <RouterLink to="/arresteds"> <v-list-item prepend-icon="mdi-import" title="المقبوضات"
+              value="arresteds"></v-list-item>
+          </RouterLink>
           <RouterLink to="/accounts"> <v-list-item prepend-icon="mdi-briefcase-account-outline" title="الحسابات"
               value="accounts"></v-list-item></RouterLink>
 
-          <RouterLink to="/arresteds"> <v-list-item prepend-icon="mdi-import" title="المقبوضات"
-              value="arresteds"></v-list-item></RouterLink>
 
-          <RouterLink to="/paids"> <v-list-item prepend-icon="mdi-export" title="المدفوعات"
-              value="paids"></v-list-item></RouterLink>
+
+
 
           <RouterLink to="/invoices"> <v-list-item prepend-icon="mdi-invoice-text-multiple-outline" title="الفواتير"
               value="invoices"></v-list-item></RouterLink>
+
+          <RouterLink to="/paids"> <v-list-item prepend-icon="mdi-export" title="المدفوعات" value="paids"></v-list-item>
+          </RouterLink>
           <RouterLink to="/areas"> <v-list-item prepend-icon="mdi-map-marker-multiple-outline" title="المناطق"
               value="areas"></v-list-item></RouterLink>
           <RouterLink to="/category"> <v-list-item prepend-icon="mdi-shape-plus-outline" title="الأصناف"
@@ -45,7 +49,7 @@
 
       </v-navigation-drawer>
       <v-main>
-         <RouterView />
+        <RouterView />
 
       </v-main>
     </v-layout>

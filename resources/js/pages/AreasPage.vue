@@ -25,7 +25,7 @@
                                         <v-col cols="12" sm="6" md="12">
                                             <v-text-field v-model="editedItem.name" label="الأسم"></v-text-field>
                                         </v-col>
-                                      
+
                                     </v-row>
                                 </v-container>
                             </v-card-text>
@@ -54,7 +54,7 @@ export default {
         return {
 
             id: 0,
-            
+
             search: '',
             dialog: false,
             dialogDelete: false,
@@ -121,7 +121,7 @@ export default {
             this.editedItem = Object.assign({}, item);
 
 
-            this.dialog = true ;
+            this.dialog = true;
 
             // this.editedIndex = this.items.indexOf(item);
             // this.editedItem = Object.assign({}, item);
@@ -154,7 +154,7 @@ export default {
             // this.close();
 
 
-          
+
 
 
             this.dialog = true;
@@ -162,10 +162,10 @@ export default {
             if (this.id == 0) { // create new area
 
                 console.log('create');
-                 // add to local data array
+                // add to local data array
                 const response = axios.post('/api/createArea', this.editedItem); // add to data base
                 this.items.push(this.editedItem);
-                
+
 
 
             } else { // update current area

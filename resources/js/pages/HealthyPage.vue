@@ -12,7 +12,8 @@
                     <v-spacer></v-spacer>
                     <v-dialog v-model="dialog" max-width="500px">
                         <template v-slot:activator="{ on, attrs }">
-                            <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on" @click="dialog = true">منتج جديد</v-btn>
+                            <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on"
+                                @click="dialog = true">منتج جديد</v-btn>
                         </template>
                         <v-card>
                             <v-card-title>
@@ -21,31 +22,33 @@
                             <v-card-text>
                                 <v-container>
                                     <v-row>
-                                    <v-col cols="12" md="4" sm="12">
-                                        <v-text-field v-model="editedItem.name" label="الاسم"></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" md="4" sm="12">
-                                        <v-text-field v-model="editedItem.price" label="الشراء"></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" md="4" sm="12">
-                                        <v-file-input v-model="editedItem.img" label="الصورة" outlined dense
-                                            capture="user" accept="image/*"></v-file-input>
-                                    </v-col>
+                                        <v-col cols="12" md="4" sm="12">
+                                            <v-text-field v-model="editedItem.name" label="الاسم"></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12" md="4" sm="12">
+                                            <v-text-field v-model="editedItem.price" label="الشراء"></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12" md="4" sm="12">
+                                            <v-file-input v-model="editedItem.img" label="الصورة" outlined dense
+                                                capture="user" accept="image/*"></v-file-input>
+                                        </v-col>
 
-                                </v-row>
-                                <v-row>
-                                    <v-col cols="12" md="4" sm="12">
-                                        <v-select v-model="editedItem.invoice" :items="invoices" label="الفاتورة"></v-select>
-                                    </v-col>
-                                   
-                                    <v-col cols="12" md="4" sm="12">
-                                        <v-select v-model="editedItem.category" :items="categories" label="الصنف"></v-select>
-                                    </v-col>
-                                    <v-col cols="12" md="4" sm="12">
-                                        <v-text-field v-model="editedItem.sell" label="البيع"></v-text-field>
-                                    </v-col>
+                                    </v-row>
+                                    <v-row>
+                                        <v-col cols="12" md="4" sm="12">
+                                            <v-select v-model="editedItem.invoice" :items="invoices"
+                                                label="الفاتورة"></v-select>
+                                        </v-col>
 
-                                </v-row>
+                                        <v-col cols="12" md="4" sm="12">
+                                            <v-select v-model="editedItem.category" :items="categories"
+                                                label="الصنف"></v-select>
+                                        </v-col>
+                                        <v-col cols="12" md="4" sm="12">
+                                            <v-text-field v-model="editedItem.sell" label="البيع"></v-text-field>
+                                        </v-col>
+
+                                    </v-row>
                                 </v-container>
                             </v-card-text>
                             <v-card-actions>
@@ -73,7 +76,7 @@ export default {
     data() {
         return {
 
-            areas : [ 'حزرما' ,'النشابية' ,'نولة'],
+            areas: ['حزرما', 'النشابية', 'نولة'],
             search: '',
             dialog: false,
             dialogDelete: false,
@@ -81,6 +84,7 @@ export default {
 
                 { title: 'الاسم', key: 'name', sortable: false },
                 { title: 'الشراء', key: 'price', sortable: false },
+                { title: 'الشراء بعد الحسم', key: 'price_after_descount', sortable: false },
                 { title: 'التاريخ', key: 'date', sortable: false },
                 { title: 'المبيع', key: 'sell', sortable: false },
                 { title: 'العمليات', key: 'actions', sortable: false },
@@ -89,16 +93,29 @@ export default {
             ],
             items: [
             ],
+            id: 0,
             editedIndex: -1,
             editedItem: {
-                num: 0,
+                id: 0,
                 name: '',
-                account: 0,
+                pricr: '',
+                invoice_id: '',
+                category_id: '',
+                img: '',
+                sell: '',
+
             },
             defaultItem: {
-                num: 0,
+
+                id: 0,
                 name: '',
-                account: 0,
+                pricr: '',
+                invoice_id: '',
+                category_id: '',
+                img: '',
+                sell: '',
+
+
             },
         };
     },
@@ -122,6 +139,13 @@ export default {
         dialogDelete(val) {
             val || this.closeDelete()
         },
+    },
+
+    async beforeCreate() {
+
+        const response = await axios.get('/api/getAllProductsHealthy');
+        this.items = response.data;
+
     },
     methods: {
         filterItems() {

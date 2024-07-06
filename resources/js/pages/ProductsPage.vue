@@ -12,7 +12,8 @@
                     <v-spacer></v-spacer>
                     <v-dialog v-model="dialog" max-width="500px">
                         <template v-slot:activator="{ on, attrs }">
-                            <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on" @click="dialog = true">منتج جديد</v-btn>
+                            <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on"
+                                @click="dialog = true">منتج جديد</v-btn>
                         </template>
                         <v-card>
                             <v-card-title>
@@ -21,31 +22,34 @@
                             <v-card-text>
                                 <v-container>
                                     <v-row>
-                                    <v-col cols="12" md="4" sm="12">
-                                        <v-text-field v-model="editedItem.name" label="الاسم"></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" md="4" sm="12">
-                                        <v-text-field v-model="editedItem.price" label="الشراء"></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" md="4" sm="12">
-                                        <v-file-input v-model="editedItem.img" label="الصورة" outlined dense
-                                            capture="user" accept="image/*"></v-file-input>
-                                    </v-col>
+                                        <v-col cols="12" md="4" sm="12">
+                                            <v-text-field v-model="editedItem.name" label="الاسم"></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12" md="4" sm="12">
+                                            <v-text-field v-model="editedItem.price" label="الشراء"></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12" md="4" sm="12">
+                                            <v-file-input v-model="editedItem.img" label="الصورة" outlined dense
+                                                capture="user" accept="image/*"></v-file-input>
+                                        </v-col>
 
-                                </v-row>
-                                <v-row>
-                                    <v-col cols="12" md="4" sm="12">
-                                        <v-select v-model="editedItem.invoice" :items="invoices" label="الفاتورة"></v-select>
-                                    </v-col>
-                                   
-                                    <v-col cols="12" md="4" sm="12">
-                                        <v-select v-model="editedItem.category" :items="categories" label="الصنف"></v-select>
-                                    </v-col>
-                                    <v-col cols="12" md="4" sm="12">
-                                        <v-text-field v-model="editedItem.sell" label="البيع"></v-text-field>
-                                    </v-col>
+                                    </v-row>
+                                    <v-row>
+                                        <v-col cols="12" md="4" sm="12">
+                                            <v-select v-model="editedItem.invoice_id" :items="invoices" item-title="id"
+                                                item-value="id" persistent-hint single-line label="الفاتورة"></v-select>
+                                        </v-col>
 
-                                </v-row>
+                                        <v-col cols="12" md="4" sm="12">
+                                            <v-select v-model="editedItem.category_id" :items="categories"
+                                                item-title="name" item-value="id" persistent-hint single-line
+                                                label="الصنف"></v-select>
+                                        </v-col>
+                                        <v-col cols="12" md="4" sm="12">
+                                            <v-text-field v-model="editedItem.sell" label="البيع"></v-text-field>
+                                        </v-col>
+
+                                    </v-row>
                                 </v-container>
                             </v-card-text>
                             <v-card-actions>
@@ -73,14 +77,19 @@ export default {
     data() {
         return {
 
-            areas : [ 'حزرما' ,'النشابية' ,'نولة'],
+            invoices: [],
+            categories: [],
             search: '',
             dialog: false,
             dialogDelete: false,
             headers: [
 
+                { title: 'التسلسل', key: 'id', sortable: false },
                 { title: 'الاسم', key: 'name', sortable: false },
                 { title: 'الشراء', key: 'price', sortable: false },
+                { title: 'الشراء بعد الحسم', key: 'price_after_descount', sortable: false },
+                { title: 'الفاتورة', key: 'invoice_id', sortable: false },
+                { title: 'الصنف', key: 'category_id', sortable: false },
                 { title: 'التاريخ', key: 'date', sortable: false },
                 { title: 'المبيع', key: 'sell', sortable: false },
                 { title: 'العمليات', key: 'actions', sortable: false },
@@ -89,53 +98,31 @@ export default {
             ],
             items: [
 
-                {
 
-                    'name': 'بوري 1/2 حديد',
-                    'price': 50000,
-                    'date' : '22-8-2024',
-                    'sell': 60000
-
-                },
-                {
-
-                    'num': 1,
-                    'name': 'Zaher',
-                    'account': 95
-
-                },
-                {
-
-                    'num': 1,
-                    'name': 'Zaher',
-                    'account': 95
-
-                },
-                {
-
-                    'num': 1,
-                    'name': 'Zaher',
-                    'account': 95
-
-                },
-                {
-
-                    'num': 1,
-                    'name': 'Zaher',
-                    'account': 95
-
-                },
             ],
+            id: 0,
             editedIndex: -1,
             editedItem: {
-                num: 0,
+                id: 0,
                 name: '',
-                account: 0,
+                pricr: '',
+                invoice_id: '',
+                category_id: '',
+                img: '',
+                sell: '',
+
             },
             defaultItem: {
-                num: 0,
+
+                id: 0,
                 name: '',
-                account: 0,
+                pricr: '',
+                invoice_id: '',
+                category_id: '',
+                img: '',
+                sell: '',
+
+
             },
         };
     },
@@ -146,7 +133,7 @@ export default {
         filteredItems() {
             return this.items.filter((item) => {
                 return (
-                    item.name.toLowerCase().includes(this.search.toLowerCase())
+                    item.name.includes(this.search.toLowerCase())
                 );
             });
         },
@@ -160,18 +147,45 @@ export default {
             val || this.closeDelete()
         },
     },
+
+    async beforeCreate() {
+
+        const response = await axios.get('/api/getAllProducts');
+        this.items = response.data;
+
+
+        const response2 = await axios.get('/api/getAllInvoices');
+
+        this.invoices = response2.data;
+
+
+        const response3 = await axios.get('/api/getAllCategories');
+
+        this.categories = response3.data;
+
+    },
     methods: {
         filterItems() {
             // This will automatically filter items as search input changes
         },
         editItem(item) {
+            // this.editedIndex = this.items.indexOf(item);
+            // this.editedItem = Object.assign({}, item);
+            // this.dialog = true;
+
+            this.id = item.id;
             this.editedIndex = this.items.indexOf(item);
             this.editedItem = Object.assign({}, item);
+
+
             this.dialog = true;
         },
-        deleteItem(item) {
+        async deleteItem(item) {
+            console.log("delete api");
+            console.log(item);
             const index = this.items.indexOf(item);
-            confirm('Are you sure you want to delete this item?') && this.items.splice(index, 1);
+            this.items.splice(index, 1);
+            await axios.delete(`/api/deleteProduct/${item.id}`);
         },
         close() {
             this.dialog = false;
@@ -182,12 +196,38 @@ export default {
         },
         save() {
 
+            // this.dialog = true;
+            // if (this.editedIndex > -1) {
+            //     Object.assign(this.items[this.editedIndex], this.editedItem);
+            // } else {
+            //     this.items.push(this.editedItem);
+            // }
+            // this.close();
+
             this.dialog = true;
-            if (this.editedIndex > -1) {
-                Object.assign(this.items[this.editedIndex], this.editedItem);
-            } else {
+
+            if (this.id == 0) { // create new area
+
+                console.log('create');
+                // add to local data array
+                const response = axios.post('/api/createProduct', this.editedItem, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    }
+                }); // add to data base
                 this.items.push(this.editedItem);
+
+
+
+            } else { // update current area
+
+                console.log('update');
+                Object.assign(this.items[this.editedIndex], this.editedItem); // update local data
+                const response = axios.put('/api/updateProduct/' + this.id, this.editedItem); // update in data base
+
+
             }
+
             this.close();
         },
     },

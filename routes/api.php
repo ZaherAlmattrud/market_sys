@@ -49,10 +49,17 @@ Route::post('/createCategory', [ApisController::class, 'createCategory']);
 Route::put('/updateCategory/{CategoryId}', [ApisController::class, 'updateCategory']);
 Route::delete('/deleteCategory/{CategoryId}', [ApisController::class, 'deleteCategory']);
 //=============================================================================
-
 Route::get('/getAllInvoices', [ApisController::class, 'getAllInvoices']);
+Route::get('/getInvoiceImgLink/{invoiceId}', [ApisController::class, 'getInvoiceImgLink']);
 Route::post('/createInvoice', [ApisController::class, 'createInvoice']);
 Route::put('/updateInvoice/{InvoiceId}', [ApisController::class, 'updateInvoice']);
 Route::delete('/deleteInvoice/{InvoiceId}', [ApisController::class, 'deleteInvoice']);
 
+
+//=============================================================================
+Route::get('/getAllProducts', [ApisController::class, 'getAllProducts']);
+Route::get('/getAllProductsHealthy', [ApisController::class, 'getAllProductsHealthy']);
+Route::post('/createProduct', [ApisController::class, 'createProduct']);
+Route::put('/updateProduct/{ProductId}', [ApisController::class, 'updateProduct']);
+Route::delete('/deleteProduct/{ProductId}', [ApisController::class, 'deleteProduct']);
 //=============================================================================

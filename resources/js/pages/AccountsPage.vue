@@ -58,10 +58,12 @@ export default {
             dialogDelete: false,
             headers: [
 
-                { title: 'التسلسل', key: 'id', sortable: true },
-                { title: 'رقم الحساب', key: 'account', sortable: true },
+          
+             //   { title: 'رقم الحساب', key: 'account', sortable: true },
                 { title: 'صاحب الحساب', key: 'person_name', sortable: false },
                 { title: 'نوع الحساب', key: 'account_user_type', sortable: false },
+                { title: 'دفتر الديون', key: 'book', sortable: true },
+                { title: ' الفواتير', key: 'invoices', sortable: true },
                 { title: 'الرصيد الإجمالي', key: 'total', sortable: true },
                 { title: 'المقبوض', key: 'arrested', sortable: false },
                 { title: 'المدفوع', key: 'paid', sortable: false },

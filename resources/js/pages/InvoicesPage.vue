@@ -24,9 +24,9 @@
                                     <v-row>
                                         <v-col cols="12" sm="6" md="6">
 
-                                            <v-select v-model="editedItem.account_id" :items="users" item-title="user_name"
-                                                item-value="id" label="صاحب الفاتورة" persistent-hint
-                                                single-line></v-select>
+                                            <v-select v-model="editedItem.account_id" :items="users"
+                                                item-title="user_name" item-value="id" label="صاحب الفاتورة"
+                                                persistent-hint single-line></v-select>
 
 
                                         </v-col>
@@ -66,6 +66,7 @@
             <template v-slot:item.actions="{ item }">
                 <v-icon larg @click="editItem(item)">mdi-pencil</v-icon>
                 <v-icon larg @click="deleteItem(item)">mdi-delete</v-icon>
+                <v-icon larg @click="moveToInvoiceImg(item)">mdi-invoice-text-outline</v-icon>
             </template>
         </v-data-table>
     </v-container>
@@ -92,7 +93,7 @@ export default {
                 { title: 'الرصيد الإجمالي', key: 'total', sortable: false },
                 { title: 'رقم الفاتورة المطبوع', key: 'num', sortable: false },
                 { title: 'التاريخ', key: 'date', sortable: false },
-                { title: 'الملف', key: 'file', sortable: false },
+                // { title: 'الملف', key: 'file', sortable: false },
                 { title: 'العمليات', key: 'actions', sortable: false },
 
 
@@ -114,6 +115,7 @@ export default {
                 'account_id': '',
                 'total': '',
                 'file': '',
+                'file_url': null,
 
 
             },
@@ -123,6 +125,7 @@ export default {
                 'date': '',
                 'num': '',
                 'account_id': '',
+                file_url: '',
                 'total': '',
                 'file': '',
             },
@@ -135,15 +138,38 @@ export default {
         filteredItems() {
             return this.items.filter((item) => {
 
-               
+                if (this.search != '') {
 
                     return (
 
-                    item.account_id.includes(this.search.toLowerCase())
+                        //   item.account_id == this.search
+
+                        item.account_id.includes(this.search.toLowerCase())
 
                     );
 
-                 
+                } else {
+
+                    return (
+
+                        true
+
+                    );
+
+
+                }
+
+
+
+                // return (
+
+                //     // item.account_id.includes(this.search.toLowerCase())
+
+                //     true
+
+                // );
+
+
 
 
 
@@ -208,6 +234,33 @@ export default {
             this.items.splice(index, 1);
             await axios.delete(`/api/deleteInvoice/${item.id}`);
         },
+
+        moveToInvoiceImg(item) {
+
+            console.log("=======================");
+
+
+           
+
+            // const response = axios.get('/api/getInvoiceImgLink/' + item.file_url);
+
+            // console.log(response.data);
+
+            // const url = null;
+            if (   item.file_url ) {
+
+
+                console.log( item.file_url);
+               
+
+               this.$router.push({ name: 'InvoiceImg', params: { url:  item.file_url  } });
+
+            }
+
+
+
+
+        },
         close() {
             this.dialog = false;
             this.$nextTick(() => {
@@ -231,7 +284,13 @@ export default {
 
                 console.log('create');
                 // add to local data array
-                const response = axios.post('/api/createInvoice', this.editedItem); // add to data base
+
+
+                const response = axios.post('/api/createInvoice', this.editedItem, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    }
+                }); // add to data base
                 this.items.push(this.editedItem);
 
 

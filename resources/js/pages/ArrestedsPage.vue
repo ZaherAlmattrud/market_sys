@@ -132,7 +132,8 @@ export default {
 
                     return (
 
-                        item.account_id == this.search
+                        // item.account_id == this.search
+                        item.account_id.includes(this.search.toLowerCase())
 
                     );
 
