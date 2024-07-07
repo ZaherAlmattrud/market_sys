@@ -14,9 +14,9 @@
               value="home"></v-list-item>
           </RouterLink>
 
-          <RouterLink to="/healthy"> <v-list-item prepend-icon="mdi-pipe-valve" title="الصحية"
+          <!-- <RouterLink to="/healthy"> <v-list-item prepend-icon="mdi-pipe-valve" title="الصحية"
               value="account"></v-list-item>
-          </RouterLink>
+          </RouterLink> -->
           <!-- <RouterLink to="/customers"> <v-list-item prepend-icon="mdi-account-box-outline" title="الزبائن"
               value="users"></v-list-item></RouterLink> -->
           <RouterLink to="/users"> <v-list-item prepend-icon="mdi-account-group-outline" title="المستخدمين"

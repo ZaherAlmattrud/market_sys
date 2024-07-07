@@ -656,7 +656,7 @@ class ApisController extends Controller
     public function getAllProducts()
     {
 
-        $data = DB::table('products')->get();
+        $data = DB::table('products')->orderBy('id' ,'desc')->get();
 
         $itemsArray = $data->map(function ($item) {
 
