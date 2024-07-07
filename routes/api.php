@@ -58,6 +58,7 @@ Route::delete('/deleteInvoice/{InvoiceId}', [ApisController::class, 'deleteInvoi
 
 //=============================================================================
 Route::get('/getAllProducts', [ApisController::class, 'getAllProducts']);
+Route::get('/getProductImgLink/{productId}', [ApisController::class, 'getProductImgLink']);
 Route::get('/getAllProductsHealthy', [ApisController::class, 'getAllProductsHealthy']);
 Route::post('/createProduct', [ApisController::class, 'createProduct']);
 Route::put('/updateProduct/{ProductId}', [ApisController::class, 'updateProduct']);

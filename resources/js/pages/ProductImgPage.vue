@@ -17,14 +17,14 @@ export default {
 
     async beforeCreate() {
 
-        const invoiceId = this.$route.params.id;
+        const invoiceId = this.$route.params.url;
 
         console.log("=====================================");
         console.log(invoiceId);
-        const response = await axios.get(`/api/getInvoiceImgLink/${invoiceId}`)
+        const response = await axios.get(`/api/getProductImgLink/${invoiceId}`)
         console.log("=====================================");
         console.log(response.data);
-        this.fileUrl =  response.data['link']; // img link
+        this.fileUrl = response.data['link']; // img link
 
 
 

@@ -1,5 +1,5 @@
 <template>
-    <v-container  >
+    <v-container>
         <v-row>
             <v-col cols="12" md="4">
                 <v-text-field v-model="search" label="البحث" @input="filterItems"></v-text-field>
@@ -29,8 +29,8 @@
                                             <v-text-field v-model="editedItem.price" label="الشراء"></v-text-field>
                                         </v-col>
                                         <v-col cols="12" md="4" sm="12">
-                                            <v-file-input v-model="editedItem.img" label="الصورة" outlined dense
-                                                capture="user" accept="image/*"></v-file-input>
+                                            <v-file-input v-model="editedItem.file" label="الملف" outlined
+                                                dense></v-file-input>
                                         </v-col>
 
                                     </v-row>
@@ -66,7 +66,7 @@
 
                 <v-icon larg @click="deleteItem(item)">mdi-delete</v-icon>
 
-                <v-icon larg @click="editItem(item)">mdi-account-eye-outline</v-icon>
+                <v-icon larg @click="moveToProductImg(item)">mdi-account-eye-outline</v-icon>
             </template>
         </v-data-table>
     </v-container>
@@ -108,6 +108,7 @@ export default {
                 pricr: '',
                 invoice_id: '',
                 category_id: '',
+                'file': '',
                 img: '',
                 sell: '',
 
@@ -121,6 +122,7 @@ export default {
                 category_id: '',
                 img: '',
                 sell: '',
+                'file': '',
 
 
             },
@@ -165,6 +167,16 @@ export default {
 
     },
     methods: {
+
+        moveToProductImg(item) {
+            ;
+
+
+            this.$router.push({ name: 'ProductImage', params: { url: item.id } });
+
+
+
+        },
         filterItems() {
             // This will automatically filter items as search input changes
         },

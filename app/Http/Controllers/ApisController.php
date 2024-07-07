@@ -571,7 +571,7 @@ class ApisController extends Controller
                 'id' => $item->id,
                 'file_url' =>  $item->file_url ?   $item->file_url  : null,
                 'num' => $item->num ? $item->num : 'لا يوجد',
-                'invoice_type' => $item->invoice_type == 'purchising' ?  'فاتورة شراء ' : 'فاتورة مبيعات',
+                'invoice_type' => $item->invoice_type ,
                 'account_id' =>  $user ? $user->user_name : null,
                 'total' => $item->total,
                 'date' => $item->date,
@@ -591,6 +591,12 @@ class ApisController extends Controller
 
         $user = DB::table('users')->where('id', $data['account_id'])->first();
 
+        $userTypeId = $user ? $user->user_type : null;
+
+        $userType = DB::table('usertypes')->where('id',  $userTypeId)->first();
+
+        $InvoiceType =   $userType->type_name == 'مورد' ? 'شراء' : 'بيع';
+
         $fileName = '';
         $filePath = '';
         $fileUrl = '';
@@ -605,10 +611,10 @@ class ApisController extends Controller
 
         $res = DB::table('invoices')->insert([
 
-            'invoice_type' => 'purchising',
+            'invoice_type' =>  $InvoiceType,
             'account_id' =>  $user ? $user->account_id : null,
             'total' => $data['total'],
-            'num'=>$data['num'],
+            'num' => $data['num'],
             'date' =>  Carbon::now()->format('Y-m-d H:i:s'),
             'file' => '',
             'file_name' =>  $fileName,
@@ -639,7 +645,7 @@ class ApisController extends Controller
                     'invoice_type' =>  $oldInvoice->invoice_type,
                     'total' => $data['total'],
                     'date' =>  Carbon::now()->format('Y-m-d H:i:s'),
-                    'num'=> $data['num'],
+                    'num' => $data['num'],
                     'file' => '',
 
                 ]
@@ -684,6 +690,16 @@ class ApisController extends Controller
         });
 
         return response()->json($itemsArray);
+    }
+
+    public function getProductImgLink($id)
+    {
+
+        $data = [];
+        $invoice =     DB::table('products')->where('id', intval($id))->first();
+        $data['link']  =  $invoice ?  $invoice->file_url : null;
+
+        return response()->json($data);
     }
 
     public function getAllProductsHealthy()
@@ -736,8 +752,8 @@ class ApisController extends Controller
 
         if ($request->hasFile('file')) {
 
-            $file = $request->file('img');
-            $fileName  =  time() . '_' . $file->getClientOriginalName();
+            $file = $request->file('file');
+            $fileName  =  time() . '1' . $file->getClientOriginalName();
             $filePath =    $file->storeAs('public', $fileName);
             $fileUrl = Storage::url($filePath);
         }

@@ -108,7 +108,7 @@ export default {
             editedIndex: -1,
             editedItem: {
 
-                'id': 0,
+                id: 0,
                 'invoice_type': '',
                 'date': '',
                 'num': '',
@@ -120,7 +120,7 @@ export default {
 
             },
             defaultItem: {
-                'id': 0,
+                id: 0,
                 'invoice_type': '',
                 'date': '',
                 'num': '',
@@ -145,6 +145,7 @@ export default {
                         //   item.account_id == this.search
 
                         item.account_id.includes(this.search.toLowerCase())
+                        //||    item.id == this.search
 
                     );
 
@@ -225,7 +226,7 @@ export default {
         },
         async deleteItem(item) {
 
-            // const index = this.items.indexOf(item);
+            // const index = this.items.indexOf(item); 5613 
             // confirm('Are you sure you want to delete this item?') && this.items.splice(index, 1);
 
             console.log("delete api");
@@ -236,27 +237,10 @@ export default {
         },
 
         moveToInvoiceImg(item) {
-
-            console.log("=======================");
-
-
-           
-
-            // const response = axios.get('/api/getInvoiceImgLink/' + item.file_url);
-
-            // console.log(response.data);
-
-            // const url = null;
-            // if (   item.file_url ) {
+            ;
 
 
-                // console.log( item.file_url);
-               
-
-               this.$router.push({ name: 'InvoiceImg', params: { url:  item.id  } });
-
-            // }
-
+            this.$router.push({ name: 'invoiceImg', params: { id: item.id } });
 
 
 
