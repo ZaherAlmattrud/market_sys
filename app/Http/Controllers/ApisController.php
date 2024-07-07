@@ -16,7 +16,7 @@ class ApisController extends Controller
     public function  getAllAreas()
     {
 
-        $data = DB::table('areas')->get();
+        $data = DB::table('areas')->orderBy('id', 'desc')->get();
 
         $itemsArray = $data->map(function ($item) {
             return [
@@ -70,7 +70,7 @@ class ApisController extends Controller
     public function  getAllUserTypes()
     {
 
-        $data = DB::table('usertypes')->get();
+        $data = DB::table('usertypes')->orderBy('id', 'desc')->get();
 
         $itemsArray = $data->map(function ($item) {
             return [
@@ -86,7 +86,7 @@ class ApisController extends Controller
     public function getAllUsers()
     {
 
-        $data = DB::table('users')->get();
+        $data = DB::table('users')->orderBy('id', 'desc')->get();
 
         $itemsArray = $data->map(function ($item) {
 
@@ -214,7 +214,7 @@ class ApisController extends Controller
     public function  getAllAccounts()
     {
 
-        $data = DB::table('accounts')->get();
+        $data = DB::table('accounts')->orderBy('id', 'desc')->get();
 
         $itemsArray = $data->map(function ($item) {
 
@@ -356,7 +356,7 @@ class ApisController extends Controller
     public function getAllPaids()
     {
 
-        $data = DB::table('paids')->get();
+        $data = DB::table('paids')->orderBy('id', 'desc')->get();
 
         $itemsArray = $data->map(function ($item) {
 
@@ -429,7 +429,7 @@ class ApisController extends Controller
     public function getAllArresteds()
     {
 
-        $data = DB::table('arresteds')->get();
+        $data = DB::table('arresteds')->orderBy('id', 'desc')->get();
 
         $itemsArray = $data->map(function ($item) {
 
@@ -500,7 +500,7 @@ class ApisController extends Controller
     public function getAllCategories()
     {
 
-        $data = DB::table('categories')->get();
+        $data = DB::table('categories')->orderBy('id', 'desc')->get();
 
         $itemsArray = $data->map(function ($item) {
 
@@ -559,7 +559,7 @@ class ApisController extends Controller
     public function getAllInvoices()
     {
 
-        $data = DB::table('invoices')->get();
+        $data = DB::table('invoices')->orderBy('id', 'desc')->get();
 
 
         $itemsArray = $data->map(function ($item) {
@@ -598,7 +598,7 @@ class ApisController extends Controller
         if ($request->hasFile('file')) {
 
             $file = $request->file('file');
-            $fileName  =  time() . '_' . $file->getClientOriginalName();
+            $fileName  =  time() . '1' . $file->getClientOriginalName();
             $filePath =    $file->storeAs('public', $fileName);
             $fileUrl = Storage::url($filePath);
         }
@@ -608,6 +608,7 @@ class ApisController extends Controller
             'invoice_type' => 'purchising',
             'account_id' =>  $user ? $user->account_id : null,
             'total' => $data['total'],
+            'num'=>$data['num'],
             'date' =>  Carbon::now()->format('Y-m-d H:i:s'),
             'file' => '',
             'file_name' =>  $fileName,
@@ -638,6 +639,7 @@ class ApisController extends Controller
                     'invoice_type' =>  $oldInvoice->invoice_type,
                     'total' => $data['total'],
                     'date' =>  Carbon::now()->format('Y-m-d H:i:s'),
+                    'num'=> $data['num'],
                     'file' => '',
 
                 ]
@@ -656,7 +658,7 @@ class ApisController extends Controller
     public function getAllProducts()
     {
 
-        $data = DB::table('products')->orderBy('id' ,'desc')->get();
+        $data = DB::table('products')->orderBy('id', 'desc')->get();
 
         $itemsArray = $data->map(function ($item) {
 
@@ -687,7 +689,7 @@ class ApisController extends Controller
     public function getAllProductsHealthy()
     {
 
-        $data = DB::table('products')->get();
+        $data = DB::table('products')->orderBy('id', 'desc')->get();
 
         $itemsArray = $data->map(function ($item) {
 
@@ -729,8 +731,8 @@ class ApisController extends Controller
 
 
         $fileName = '';
-             $filePath = '';
-            $fileUrl = '';
+        $filePath = '';
+        $fileUrl = '';
 
         if ($request->hasFile('file')) {
 
@@ -791,8 +793,12 @@ class ApisController extends Controller
     public function getInvoiceImgLink($id)
     {
 
-        $invoice =     DB::table('invoices')->where('id', $id)->first();
-        $link =  $invoice ?  $invoice->file_url : null;
-        return response()->json($link);
+        $data = [];
+        $invoice =     DB::table('invoices')->where('id', intval($id))->first();
+        $data['link']  =  $invoice ?  $invoice->file_url : null;
+
+        Log::info("getInvoiceImgLink");
+        Log::info($data);
+        return response()->json($data);
     }
 }

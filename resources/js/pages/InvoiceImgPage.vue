@@ -1,6 +1,6 @@
 <template>
     <div v-if="fileUrl">
-        <img :src="fileUrl" alt="Invoice Image" />
+        <img :src="fileUrl" style="height:100%;width:100%" alt="Invoice Image" />
     </div>
 </template>
 <script>
@@ -11,15 +11,24 @@ export default {
 
     data: () => ({
 
-        fileUrl:null,
+        fileUrl: null,
 
     }),
 
-     beforeCreate() {
+    async beforeCreate() {
 
-        const file = this.$route.params.url;
-  
-        this.fileUrl = file ;
+        const invoiceId = this.$route.params.url;
+
+        console.log("=====================================");
+        console.log(invoiceId);
+        const response = await axios.get(`/api/getInvoiceImgLink/${invoiceId}`)
+        console.log("=====================================");
+        console.log(response.data);
+        this.fileUrl = response.data['link']; // img link
+
+
+
+        // this.fileUrl = file ;
 
     },
 

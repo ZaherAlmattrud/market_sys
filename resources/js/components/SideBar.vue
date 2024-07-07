@@ -3,8 +3,8 @@
     <v-layout>
       <v-navigation-drawer location="right" permanent :width="175">
         <template v-slot:prepend>
-          <v-list-item lines="two" prepend-avatar="https://randomuser.me/api/portraits/women/81.jpg"
-            subtitle="Logged in" title="Jane Smith"></v-list-item>
+          <v-list-item lines="two" prepend-avatar="storage/uploads/profile.jpg"
+            subtitle="" title="المهندس زاهر "></v-list-item>
         </template>
 
         <v-divider></v-divider>

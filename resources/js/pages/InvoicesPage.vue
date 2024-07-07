@@ -247,15 +247,15 @@ export default {
             // console.log(response.data);
 
             // const url = null;
-            if (   item.file_url ) {
+            // if (   item.file_url ) {
 
 
-                console.log( item.file_url);
+                // console.log( item.file_url);
                
 
-               this.$router.push({ name: 'InvoiceImg', params: { url:  item.file_url  } });
+               this.$router.push({ name: 'InvoiceImg', params: { url:  item.id  } });
 
-            }
+            // }
 
 
 

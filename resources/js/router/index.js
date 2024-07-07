@@ -19,19 +19,19 @@ const routes = [
   { path: '/', component: ProductPage, name: 'products', meta: { requiresAuth: false }, },
   { path: '/customers', component: CustomerPage, meta: { requiresAuth: false }, },
   { path: '/healthy', component: HealthyPage, meta: { requiresAuth: false }, },
-  { path: '/accounts', component: AccountsPage, meta: { requiresAuth: true }, },
+  { path: '/accounts', component: AccountsPage, meta: { requiresAuth: false }, },
   { path: '/users', component: UsersPage, meta: { requiresAuth: false }, },
-  { path: '/invoices', component: InvoicesPage, meta: { requiresAuth: true }, },
+  { path: '/invoices', component: InvoicesPage, meta: { requiresAuth: false }, },
   { path: '/areas', component: AreasPage, meta: { requiresAuth: false }, },
   { path: '/category', component: CategoryPage, meta: { requiresAuth: false }, },
-  { path: '/accountDetails:accountId', component: AccountDetailsPage, props: true, name: 'accountDetails', meta: { requiresAuth: true }, },
+  { path: '/accountDetails:accountId', component: AccountDetailsPage, props: true, name: 'accountDetails', meta: { requiresAuth: false }, },
   { path: '/login', component: LoginPage, name: 'login' },
-  { path: '/arresteds', component: ArrestedsPage, meta: { requiresAuth: true }, },
-  { path: '/paids', component: PaidsPage, meta: { requiresAuth: true }, },
+  { path: '/arresteds', component: ArrestedsPage, meta: { requiresAuth: false }, },
+  { path: '/paids', component: PaidsPage, meta: { requiresAuth: false }, },
 
   //{ path: '/invoice', component: InvoicePage, meta: { requiresAuth: true },
   {
-    path: '/invoiceImg:url', component: InvoiceImgPage, name: 'InvoiceImg', props: true, meta: { requiresAuth: true },
+    path: '/invoiceImg:url', component: InvoiceImgPage, name: 'InvoiceImg', props: true, meta: { requiresAuth: false },
 
   },
 
