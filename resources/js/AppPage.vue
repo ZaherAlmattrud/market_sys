@@ -1,30 +1,35 @@
 <template>
- <SideBar></SideBar>
+  <SideBar></SideBar>
+  
 </template>
 
- 
+
 
 <script>
 import SideBar from './components/SideBar.vue';
 import LoginPage from './pages/LoginPage.vue';
-  export default {
-    data: () => ({
-      loggedIn : null ,
-    }),
-    components:{
-      SideBar,
-      LoginPage
-    },
+export default {
+  data: () => ({
+    loggedIn: false,
+  }),
+  components: {
+    SideBar,
+    LoginPage
+  },
 
-    beforeCreate(){
+  watch: {
+    loggedIn(val) {
+       console.log(val);
+    } 
+  },
 
-      
-      
+  beforeCreate() {
 
-      this.loggedIn = localStorage.getItem('user'); 
-      console.log(this.loggedIn);
+    const user = localStorage.getItem('user');
 
+    if (user)
+      this.loggedIn = true;
 
-      }
   }
+}
 </script>
