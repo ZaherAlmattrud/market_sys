@@ -1,8 +1,11 @@
 <template>
     <v-container>
         <v-row>
-            <v-col cols="12" md="4">
+            <v-col cols="12" md="10">
                 <v-text-field v-model="search" label="البحث" @input="filterItems"></v-text-field>
+            </v-col>
+            <v-col cols="12" md="2">
+                <v-text-field >{{ filteredItems.length }}</v-text-field>
             </v-col>
         </v-row>
         <v-data-table :headers="headers" :items="filteredItems" item-key="id" class="elevation-1">
@@ -22,12 +25,12 @@
                             <v-card-text>
                                 <v-container>
                                     <v-row>
-                                        <v-col cols="12" sm="6" md="4">
+                                        <v-col cols="12" sm="6" md="6">
                                             <v-text-field v-model="editedItem.user_name" label="الأسم"></v-text-field>
                                         </v-col>
 
 
-                                        <v-col cols="12" sm="6" md="4">
+                                        <v-col cols="12" sm="6" md="6">
 
 
 
@@ -37,14 +40,22 @@
 
 
                                         </v-col>
-                                        <v-col cols="12" sm="6" md="4">
+                                    </v-row>
+                                    <v-row>
+                                        <v-col cols="12" sm="6" md="6">
 
 
                                             <v-select v-model="editedItem.user_type" :items="user_types"
                                                 item-title="name" item-value="id" label="نوع المستخدم" persistent-hint
                                                 single-line></v-select>
                                         </v-col>
+
+                                        <v-col cols="12" sm="6" md="6">
+                                            <v-text-field v-model="editedItem.number_in_book"
+                                                label="رقمه بالدفتر"></v-text-field>
+                                        </v-col>
                                     </v-row>
+
                                 </v-container>
                             </v-card-text>
                             <v-card-actions>
@@ -74,6 +85,8 @@ export default {
     data() {
         return {
 
+
+           
             id: 0,
             user_types: [],
             areas: [],
@@ -83,8 +96,10 @@ export default {
             dialogDelete: false,
             headers: [
 
+
                 { title: 'التسلسل', key: 'id', sortable: false },
                 { title: 'الأسم', key: 'user_name', sortable: false },
+                { title: 'رقمه بالدفتر', key: 'number_in_book', sortable: false },
                 { title: 'نوع المستخدم', key: 'user_type', sortable: false },
                 { title: 'البلدة', key: 'area', sortable: false },
                 { title: 'الحساب', key: 'account', sortable: false },
@@ -97,11 +112,13 @@ export default {
 
 
             ],
+            allUsers: 0,
             editedIndex: -1,
             editedItem: {
                 id: 0,
                 user_name: '',
                 user_type: '',
+                number_in_book: '',
                 area: '',
                 account: 0,
 
@@ -117,14 +134,22 @@ export default {
         };
     },
     computed: {
+
+      
+
+      
         formTitle() {
             return this.editedIndex === -1 ? 'مستخدم جديد' : 'تحديث معلومات مستخدم';
         },
         filteredItems() {
             return this.items.filter((item) => {
+
+                const it =   item.user_name.toLowerCase().includes(this.search.toLowerCase()) || item.area.toLowerCase().includes(this.search.toLowerCase()) ;
+             
                 return (
-                    item.user_name.toLowerCase().includes(this.search.toLowerCase())
-                );
+                  
+                  it
+                    );
             });
         },
     },
@@ -142,6 +167,8 @@ export default {
 
         const response = await axios.get('/api/getAllUsers');
         this.items = response.data; // users
+
+        this.allUsers =   this.items.length ;
 
         const response_1 = await axios.get('/api/getAllAreas');
         this.areas = response_1.data;

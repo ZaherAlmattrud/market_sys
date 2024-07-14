@@ -107,6 +107,7 @@ class ApisController extends Controller
                 'user_type' =>   $userType ?  $userType->type_name : 'غير محدد',
                 'area' =>  $area  ? $area->name : 'غير محدد',
                 'account' => $item->id,
+                'number_in_book' => $item->number_in_book,
             ];
         });
 
@@ -125,6 +126,7 @@ class ApisController extends Controller
                 'user_name' => $data['user_name'],
                 'user_type' => $data['user_type'] ? $data['user_type'] : null,
                 'area_id' => $data['area'] ? $data['area']  : null,
+                'number_in_book' => $data['number_in_book'],
             ]
         );
 
@@ -196,6 +198,7 @@ class ApisController extends Controller
                 'user_name' => $data['user_name'],
                 'user_type' =>     $userTypeId,
                 'area_id' =>   $areaId,
+                'number_in_book' => $data['number_in_book'],
             ]);
 
 
@@ -303,6 +306,7 @@ class ApisController extends Controller
             'quantity' => $data['quantity'],
             'total' => $data['total'],
             'price' => $data['price'],
+            'date'=> Carbon::now()->format('Y-m-d H:i:s'),
             'account_id' =>  $accountId,
         ]);
 
@@ -571,7 +575,7 @@ class ApisController extends Controller
                 'id' => $item->id,
                 'file_url' =>  $item->file_url ?   $item->file_url  : null,
                 'num' => $item->num ? $item->num : 'لا يوجد',
-                'invoice_type' => $item->invoice_type ,
+                'invoice_type' => $item->invoice_type,
                 'account_id' =>  $user ? $user->user_name : null,
                 'total' => $item->total,
                 'date' => $item->date,
@@ -613,7 +617,7 @@ class ApisController extends Controller
 
             'invoice_type' =>  $InvoiceType,
             'account_id' =>  $user ? $user->account_id : null,
-            'total' => $data['total'],
+            'total' => $data['total'] ? $data['total'] : '0',
             'num' => $data['num'],
             'date' =>  Carbon::now()->format('Y-m-d H:i:s'),
             'file' => '',

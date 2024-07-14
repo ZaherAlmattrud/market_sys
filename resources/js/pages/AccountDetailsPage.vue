@@ -89,6 +89,7 @@ export default {
                 { title: 'السعر الإفرادي', key: 'price', sortable: false },
 
                 { title: 'الكمية', key: 'quantity', sortable: false },
+                { title: 'التاريخ', key: 'date', sortable: false },
 
                 { title: 'العمليات', key: 'actions', sortable: false },
 
@@ -105,6 +106,7 @@ export default {
                 'total': '',
                 'description': '',
                 'quantity': '',
+                
                 'price': '',
             },
             defaultItem: {

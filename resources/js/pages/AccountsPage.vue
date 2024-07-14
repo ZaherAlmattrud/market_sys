@@ -1,8 +1,12 @@
 <template>
     <v-container>
         <v-row>
-            <v-col cols="12" md="4">
+            <v-col cols="12" md="10">
                 <v-text-field v-model="search" label="صاحب الحساب" @input="filterItems"></v-text-field>
+            </v-col>
+
+            <v-col cols="12" md="2">
+                <v-text-field>{{ filteredItems.length }}</v-text-field>
             </v-col>
         </v-row>
         <v-data-table :headers="headers" :items="filteredItems" item-key="id" class="elevation-1">
@@ -58,8 +62,8 @@ export default {
             dialogDelete: false,
             headers: [
 
-          
-             //   { title: 'رقم الحساب', key: 'account', sortable: true },
+
+                //   { title: 'رقم الحساب', key: 'account', sortable: true },
                 { title: 'صاحب الحساب', key: 'person_name', sortable: false },
                 { title: 'نوع الحساب', key: 'account_user_type', sortable: false },
                 { title: 'دفتر الديون', key: 'book', sortable: true },
@@ -139,7 +143,7 @@ export default {
 
             console.log(item.id);
 
-            this.$router.push({ name: 'accountDetails', params: { accountId: item.id} });
+            this.$router.push({ name: 'accountDetails', params: { accountId: item.id } });
         },
         filterItems() {
             // This will automatically filter items as search input changes

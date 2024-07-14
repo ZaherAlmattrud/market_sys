@@ -1,8 +1,12 @@
 <template>
     <v-container>
         <v-row>
-            <v-col cols="12" md="4">
+            <v-col cols="12" md="10">
                 <v-text-field v-model="search" label="البحث" @input="filterItems"></v-text-field>
+            </v-col>
+
+            <v-col cols="12" md="2">
+                <v-text-field>{{ filteredItems.length }}</v-text-field>
             </v-col>
         </v-row>
         <v-data-table :headers="headers" :items="filteredItems" item-key="id" class="elevation-1">
