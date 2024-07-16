@@ -19,13 +19,13 @@
           </RouterLink> -->
           <!-- <RouterLink to="/customers"> <v-list-item prepend-icon="mdi-account-box-outline" title="الزبائن"
               value="users"></v-list-item></RouterLink> -->
-          <RouterLink to="/users"> <v-list-item prepend-icon="mdi-account-group-outline" title="المستخدمين"
+          <RouterLink to="/users"> <v-list-item prepend-icon="mdi-briefcase-account-outline" title="الحسابات"
               value="users"></v-list-item></RouterLink>
           <RouterLink to="/arresteds"> <v-list-item prepend-icon="mdi-import" title="المقبوضات"
               value="arresteds"></v-list-item>
           </RouterLink>
-          <RouterLink to="/accounts"> <v-list-item prepend-icon="mdi-briefcase-account-outline" title="الحسابات"
-              value="accounts"></v-list-item></RouterLink>
+          <!-- <RouterLink to="/accounts"> <v-list-item prepend-icon="mdi-briefcase-account-outline" title="الحسابات"
+              value="accounts"></v-list-item></RouterLink> -->
 
 
 
@@ -38,6 +38,15 @@
           </RouterLink>
           <RouterLink to="/areas"> <v-list-item prepend-icon="mdi-map-marker-multiple-outline" title="المناطق"
               value="areas"></v-list-item></RouterLink>
+
+          <RouterLink to="/days"> <v-list-item prepend-icon="mdi-alarm-panel-outline" title="اليومية"
+              value="days"></v-list-item>
+          </RouterLink>
+
+          <RouterLink to="/reports"> <v-list-item prepend-icon="mdi-chart-bar" title="التقارير"
+              value="reports"></v-list-item>
+          </RouterLink>
+
           <RouterLink to="/category"> <v-list-item prepend-icon="mdi-shape-plus-outline" title="الأصناف"
               value="category"></v-list-item>
           </RouterLink>

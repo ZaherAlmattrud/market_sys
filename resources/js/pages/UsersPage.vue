@@ -5,7 +5,7 @@
                 <v-text-field v-model="search" label="البحث" @input="filterItems"></v-text-field>
             </v-col>
             <v-col cols="12" md="2">
-                <v-text-field >{{ filteredItems.length }}</v-text-field>
+                <v-text-field>{{ filteredItems.length }}</v-text-field>
             </v-col>
         </v-row>
         <v-data-table :headers="headers" :items="filteredItems" item-key="id" class="elevation-1">
@@ -33,9 +33,13 @@
                                         <v-col cols="12" sm="6" md="6">
 
 
+                                            <v-autocomplete v-model="editedItem.area" :items="areas" item-title="name"
+                                                item-value="id" label="المنطقة" placeholder="المنطقة" crearable>
+                                            </v-autocomplete>
 
-                                            <v-select v-model="editedItem.area" :items="areas" item-title="name"
-                                                item-value="id" label="المنطقة" persistent-hint single-line></v-select>
+
+                                            <!-- <v-select v-model="editedItem.area" :items="areas" item-title="name"
+                                                item-value="id" label="المنطقة" persistent-hint single-line></v-select> -->
 
 
 
@@ -71,6 +75,7 @@
                 <v-icon larg @click="editItem(item)">mdi-pencil</v-icon>
 
                 <v-icon larg @click="deleteItem(item)">mdi-delete</v-icon>
+                <v-icon larg @click="moveToAccountDetails(item)">mdi-account-eye-outline</v-icon>
 
 
             </template>
@@ -86,7 +91,7 @@ export default {
         return {
 
 
-           
+
             id: 0,
             user_types: [],
             areas: [],
@@ -135,21 +140,21 @@ export default {
     },
     computed: {
 
-      
 
-      
+
+
         formTitle() {
             return this.editedIndex === -1 ? 'مستخدم جديد' : 'تحديث معلومات مستخدم';
         },
         filteredItems() {
             return this.items.filter((item) => {
 
-                const it =   item.user_name.toLowerCase().includes(this.search.toLowerCase()) || item.area.toLowerCase().includes(this.search.toLowerCase()) ;
-             
+                const it = item.user_name.includes(this.search.toLowerCase()) || item.area.includes(this.search.toLowerCase());
+
                 return (
-                  
-                  it
-                    );
+
+                    it
+                );
             });
         },
     },
@@ -168,7 +173,7 @@ export default {
         const response = await axios.get('/api/getAllUsers');
         this.items = response.data; // users
 
-        this.allUsers =   this.items.length ;
+        this.allUsers = this.items.length;
 
         const response_1 = await axios.get('/api/getAllAreas');
         this.areas = response_1.data;
@@ -178,6 +183,15 @@ export default {
 
     },
     methods: {
+
+        moveToAccountDetails(item) {
+
+            console.log("=======================");
+
+            console.log(item.id);
+
+            this.$router.push({ name: 'accountDetails', params: { accountId: item.account } });
+        },
 
         filterItems() {
             // This will automatically filter items as search input changes

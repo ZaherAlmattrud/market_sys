@@ -35,9 +35,23 @@
 
                                             <!-- <v-text-field v-model="editedItem.account_id" label="الحساب"></v-text-field> -->
 
-                                            <v-select v-model="editedItem.account_id" :items="users"
+                                            <!-- <v-select v-model="editedItem.account_id" :items="users"
                                                 item-title="user_name" item-value="id" label="صاحب الحساب"
-                                                persistent-hint single-line></v-select>
+                                                persistent-hint single-line></v-select> -->
+
+
+                                            <v-autocomplete 
+                                            v-model="editedItem.account_id" 
+                                            :items="users"
+                                            item-title="user_name"
+                                            item-value="id" 
+                                            label="صاحب الحساب"
+                                            placeholder="ابدأ البحث"
+                                            crearable
+                                                 >
+
+
+                                            </v-autocomplete>
 
 
                                         </v-col>
@@ -107,7 +121,7 @@ export default {
             editedItem: {
                 id: 0,
                 account_id: '',
-                total: '',
+                total: 0,
                 notes: '',
                 date: '',
 
@@ -115,7 +129,7 @@ export default {
             defaultItem: {
                 id: 0,
                 account_id: '',
-                total: '',
+                total: 0,
                 notes: '',
                 date: '',
 
@@ -179,7 +193,7 @@ export default {
 
     },
 
-    
+
     methods: {
 
         filterItems() {

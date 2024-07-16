@@ -8,10 +8,30 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\Version_1_1\AccountController;
+use App\Http\Controllers\Version_1_1\ArrestedsController;
+use App\Http\Controllers\Version_1_1\UsersController;
+use App\Http\Controllers\Version_1_1\PaidsController;
+use App\Models\Area;
 
 class ApisController extends Controller
 {
     //
+
+
+    private $accountController;
+    private $userController;
+    private $arrestedsController;
+    private $paidsController;
+
+    function __construct(AccountController $accountController, UsersController $userController, ArrestedsController $arrestedsController, PaidsController $paidsController)
+    {
+
+        $this->accountController = $accountController;
+        $this->userController = $userController;
+        $this->arrestedsController = $arrestedsController;
+        $this->paidsController = $paidsController;
+    }
 
     public function  getAllAreas()
     {
@@ -85,6 +105,10 @@ class ApisController extends Controller
 
     public function getAllUsers()
     {
+
+
+        // $data = $this->userController->getAll();
+        // return response()->json($data);
 
         $data = DB::table('users')->orderBy('id', 'desc')->get();
 
@@ -217,48 +241,51 @@ class ApisController extends Controller
     public function  getAllAccounts()
     {
 
-        $data = DB::table('accounts')->orderBy('id', 'desc')->get();
 
-        $itemsArray = $data->map(function ($item) {
+        return  $this->accountController->getAll();
 
-            $user =  DB::table('users')->where('id', $item->user_id)->first();
+        // $data = DB::table('accounts')->orderBy('id', 'desc')->get();
 
-            $book =  DB::table('account_details')->where('account_id', $item->id)->sum('total'); //  الاجمالي
-            $invoices =  DB::table('invoices')->where('account_id', $item->id)->sum('total'); //  الاجمالي
-            $arresteds =  DB::table('arresteds')->where('account_id', $item->id)->sum('total'); // مقبوضات 
-            $paids =  DB::table('paids')->where('account_id', $item->id)->sum('total'); // مدفوعات 
-            $userTypeRow = DB::table('usertypes')->where('id', $user->user_type)->first();
-            $debts = 0;
+        // $itemsArray = $data->map(function ($item) {
 
-            $total =  $book  +   $invoices;
+        //     $user =  DB::table('users')->where('id', $item->user_id)->first();
+
+        //     $book =  DB::table('account_details')->where('account_id', $item->id)->sum('total'); //  الاجمالي
+        //     $invoices =  DB::table('invoices')->where('account_id', $item->id)->sum('total'); //  الاجمالي
+        //     $arresteds =  DB::table('arresteds')->where('account_id', $item->id)->sum('total'); // مقبوضات 
+        //     $paids =  DB::table('paids')->where('account_id', $item->id)->sum('total'); // مدفوعات 
+        //     $userTypeRow = DB::table('usertypes')->where('id', $user->user_type)->first();
+        //     $debts = 0;
+
+        //     $total =  $book  +   $invoices;
 
 
-            if ($userTypeRow->type_name != 'مورد') {
+        //     if ($userTypeRow->type_name != 'مورد') {
 
-                $debts = $total -    $arresteds; // الباقي = رصيده المديون - المقبوضات
-                $debts =  $debts +   $paids; // الباقي النهائي = المدفوع + الباقي
+        //         $debts = $total -    $arresteds; // الباقي = رصيده المديون - المقبوضات
+        //         $debts =  $debts +   $paids; // الباقي النهائي = المدفوع + الباقي
 
-            } else {
+        //     } else {
 
-                $debts = $total -   $paids;
-            }
+        //         $debts = $total -   $paids;
+        //     }
 
-            return [
-                'id' => $item->id,
-                'account' => $item->account_num,
-                'person_name' => $user->user_name,
-                'account_user_type' => $userTypeRow  ? $userTypeRow->type_name  : null,
-                'total' =>  $total,
-                'invoices' =>   $invoices,
-                'book' =>   $book,
-                'paid' =>  $paids,
-                'arrested' =>  $arresteds,
-                'debts' =>  $debts
+        //     return [
+        //         'id' => $item->id,
+        //         'account' => $item->account_num,
+        //         'person_name' => $user->user_name,
+        //         'account_user_type' => $userTypeRow  ? $userTypeRow->type_name  : null,
+        //         'total' =>  $total,
+        //         'invoices' =>   $invoices,
+        //         'book' =>   $book,
+        //         'paid' =>  $paids,
+        //         'arrested' =>  $arresteds,
+        //         'debts' =>  $debts
 
-            ];
-        });
+        //     ];
+        // });
 
-        return response()->json($itemsArray);
+        // return response()->json($itemsArray);
     }
 
 
@@ -285,7 +312,36 @@ class ApisController extends Controller
 
         $data = DB::table('account_details')->where('account_id', $accountId)->get();
 
-        $res = $data->map(function ($item) {
+        $book =  DB::table('account_details')->where('account_id', $accountId)->sum('total'); //  الاجمالي
+        $invoices =  DB::table('invoices')->where('account_id', $accountId)->sum('total'); //  الاجمالي
+        $arresteds =  DB::table('arresteds')->where('account_id', $accountId)->sum('total'); // مقبوضات 
+        $paids =  DB::table('paids')->where('account_id', $accountId)->sum('total'); // مدفوعات 
+
+        $user = DB::table('users')->where('account_id', $accountId)->first();
+        $userTypeRow = DB::table('usertypes')->where('id', $user->user_type)->first();
+        $debts = 0;
+
+        $total =  $book  +   $invoices;
+
+
+        if ($userTypeRow->type_name != 'مورد') {
+
+            $debts = $total -    $arresteds; // الباقي = رصيده المديون - المقبوضات
+            $debts =  $debts +   $paids; // الباقي النهائي = المدفوع + الباقي
+
+        } else {
+
+            $debts = $total -   $paids;
+        }
+
+        $res['total'] = $total;
+        $res['invoices'] = $invoices;
+        $res['book'] = $book;
+        $res['arresteds'] = $arresteds;
+        $res['paids'] = $paids;
+        $res['debts'] = $debts;
+        $res['account_persion'] = $user->user_name;
+        $res['data'] = $data->map(function ($item) {
 
             return  $item;
         });
@@ -306,7 +362,7 @@ class ApisController extends Controller
             'quantity' => $data['quantity'],
             'total' => $data['total'],
             'price' => $data['price'],
-            'date'=> Carbon::now()->format('Y-m-d H:i:s'),
+            'date' => Carbon::now()->format('Y-m-d H:i:s'),
             'account_id' =>  $accountId,
         ]);
 
@@ -360,23 +416,24 @@ class ApisController extends Controller
     public function getAllPaids()
     {
 
-        $data = DB::table('paids')->orderBy('id', 'desc')->get();
+        return $this->paidsController->getAll();
+        // $data = DB::table('paids')->orderBy('id', 'desc')->get();
 
-        $itemsArray = $data->map(function ($item) {
+        // $itemsArray = $data->map(function ($item) {
 
-            $user =     DB::table('users')->where('account_id', $item->account_id)->first();
+        //     $user =     DB::table('users')->where('account_id', $item->account_id)->first();
 
 
-            return [
-                'id' => $item->id,
-                'total' => $item->total,
-                'date' =>  $item->date,
-                'notes' =>  $item->notes,
-                'account_id' =>  $user->user_name,
-            ];
-        });
+        //     return [
+        //         'id' => $item->id,
+        //         'total' => $item->total,
+        //         'date' =>  $item->date,
+        //         'notes' =>  $item->notes,
+        //         'account_id' =>  $user->user_name,
+        //     ];
+        // });
 
-        return response()->json($itemsArray);
+        // return response()->json($itemsArray);
     }
 
     public function createPaid(Request $request)
@@ -402,25 +459,28 @@ class ApisController extends Controller
 
 
 
-        $data = $request->all();
+        return $this->paidsController->update($request, $id);
 
-        $user = DB::table('users')->where('id', $data['account_id'])->first();
 
-        $res =  DB::table('paids')
-            ->where('id', $id)
-            ->update(
+        // $data = $request->all();
 
-                [
-                    'total' =>  $data['total'],
-                    //  'date' =>   Carbon::now()->format('Y-m-d H:i:s'),
-                    'notes' =>   $data['notes'],
-                    'account_id' =>  $user->account_id,
+        // $user = DB::table('users')->where('id', $data['account_id'])->first();
 
-                ]
+        // $res =  DB::table('paids')
+        //     ->where('id', $id)
+        //     ->update(
 
-            );
+        //         [
+        //             'total' =>  $data['total'],
+        //             //  'date' =>   Carbon::now()->format('Y-m-d H:i:s'),
+        //             'notes' =>   $data['notes'],
+        //             'account_id' =>  $user->account_id,
 
-        return response()->json($res);
+        //         ]
+
+        //     );
+
+        // return response()->json($res);
     }
 
     public function deletePaid($id)
@@ -433,23 +493,26 @@ class ApisController extends Controller
     public function getAllArresteds()
     {
 
-        $data = DB::table('arresteds')->orderBy('id', 'desc')->get();
-
-        $itemsArray = $data->map(function ($item) {
-
-            $user =     DB::table('users')->where('account_id', $item->account_id)->first();
+        return $this->arrestedsController->getAll();
 
 
-            return [
-                'id' => $item->id,
-                'total' => $item->total,
-                'date' =>  $item->date,
-                'notes' =>  $item->notes,
-                'account_id' =>  $user->user_name,
-            ];
-        });
+        // $data = DB::table('arresteds')->orderBy('id', 'desc')->get();
 
-        return response()->json($itemsArray);
+        // $itemsArray = $data->map(function ($item) {
+
+        //     $user =     DB::table('users')->where('account_id', $item->account_id)->first();
+
+
+        //     return [
+        //         'id' => $item->id,
+        //         'total' => $item->total,
+        //         'date' =>  $item->date,
+        //         'notes' =>  $item->notes,
+        //         'account_id' =>  $user->user_name,
+        //     ];
+        // });
+
+        // return response()->json($itemsArray);
     }
 
     public function createArrested(Request $request)
@@ -772,6 +835,7 @@ class ApisController extends Controller
             'img' =>  $data['img'],
             'invoice_id' =>  $data['invoice_id'],
             'category_id' =>  $data['category_id'],
+            'date' => Carbon::now()->format('Y-m-d H:i:s'),
             'file_name' =>    $fileName,
             'file_path' =>    $filePath,
             'file_url' =>   $fileUrl,
@@ -787,6 +851,19 @@ class ApisController extends Controller
 
         $data = $request->all();
 
+        $fileName = '';
+        $filePath = '';
+        $fileUrl = '';
+
+        if ($request->hasFile('file')) {
+
+            $file = $request->file('file');
+            $fileName  =  time() . '1' . $file->getClientOriginalName();
+            $filePath =    $file->storeAs('public', $fileName);
+            $fileUrl = Storage::url($filePath);
+        }
+
+
         $res =  DB::table('products')
             ->where('id', $id)
             ->update(
@@ -797,6 +874,9 @@ class ApisController extends Controller
                     'price' =>  $data['price'],
                     'sell' =>   $data['sell'],
                     'img' =>    null,
+                    'file_name' =>    $fileName,
+                    'file_path' =>    $filePath,
+                    'file_url' =>   $fileUrl,
                 ]
 
             );
@@ -820,5 +900,145 @@ class ApisController extends Controller
         Log::info("getInvoiceImgLink");
         Log::info($data);
         return response()->json($data);
+    }
+
+
+    public function getReport()
+    {
+
+        $data = [];
+
+        $total = 0;
+        $arresteds = 0;
+        $paids = 0;
+
+        /*
+
+        $excludedUserType = 'excluded_type';
+
+$regions = Region::with(['users.account.accountDetails', 'users.account.invoices'])
+    ->get()
+    ->map(function ($region) use ($excludedUserType) {
+        $totalAmount = $region->users
+            ->filter(function ($user) use ($excludedUserType) {
+                return $user->user_type !== $excludedUserType;
+            })
+            ->sum(function ($user) {
+                $account = $user->account;
+                if ($account) {
+                    $accountDetailsSum = $account->accountDetails->sum('amount');
+                    $invoicesSum = $account->invoices->sum('amount'); // assuming invoices table has an 'amount' column
+                    return $accountDetailsSum + $invoicesSum;
+                }
+                return 0;
+            });
+
+        return [
+            'name' => $region->name,
+            'total_amount' => $totalAmount,
+        ];
+    });
+
+foreach ($regions as $region) {
+    echo "Region: {$region['name']}, Total Amount: {$region['total_amount']}\n";
+}
+
+
+        */
+
+
+
+
+        $debtstotalSupplers = 0;
+
+        $regions = Area::with(['users.account.accountDetails', 'users.account.invoices', 'users.userType'])
+            ->get()
+            ->map(function ($region) {
+
+
+                $total = $region->users
+                    ->filter(function ($user) {
+
+                        if ($user->userType->type_name != 'مورد')
+                            return true;
+                        else
+                            return false;
+                    })
+                    ->sum(function ($user) {
+
+                        $account = $user->account;
+
+                        $accountDetailsSum = $account->accountDetails->sum('total');
+                        $invoicesSum = $account->invoices->sum('total');
+                        return $accountDetailsSum + $invoicesSum;
+                    });
+
+                $arresteds = $region->users
+                    ->filter(function ($user) {
+
+                        if ($user->userType->type_name != 'مورد')
+                            return true;
+                        else
+                            return false;
+                    })
+                    ->sum(function ($user) {
+
+                        $account = $user->account;
+
+                        return   $account->arresteds->sum('total');
+                    });
+
+
+
+                $paids = $region->users
+                    ->filter(function ($user) {
+
+                        if ($user->userType->type_name != 'مورد')
+                            return true;
+                        else
+                            return false;
+                    })
+                    ->sum(function ($user) {
+
+                        $account = $user->account;
+                        return   $account->paids->sum('total');
+                    });
+
+                $debts = $total -    $arresteds; // الباقي = رصيده المديون - المقبوضات
+                $debts =  $debts +   $paids; // الباقي النهائي = المدفوع + الباقي
+
+
+
+                return [
+                    'id' =>  $region->id,
+                    'name' => $region->name,
+                    'total' => $total,
+                    'arresteds' => $arresteds,
+                    'paids' => $paids,
+                    'debts' =>  $debts,
+                ];
+            });
+
+        foreach ($regions as $region) {
+
+            $d['id'] = $region['id'];
+            $d['name'] = $region['name'];
+            $d['total'] = $region['total'];
+            $d['arresteds'] = $region['arresteds'];
+            $d['paids'] = $region['paids'];
+            $d['debts'] = $region['debts'];
+
+            $debtstotalSupplers =  $debtstotalSupplers +  $d['debts'];
+
+
+
+            array_push($data, $d);
+        }
+
+        $response = [];
+        $response['data'] = $data;
+        $response['debtstotalSupplers'] = $debtstotalSupplers;
+
+        return response()->json($response);
     }
 }

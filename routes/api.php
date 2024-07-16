@@ -64,3 +64,6 @@ Route::post('/createProduct', [ApisController::class, 'createProduct']);
 Route::put('/updateProduct/{ProductId}', [ApisController::class, 'updateProduct']);
 Route::delete('/deleteProduct/{ProductId}', [ApisController::class, 'deleteProduct']);
 //=============================================================================
+
+
+Route::get('/report', [ApisController::class, 'getReport']);

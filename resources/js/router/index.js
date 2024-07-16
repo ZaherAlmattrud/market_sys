@@ -16,6 +16,9 @@ import PaidsPage from "@/pages/PaidsPage.vue"
 import InvoiceImgPage from "@/pages/InvoiceImgPage.vue"
 import ProductImgPage from "@/pages/ProductImgPage.vue"
 
+import DayPage from "@/pages/DayPage.vue"
+import ReportsPage from "@/pages/ReportsPage.vue"
+
 const routes = [
   { path: '/', component: ProductPage, name: 'products', meta: { requiresAuth: false }, },
   { path: '/customers', component: CustomerPage, meta: { requiresAuth: false }, },
@@ -30,8 +33,10 @@ const routes = [
   { path: '/arresteds', component: ArrestedsPage, meta: { requiresAuth: true }, },
   { path: '/paids', component: PaidsPage, meta: { requiresAuth: true }, },
 
-   { path: '/invoiceImg:id', component: InvoiceImgPage, name: 'invoiceImg', props: true, meta: { requiresAuth: false },},
-    {path: '/productImg:url', component: ProductImgPage, name: 'ProductImage', props: true, meta: { requiresAuth: false },}
+  { path: '/invoiceImg:id', component: InvoiceImgPage, name: 'invoiceImg', props: true, meta: { requiresAuth: false }, },
+  { path: '/productImg:url', component: ProductImgPage, name: 'ProductImage', props: true, meta: { requiresAuth: false }, },
+  { path: '/reports', component: ReportsPage, meta: { requiresAuth: true }, },
+  { path: '/days', component: DayPage, meta: { requiresAuth: true }, },
 
 
 

@@ -66,12 +66,12 @@ export default {
                 //   { title: 'رقم الحساب', key: 'account', sortable: true },
                 { title: 'صاحب الحساب', key: 'person_name', sortable: false },
                 { title: 'نوع الحساب', key: 'account_user_type', sortable: false },
-                { title: 'دفتر الديون', key: 'book', sortable: true },
-                { title: ' الفواتير', key: 'invoices', sortable: true },
-                { title: 'الرصيد الإجمالي', key: 'total', sortable: true },
-                { title: 'المقبوض', key: 'arrested', sortable: false },
-                { title: 'المدفوع', key: 'paid', sortable: false },
-                { title: ' المتبقي ', key: 'debts', sortable: true },
+                // { title: 'دفتر الديون', key: 'book', sortable: true },
+                // { title: ' الفواتير', key: 'invoices', sortable: true },
+                // { title: 'الرصيد الإجمالي', key: 'total', sortable: true },
+                // { title: 'المقبوض', key: 'arrested', sortable: false },
+                // { title: 'المدفوع', key: 'paid', sortable: false },
+                // { title: ' المتبقي ', key: 'debts', sortable: true },
                 { title: 'العمليات', key: 'actions', sortable: false },
 
 

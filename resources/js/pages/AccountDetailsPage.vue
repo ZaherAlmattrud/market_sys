@@ -1,14 +1,50 @@
 <template>
     <v-container>
         <v-row>
-            <v-col cols="12" md="8">
+            <v-col cols="12" md="3">
                 <v-text-field v-model="search" label="البحث" @input="filterItems"></v-text-field>
             </v-col>
-            <v-col cols="12" md="4">
 
+            <v-col cols="12" md="3">
 
-
+                <v-text-field> {{ account_persion }} </v-text-field>
             </v-col>
+
+
+
+            <v-col cols="12" md="3">
+                <v-text-field> {{ total }} : الاجمالي </v-text-field>
+            </v-col>
+
+            <v-col cols="12" md="3">
+                <v-text-field> {{ debts }} : المتبقي </v-text-field>
+            </v-col>
+
+        </v-row>
+        <v-row>
+
+            <v-col cols="12" md="3">
+                <v-text-field> {{ paids }} : المدفوعات </v-text-field>
+            </v-col>
+            <v-col cols="12" md="3">
+                <v-text-field> {{ arresteds }} : المقبوضات </v-text-field>
+            </v-col>
+
+
+
+            <v-col cols="12" md="3">
+                <v-text-field> {{ invoices }} : الفواتير </v-text-field>
+            </v-col>
+
+       
+      
+
+            <v-col cols="12" md="3">
+                <v-text-field> {{ book }}: الدفتر </v-text-field>
+            </v-col>
+
+          
+           
         </v-row>
         <v-data-table :headers="headers" :items="filteredItems" item-key="id" class="elevation-1">
             <template v-slot:top>
@@ -77,6 +113,15 @@ export default {
     data() {
         return {
 
+
+            account_persion: '',
+            total: 0,
+            invoices: 0,
+            book: 0,
+            paids: 0,
+            arresteds: 0,
+            debts: 0,
+
             id: 0,
             search: '',
             dialog: false,
@@ -106,7 +151,7 @@ export default {
                 'total': '',
                 'description': '',
                 'quantity': '',
-                
+
                 'price': '',
             },
             defaultItem: {
@@ -148,7 +193,16 @@ export default {
         console.log('account id');
         console.log(accountId);
         const response = await axios.get('/api/getAccountDetails/' + accountId);
-        this.items = response.data; // users
+        this.items = response.data['data']; // users
+
+        this.invoices = response.data['invoices'];
+        this.total = response.data['total'];
+        this.book = response.data['book'];
+        this.paids = response.data['paids'];
+        this.arresteds = response.data['arresteds'];
+        this.debts = response.data['debts'];
+        this.account_persion = response.data['account_persion'];;
+
 
 
 
