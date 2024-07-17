@@ -135,6 +135,8 @@ class ApisController extends Controller
             ];
         });
 
+        Log::info(' data : '.$itemsArray);
+
         return response()->json($itemsArray);
     }
 
@@ -912,39 +914,7 @@ class ApisController extends Controller
         $arresteds = 0;
         $paids = 0;
 
-        /*
-
-        $excludedUserType = 'excluded_type';
-
-$regions = Region::with(['users.account.accountDetails', 'users.account.invoices'])
-    ->get()
-    ->map(function ($region) use ($excludedUserType) {
-        $totalAmount = $region->users
-            ->filter(function ($user) use ($excludedUserType) {
-                return $user->user_type !== $excludedUserType;
-            })
-            ->sum(function ($user) {
-                $account = $user->account;
-                if ($account) {
-                    $accountDetailsSum = $account->accountDetails->sum('amount');
-                    $invoicesSum = $account->invoices->sum('amount'); // assuming invoices table has an 'amount' column
-                    return $accountDetailsSum + $invoicesSum;
-                }
-                return 0;
-            });
-
-        return [
-            'name' => $region->name,
-            'total_amount' => $totalAmount,
-        ];
-    });
-
-foreach ($regions as $region) {
-    echo "Region: {$region['name']}, Total Amount: {$region['total_amount']}\n";
-}
-
-
-        */
+  
 
 
 
@@ -959,7 +929,7 @@ foreach ($regions as $region) {
                 $total = $region->users
                     ->filter(function ($user) {
 
-                        if ($user->userType->type_name != 'مورد')
+                        if ($user->userType->type_name != 'مورد' || $user->userType->type_name != 'مدير'    )
                             return true;
                         else
                             return false;
@@ -976,7 +946,7 @@ foreach ($regions as $region) {
                 $arresteds = $region->users
                     ->filter(function ($user) {
 
-                        if ($user->userType->type_name != 'مورد')
+                        if ($user->userType->type_name != 'مورد' || $user->userType->type_name != 'مدير'  )
                             return true;
                         else
                             return false;
@@ -993,7 +963,7 @@ foreach ($regions as $region) {
                 $paids = $region->users
                     ->filter(function ($user) {
 
-                        if ($user->userType->type_name != 'مورد')
+                        if ($user->userType->type_name != 'مورد' || $user->userType->type_name != 'مدير'  )
                             return true;
                         else
                             return false;

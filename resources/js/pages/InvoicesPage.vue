@@ -24,9 +24,13 @@
                                     <v-row>
                                         <v-col cols="12" sm="6" md="6">
 
-                                            <v-select v-model="editedItem.account_id" :items="users"
+                                            <!-- <v-select v-model="editedItem.account_id" :items="users"
                                                 item-title="user_name" item-value="id" label="صاحب الفاتورة"
-                                                persistent-hint single-line></v-select>
+                                                persistent-hint single-line></v-select> -->
+
+                                                <v-autocomplete v-model="editedItem.account_id" :items="users"
+                                                item-title="user_name" item-value="id" label="صاحب الفاتورة"
+                                                placeholder="ابدأ البحث" crearable> </v-autocomplete>
 
 
                                         </v-col>

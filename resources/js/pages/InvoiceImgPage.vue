@@ -1,7 +1,26 @@
 <template>
-    <div v-if="fileUrl">
+
+    <v-container>
+        <v-row>
+            <v-col cols="12" md="10">
+                <v-button @click="$router.go(-1)"> العودة الى قائمة الفواتير </v-button>
+            </v-col>
+
+        </v-row>
+
+        <v-row>
+
+            <div v-if="fileUrl">
+                <img :src="fileUrl" style="height:100%;width:100%" alt="Invoice Image" />
+            </div>
+        </v-row>
+    </v-container>
+
+
+
+    <!-- <div v-if="fileUrl">
         <img :src="fileUrl" style="height:100%;width:100%" alt="Invoice Image" />
-    </div>
+    </div> -->
 </template>
 <script>
 
@@ -24,7 +43,7 @@ export default {
         const response = await axios.get(`/api/getInvoiceImgLink/${invoiceId}`)
         console.log("=====================================");
         console.log(response.data);
-        this.fileUrl =  response.data['link']; // img link
+        this.fileUrl = response.data['link']; // img link
 
 
 

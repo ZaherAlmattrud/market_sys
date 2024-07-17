@@ -48,8 +48,23 @@ class ArrestedsController extends Controller
     public function update(Request $request, $id)
     {
 
-        $data = [];
-        return response()->json($data);
+        $data = $request->all();;
+
+
+
+
+
+
+        $arrested = Arrested::where('id', $id)->first();
+
+
+        if ($arrested) {
+            $arrested->total = $data['total'];
+            $arrested->save();
+        }
+
+
+        return response()->json();
     }
 
     public function delete($id)

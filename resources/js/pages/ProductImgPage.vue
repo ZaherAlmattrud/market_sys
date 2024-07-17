@@ -1,7 +1,24 @@
 <template>
-    <div v-if="fileUrl">
-        <img :src="fileUrl" style="height:100%;width:100%" alt="Invoice Image" />
-    </div>
+
+    <v-container>
+        <v-row>
+            <v-col cols="12" md="10">
+                <v-button @click="$router.go(-1)"> العودة الى قائمة المنتجات </v-button>
+            </v-col>
+
+        </v-row>
+
+        <v-row>
+
+            <div v-if="fileUrl">
+                <img :src="fileUrl" style="height:100%;width:100%" alt="Invoice Image" />
+            </div>
+        </v-row>
+    </v-container>
+
+
+
+
 </template>
 <script>
 

@@ -9,6 +9,8 @@ class Arrested extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     protected $fillable = [
         'total',
         'date',
