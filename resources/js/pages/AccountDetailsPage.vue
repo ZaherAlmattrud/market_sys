@@ -1,7 +1,12 @@
 <template>
     <v-container>
         <v-row>
-            <v-col cols="12" md="3">
+
+            <v-col cols="12" md="1">
+                <v-button @click="$router.go(-1)"> العودة الى الحسابات </v-button>
+            </v-col>
+
+            <v-col cols="12" md="2">
                 <v-text-field v-model="search" label="البحث" @input="filterItems"></v-text-field>
             </v-col>
 
@@ -65,14 +70,15 @@
                             <v-card-text>
                                 <v-container>
                                     <v-row>
-                                        <v-col cols="12" sm="6" md="6">
-                                            <v-text-field v-model="editedItem.description"
-                                                label="البيان"></v-text-field>
-                                        </v-col>
+                                       
                                         <v-col cols="12" sm="6" md="6">
                                             <v-text-field v-model="editedItem.quantity" label="الكمية"></v-text-field>
 
 
+                                        </v-col>
+                                        <v-col cols="12" sm="6" md="6">
+                                            <v-text-field v-model="editedItem.description"
+                                                label="البيان"></v-text-field>
                                         </v-col>
                                     </v-row>
                                     <v-row>

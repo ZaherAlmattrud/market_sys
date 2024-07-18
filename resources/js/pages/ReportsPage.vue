@@ -17,7 +17,7 @@
             </v-col>
 
             <v-col cols="12" md="6">
-                <v-text-field> {{ debtstotalSupplers }} : مستحقات الزبائن المتبقية لنا </v-text-field>
+                <v-text-field> {{ debtstotalCustomers }} : مستحقات الزبائن المتبقية لنا </v-text-field>
             </v-col>
         </v-row>
 
@@ -45,6 +45,7 @@ export default {
     data() {
         return {
 
+            debtstotalCustomers: 0,
             debtstotalSupplers: 0,
             invoices: [],
             categories: [],
@@ -122,6 +123,8 @@ export default {
         const response = await axios.get('/api/report');
         this.items = response.data['data'];
         this.debtstotalSupplers = response.data['debtstotalSupplers'];
+        this.debtstotalCustomers = response.data['debtstotalCustomers'];
+        
 
 
 

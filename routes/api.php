@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ApisController;
+use App\Http\Controllers\Version_1_1\DayController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -64,6 +65,11 @@ Route::post('/createProduct', [ApisController::class, 'createProduct']);
 Route::put('/updateProduct/{ProductId}', [ApisController::class, 'updateProduct']);
 Route::delete('/deleteProduct/{ProductId}', [ApisController::class, 'deleteProduct']);
 //=============================================================================
-
-
 Route::get('/report', [ApisController::class, 'getReport']);
+//=============================================================================
+Route::get('/getAllDays', [DayController::class, 'getAll']);
+Route::post('/createDay', [DayController::class, 'create']);
+Route::put('/updateDay/{Id}', [DayController::class, 'update']);
+Route::delete('/deleteDay/{Id}', [DayController::class, 'delete']);
+//=============================================================================
+

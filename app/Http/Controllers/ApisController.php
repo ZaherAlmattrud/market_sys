@@ -135,7 +135,7 @@ class ApisController extends Controller
             ];
         });
 
-        Log::info(' data : '.$itemsArray);
+        Log::info(' data : ' . $itemsArray);
 
         return response()->json($itemsArray);
     }
@@ -910,26 +910,24 @@ class ApisController extends Controller
 
         $data = [];
 
-        $total = 0;
-        $arresteds = 0;
-        $paids = 0;
+        $userTypeExepted = ['زبون'];
 
-  
-
-
-
+        // $total = 0;
+        // $arresteds = 0;
+        // $paids = 0;
 
         $debtstotalSupplers = 0;
+        $debtstotalCustomers = 0 ;
 
         $regions = Area::with(['users.account.accountDetails', 'users.account.invoices', 'users.userType'])
             ->get()
-            ->map(function ($region) {
+            ->map(function ($region)use($userTypeExepted) {
 
 
                 $total = $region->users
-                    ->filter(function ($user) {
+                    ->filter(function ($user)use($userTypeExepted) {
 
-                        if ($user->userType->type_name != 'مورد' || $user->userType->type_name != 'مدير'    )
+                        if ( in_array(  $user->userType->type_name , $userTypeExepted  )) 
                             return true;
                         else
                             return false;
@@ -944,12 +942,17 @@ class ApisController extends Controller
                     });
 
                 $arresteds = $region->users
-                    ->filter(function ($user) {
+                    ->filter(function ($user)use($userTypeExepted) {
 
-                        if ($user->userType->type_name != 'مورد' || $user->userType->type_name != 'مدير'  )
-                            return true;
-                        else
-                            return false;
+                        if ( in_array( $user->userType->type_name , $userTypeExepted )) 
+                        return true;
+                    else
+                        return false;
+
+                        // if ($user->userType->type_name != 'مورد' /*|| $user->userType->type_name != 'مدير'  */)
+                        //     return true;
+                        // else
+                        //     return false;
                     })
                     ->sum(function ($user) {
 
@@ -961,12 +964,17 @@ class ApisController extends Controller
 
 
                 $paids = $region->users
-                    ->filter(function ($user) {
+                    ->filter(function ($user)use($userTypeExepted) {
 
-                        if ($user->userType->type_name != 'مورد' || $user->userType->type_name != 'مدير'  )
-                            return true;
-                        else
-                            return false;
+                        if ( in_array(  $user->userType->type_name , $userTypeExepted  )) 
+                        return true;
+                    else
+                        return false;
+
+                        // if ($user->userType->type_name != 'مورد' /*|| $user->userType->type_name != 'مدير'  */)
+                        //     return true;
+                        // else
+                        //     return false;
                     })
                     ->sum(function ($user) {
 
@@ -998,7 +1006,7 @@ class ApisController extends Controller
             $d['paids'] = $region['paids'];
             $d['debts'] = $region['debts'];
 
-            $debtstotalSupplers =  $debtstotalSupplers +  $d['debts'];
+            $debtstotalCustomers =  $debtstotalCustomers +  $d['debts'];
 
 
 
@@ -1008,6 +1016,7 @@ class ApisController extends Controller
         $response = [];
         $response['data'] = $data;
         $response['debtstotalSupplers'] = $debtstotalSupplers;
+        $response['debtstotalCustomers'] = $debtstotalCustomers;
 
         return response()->json($response);
     }
