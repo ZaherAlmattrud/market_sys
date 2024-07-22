@@ -48,7 +48,11 @@
           </RouterLink>
 
           <RouterLink to="/category"> <v-list-item prepend-icon="mdi-shape-plus-outline" title="الأصناف"
-              value="category"></v-list-item>
+              value="category"></v-list-item>        </RouterLink>
+
+              <RouterLink to="/exchange"> <v-list-item prepend-icon="mdi-currency-usd" title="الصرف"
+              value="exchange"></v-list-item>
+
           </RouterLink>
           <v-list-item @click="logout" prepend-icon="mdi-account-lock-outline" title="الخروج"
             value="logOut"></v-list-item>

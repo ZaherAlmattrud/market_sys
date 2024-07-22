@@ -1,12 +1,28 @@
 <template>
-  <SideBar></SideBar>
-  
+ 
+
+    
+
+    <SideBar></SideBar>
+    
+    <!-- Navigation bar ends -->
+ 
+
+ 
+
+
+
+  <!-- 
+ 
+  <FooterComponent></FooterComponent> -->
+
 </template>
 
 
 
 <script>
 import SideBar from './components/SideBar.vue';
+import FooterComponent from './components/FooterComponent.vue';
 import LoginPage from './pages/LoginPage.vue';
 export default {
   data: () => ({
@@ -14,13 +30,14 @@ export default {
   }),
   components: {
     SideBar,
-    LoginPage
+    LoginPage,
+    FooterComponent
   },
 
   watch: {
     loggedIn(val) {
-       console.log(val);
-    } 
+      console.log(val);
+    }
   },
 
   beforeCreate() {

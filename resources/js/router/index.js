@@ -18,6 +18,7 @@ import ProductImgPage from "@/pages/ProductImgPage.vue"
 
 import DayPage from "@/pages/DayPage.vue"
 import ReportsPage from "@/pages/ReportsPage.vue"
+import ExchangePage from "@/pages/ExchangePage.vue"
 
 const routes = [
   { path: '/', component: ProductPage, name: 'products', meta: { requiresAuth: false }, },
@@ -37,6 +38,9 @@ const routes = [
   { path: '/productImg:url', component: ProductImgPage, name: 'ProductImage', props: true, meta: { requiresAuth: false }, },
   { path: '/reports', component: ReportsPage, meta: { requiresAuth: true }, },
   { path: '/days', component: DayPage, meta: { requiresAuth: true }, },
+  { path: '/exchange', component: ExchangePage, meta: { requiresAuth: true }, },
+
+  
 
 
 
