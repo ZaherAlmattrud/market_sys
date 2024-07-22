@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-layout>
+    <!-- <v-layout> -->
       <v-navigation-drawer location="right" permanent :width="175">
         <template v-slot:prepend>
           <v-list-item lines="two" prepend-avatar="storage/uploads/profile.jpg" subtitle=""
@@ -61,11 +61,11 @@
         </v-list>
 
       </v-navigation-drawer>
-      <v-main>
+      <!-- <v-main>
         <RouterView />
 
       </v-main>
-    </v-layout>
+    </v-layout> -->
   </v-card>
 </template>
 <script>

@@ -1,5 +1,5 @@
 <template>
-    <v-footer class="bg-grey-lighten-1">
+    <v-footer color="gray" class="bg-grey-lighten-1">
       <v-row justify="center" no-gutters>
         <v-btn
           v-for="link in links"
@@ -12,7 +12,7 @@
           {{ link }}
         </v-btn>
         <v-col class="text-center mt-4" cols="12">
-          {{ new Date().getFullYear() }} — <strong>Vuetify</strong>
+          {{ new Date().getFullYear() }} — <strong>مركز المطرود التجاري</strong>
         </v-col>
       </v-row>
     </v-footer>
@@ -21,12 +21,12 @@
     export default {
       data: () => ({
         links: [
-          'Home',
-          'About Us',
-          'Team',
-          'Services',
-          'Blog',
-          'Contact Us',
+          'تمديدات كهربائية',
+          'أكسسوارات صحية',
+          'خراطيم زراعية',
+          'رومانات',
+          'قشط',
+          'براغي',
         ],
       }),
     }

@@ -1,20 +1,18 @@
 <template>
- 
+  <v-app app>
+    <SideBar app />
+
+    <NavbarComponent app  />
 
     
-
-    <SideBar></SideBar>
-    
-    <!-- Navigation bar ends -->
- 
-
- 
-
-
-
-  <!-- 
- 
-  <FooterComponent></FooterComponent> -->
+    <v-main>
+      <v-container fluid>
+        <router-view />
+      </v-container>
+    </v-main>
+    <FooterComponent app />
+  </v-app>
+   
 
 </template>
 
@@ -24,6 +22,8 @@
 import SideBar from './components/SideBar.vue';
 import FooterComponent from './components/FooterComponent.vue';
 import LoginPage from './pages/LoginPage.vue';
+import NavbarComponent from './components/NavbarComponent.vue';
+
 export default {
   data: () => ({
     loggedIn: false,
@@ -31,7 +31,8 @@ export default {
   components: {
     SideBar,
     LoginPage,
-    FooterComponent
+    FooterComponent,
+    NavbarComponent
   },
 
   watch: {
