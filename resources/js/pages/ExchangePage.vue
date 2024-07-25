@@ -22,7 +22,7 @@
                                
 
                                         <v-col cols="12" sm="6" md="12">
-                                            <v-text-field v-model="editedItem.num"
+                                            <v-text-field v-model="editedItem.value"
                                                 label="سعر الصرف"></v-text-field>
 
 
@@ -64,10 +64,7 @@ export default {
             headers: [
 
                 { title: 'التسلسل', key: 'id', sortable: false },
-                { title: 'نوع الفاتورة', key: 'invoice_type', sortable: false },
-                { title: 'صاحب الفاتورة', key: 'account_id', sortable: false },
-                { title: 'الرصيد الإجمالي', key: 'total', sortable: false },
-                { title: 'رقم الفاتورة المطبوع', key: 'num', sortable: false },
+                { title: 'القيمة بالليرة السورية', key: 'value', sortable: false },
                 { title: 'التاريخ', key: 'date', sortable: false },
                 // { title: 'الملف', key: 'file', sortable: false },
                 { title: 'العمليات', key: 'actions', sortable: false },
@@ -85,25 +82,13 @@ export default {
             editedItem: {
 
                 id: 0,
-                'invoice_type': '',
-                'date': '',
-                'num': '',
-                'account_id': '',
-                'total': '',
-                'file': '',
-                'file_url': null,
+                value : 0
 
 
             },
             defaultItem: {
                 id: 0,
-                'invoice_type': '',
-                'date': '',
-                'num': '',
-                'account_id': '',
-                file_url: '',
-                'total': '',
-                'file': '',
+                value : ''
             },
         };
     },
@@ -166,17 +151,10 @@ export default {
 
     async beforeCreate() {
 
-        const response = await axios.get('/api/getAllInvoices');
-        console.log("Data Reponse");
-
+        const response = await axios.get('/api/getAll');
         this.items = response.data;
 
-
-        const response2 = await axios.get('/api/getAllUsers');
-
-        console.log("Rrrrrrrrr");
-        console.log(response2);
-        this.users = response2.data;
+ 
 
     },
     methods: {

@@ -107,12 +107,36 @@ class ApisController extends Controller
     {
 
 
-        // $data = $this->userController->getAll();
-        // return response()->json($data);
+ 
 
         $data = DB::table('users')->orderBy('id', 'desc')->get();
 
         $itemsArray = $data->map(function ($item) {
+
+
+            
+            $user = $item  ;
+
+            $book =  DB::table('account_details')->where('account_id', $user->account_id)->sum('total'); //  الاجمالي
+            $invoices =  DB::table('invoices')->where('account_id',$user->account_id)->sum('total'); //  الاجمالي
+            $arresteds =  DB::table('arresteds')->where('account_id', $user->account_id)->sum('total'); // مقبوضات 
+            $paids =  DB::table('paids')->where('account_id', $user->account_id)->sum('total'); // مدفوعات 
+            $userTypeRow = DB::table('usertypes')->where('id', $user->user_type)->first();
+            $debts = 0;
+
+            $total =  $book  +   $invoices;
+
+
+            if ($userTypeRow->type_name != 'مورد') {
+
+                $debts = $total -    $arresteds; // الباقي = رصيده المديون - المقبوضات
+                $debts =  $debts +   $paids; // الباقي النهائي = المدفوع + الباقي
+
+            } else {
+
+                $debts = $total -   $paids;
+            }
+
 
             $userType =  DB::table('usertypes')
                 ->where('id', $item->user_type)
@@ -132,6 +156,8 @@ class ApisController extends Controller
                 'area' =>  $area  ? $area->name : 'غير محدد',
                 'account' => $item->id,
                 'number_in_book' => $item->number_in_book,
+                'mobile' => $item->mobile,
+                'debts' =>  $debts,
             ];
         });
 
@@ -153,6 +179,7 @@ class ApisController extends Controller
                 'user_type' => $data['user_type'] ? $data['user_type'] : null,
                 'area_id' => $data['area'] ? $data['area']  : null,
                 'number_in_book' => $data['number_in_book'],
+                'mobile' => $data['mobile'],
             ]
         );
 
@@ -225,6 +252,7 @@ class ApisController extends Controller
                 'user_type' =>     $userTypeId,
                 'area_id' =>   $areaId,
                 'number_in_book' => $data['number_in_book'],
+                'mobile' => $data['mobile'],
             ]);
 
 
@@ -739,6 +767,7 @@ class ApisController extends Controller
 
             $invoice =     DB::table('invoices')->where('id', $item->invoice_id)->first();
             $category =     DB::table('categories')->where('id', $item->category_id)->first();
+            $exchange =     DB::table('exchange')->first();
 
 
 
@@ -753,6 +782,7 @@ class ApisController extends Controller
                 'img' => $item->img,
                 'invoice_id' => $item->invoice_id,
                 'category_id' => $category ?  $category->name : null,
+                'updatingPrice'=> $item->price_in_dollar *   $exchange->value ,
 
 
             ];
@@ -794,7 +824,7 @@ class ApisController extends Controller
                     'name' => $item->name,
                     'date' => $invoice ? $invoice->date : null,
                     'price'     => $item->price,
-                    'price_after_descount'     =>  $category ? ($item->price) - ($category->descount * $item->price) : $item->price,
+                    'price_after_descount'     => $item->price_after_descount ?   $item->price_after_descount :  ($item->price) - ($category->descount * $item->price)  ,
                     'notes' => $item->notes,
                     'sell' => $item->sell,
                     'img' => $item->img,
@@ -827,6 +857,8 @@ class ApisController extends Controller
             $fileUrl = Storage::url($filePath);
         }
 
+        $exchange =     DB::table('exchange')->first();
+        $category =     DB::table('categories')->where('id', $data['category_id'])->first();
 
         $res = DB::table('products')->insert([
 
@@ -841,6 +873,8 @@ class ApisController extends Controller
             'file_name' =>    $fileName,
             'file_path' =>    $filePath,
             'file_url' =>   $fileUrl,
+            'price_after_descount' => $category ? ( $data['price']) - ($category->descount *  $data['price']) :  $data['price'],
+            'price_in_dollar' =>   $data['price'] /   $exchange->value,
 
         ]);
         return response()->json($res);

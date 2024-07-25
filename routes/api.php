@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ApisController;
 use App\Http\Controllers\Version_1_1\DayController;
+use App\Http\Controllers\Version_1_1\ExchangeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -72,4 +73,8 @@ Route::post('/createDay', [DayController::class, 'create']);
 Route::put('/updateDay/{Id}', [DayController::class, 'update']);
 Route::delete('/deleteDay/{Id}', [DayController::class, 'delete']);
 //=============================================================================
+
+Route::get('/getAll', [ExchangeController::class, 'getAll']);
+Route::post('/createExchange', [ExchangeController::class, 'create']);
+Route::put('/updateExchange/{Id}', [ExchangeController::class, 'update']);
 

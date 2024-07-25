@@ -25,19 +25,19 @@
                             <v-card-text>
                                 <v-container>
                                     <v-row>
-                                        <v-col cols="12" md="4" sm="12">
+                                        <v-col cols="12" md="8" sm="12">
                                             <v-text-field v-model="editedItem.name" label="الاسم"></v-text-field>
                                         </v-col>
                                         <v-col cols="12" md="4" sm="12">
                                             <v-text-field v-model="editedItem.price" label="الشراء"></v-text-field>
                                         </v-col>
-                                        <v-col cols="12" md="4" sm="12">
-                                            <v-file-input v-model="editedItem.file" label="الملف" outlined
-                                                dense></v-file-input>
-                                        </v-col>
+
 
                                     </v-row>
                                     <v-row>
+
+                                    
+
                                         <v-col cols="12" md="4" sm="12">
                                             <v-select v-model="editedItem.invoice_id" :items="invoices" item-title="id"
                                                 item-value="id" persistent-hint single-line label="الفاتورة"></v-select>
@@ -49,6 +49,14 @@
                                                 label="الصنف"></v-select>
                                         </v-col>
                                         <v-col cols="12" md="4" sm="12">
+                                            <v-file-input v-model="editedItem.file" label="الملف" outlined
+                                                dense></v-file-input>
+                                        </v-col>
+
+                                    </v-row>
+                                    <v-row>
+
+                                        <v-col cols="12" md="12" sm="12">
                                             <v-text-field v-model="editedItem.sell" label="البيع"></v-text-field>
                                         </v-col>
 
@@ -92,8 +100,11 @@ export default {
                 { title: 'الشراء', key: 'price', sortable: false },
                 { title: 'الشراء بعد الحسم', key: 'price_after_descount', sortable: false },
                 { title: 'الفاتورة', key: 'invoice_id', sortable: false },
+
                 { title: 'الصنف', key: 'category_id', sortable: false },
                 { title: 'التاريخ', key: 'date', sortable: false },
+
+                { title: 'المحدث', key: 'updatingPrice', sortable: false },
                 { title: 'المبيع', key: 'sell', sortable: false },
                 { title: 'العمليات', key: 'actions', sortable: false },
 

@@ -19,6 +19,15 @@ import ProductImgPage from "@/pages/ProductImgPage.vue"
 import DayPage from "@/pages/DayPage.vue"
 import ReportsPage from "@/pages/ReportsPage.vue"
 import ExchangePage from "@/pages/ExchangePage.vue"
+ import TotalCatalog from "@/pages/TotalCatalog.vue"
+ import LibraCatalog from "@/pages/LibraCatalog.vue"
+ import LibraRatingCatalog from "@/pages/LibraRatingCatalog.vue"
+
+ 
+ 
+ 
+ 
+ 
 
 const routes = [
   { path: '/', component: ProductPage, name: 'products', meta: { requiresAuth: false }, },
@@ -39,6 +48,12 @@ const routes = [
   { path: '/reports', component: ReportsPage, meta: { requiresAuth: true }, },
   { path: '/days', component: DayPage, meta: { requiresAuth: true }, },
   { path: '/exchange', component: ExchangePage, meta: { requiresAuth: true }, },
+
+ { path: '/totalCatalog', component: TotalCatalog , name: 'TotalCatalog' ,   meta: { requiresAuth: true }, },
+ { path: '/libraCatalog', component: LibraCatalog , name: 'LibraCatalog' ,   meta: { requiresAuth: true }, },
+ { path: '/LibraRatingCatalog', component: LibraRatingCatalog , name: 'LibraRatingCatalog' ,   meta: { requiresAuth: true }, },
+
+ 
 
   
 

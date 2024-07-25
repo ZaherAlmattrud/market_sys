@@ -25,38 +25,51 @@
                             <v-card-text>
                                 <v-container>
                                     <v-row>
-                                        <v-col cols="12" sm="6" md="6">
+                                        <v-col cols="12" sm="6" md="12">
                                             <v-text-field v-model="editedItem.user_name" label="الأسم"></v-text-field>
                                         </v-col>
 
 
-                                        <v-col cols="12" sm="6" md="6">
 
+                                    </v-row>
+                                    <v-row>
+                                        <v-col cols="12" sm="6" md="6">
 
                                             <v-autocomplete v-model="editedItem.area" :items="areas" item-title="name"
                                                 item-value="id" label="المنطقة" placeholder="المنطقة" crearable>
                                             </v-autocomplete>
 
 
-                                            <!-- <v-select v-model="editedItem.area" :items="areas" item-title="name"
-                                                item-value="id" label="المنطقة" persistent-hint single-line></v-select> -->
-
-
-
-                                        </v-col>
-                                    </v-row>
-                                    <v-row>
-                                        <v-col cols="12" sm="6" md="6">
-
-
-                                            <v-select v-model="editedItem.user_type" :items="user_types"
-                                                item-title="name" item-value="id" label="نوع المستخدم" persistent-hint
-                                                single-line></v-select>
+                                           
                                         </v-col>
 
                                         <v-col cols="12" sm="6" md="6">
                                             <v-text-field v-model="editedItem.number_in_book"
                                                 label="رقمه بالدفتر"></v-text-field>
+                                        </v-col>
+                                    </v-row>
+
+                                    <v-row>
+                                        <v-col cols="12" sm="6" md="6">
+
+
+                                        
+
+                                            <v-select v-model="editedItem.user_type" :items="user_types"
+                                                item-title="name" item-value="id" label="نوع المستخدم" persistent-hint
+                                                single-line></v-select>
+
+
+                                            <!-- <v-select v-model="editedItem.area" :items="areas" item-title="name"
+    item-value="id" label="المنطقة" persistent-hint single-line></v-select> -->
+
+
+
+                                        </v-col>
+
+                                        <v-col cols="12" sm="6" md="6">
+                                            <v-text-field v-model="editedItem.mobile"
+                                                label="موبايل"></v-text-field>
                                         </v-col>
                                     </v-row>
 
@@ -72,7 +85,7 @@
                 </v-toolbar>
             </template>
             <template v-slot:item.actions="{ item }">
-               
+
 
                 <v-icon larg @click="deleteItem(item)">mdi-delete</v-icon>
                 <v-icon larg @click="editItem(item)">mdi-pencil</v-icon>
@@ -105,10 +118,13 @@ export default {
 
                 { title: 'التسلسل', key: 'id', sortable: false },
                 { title: 'الأسم', key: 'user_name', sortable: false },
+                { title: 'المتبقي', key: 'debts', sortable: false },
+            
                 { title: 'رقمه بالدفتر', key: 'number_in_book', sortable: false },
                 { title: 'نوع المستخدم', key: 'user_type', sortable: false },
                 { title: 'البلدة', key: 'area', sortable: false },
                 { title: 'الحساب', key: 'account', sortable: false },
+                { title: 'موبايل', key: 'mobile', sortable: false },
                 { title: 'العمليات', key: 'actions', sortable: false },
 
 
@@ -127,6 +143,7 @@ export default {
                 number_in_book: '',
                 area: '',
                 account: 0,
+                mobile: '',
 
             },
             defaultItem: {
