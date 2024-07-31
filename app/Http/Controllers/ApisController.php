@@ -107,18 +107,18 @@ class ApisController extends Controller
     {
 
 
- 
+
 
         $data = DB::table('users')->orderBy('id', 'desc')->get();
 
         $itemsArray = $data->map(function ($item) {
 
 
-            
-            $user = $item  ;
+
+            $user = $item;
 
             $book =  DB::table('account_details')->where('account_id', $user->account_id)->sum('total'); //  الاجمالي
-            $invoices =  DB::table('invoices')->where('account_id',$user->account_id)->sum('total'); //  الاجمالي
+            $invoices =  DB::table('invoices')->where('account_id', $user->account_id)->sum('total'); //  الاجمالي
             $arresteds =  DB::table('arresteds')->where('account_id', $user->account_id)->sum('total'); // مقبوضات 
             $paids =  DB::table('paids')->where('account_id', $user->account_id)->sum('total'); // مدفوعات 
             $userTypeRow = DB::table('usertypes')->where('id', $user->user_type)->first();
@@ -371,6 +371,7 @@ class ApisController extends Controller
         $res['paids'] = $paids;
         $res['debts'] = $debts;
         $res['account_persion'] = $user->user_name;
+        $res['book_number'] = $user->number_in_book;
         $res['data'] = $data->map(function ($item) {
 
             return  $item;
@@ -774,15 +775,17 @@ class ApisController extends Controller
             return [
                 'id' => $item->id,
                 'name' => $item->name,
-                'date' => $invoice ? $invoice->date : null,
+                'code' => $item->code,
+                'date' => $invoice ? $invoice->date :  $item->date ,
                 'price'     => $item->price,
                 'price_after_descount'     =>  $category ? ($item->price) - ($category->descount * $item->price) : $item->price,
                 'notes' => $item->notes,
                 'sell' => $item->sell,
+                'price_in_dollar' => $item->price_in_dollar,
                 'img' => $item->img,
                 'invoice_id' => $item->invoice_id,
                 'category_id' => $category ?  $category->name : null,
-                'updatingPrice'=> $item->price_in_dollar *   $exchange->value ,
+                'updatingPrice' => $item->price_in_dollar *   $exchange->value,
 
 
             ];
@@ -822,9 +825,9 @@ class ApisController extends Controller
                 return [
                     'id' => $item->id,
                     'name' => $item->name,
-                    'date' => $invoice ? $invoice->date : null,
+                    'date' => $invoice ? $invoice->date : $item->date ,
                     'price'     => $item->price,
-                    'price_after_descount'     => $item->price_after_descount ?   $item->price_after_descount :  ($item->price) - ($category->descount * $item->price)  ,
+                    'price_after_descount'     => $item->price_after_descount ?   $item->price_after_descount : ($item->price) - ($category->descount * $item->price),
                     'notes' => $item->notes,
                     'sell' => $item->sell,
                     'img' => $item->img,
@@ -863,8 +866,10 @@ class ApisController extends Controller
         $res = DB::table('products')->insert([
 
             'name' =>  $data['name'],
+            'code' =>  $data['code'] ? $data['code'] : 0,
             'price'     => $data['price'],
-            'notes' =>   null,
+            'notes' =>   $data['notes'],
+            'price_in_dollar' => $data['pricr_in_doller'],
             'sell' =>  $data['sell'],
             'img' =>  $data['img'],
             'invoice_id' =>  $data['invoice_id'],
@@ -873,7 +878,7 @@ class ApisController extends Controller
             'file_name' =>    $fileName,
             'file_path' =>    $filePath,
             'file_url' =>   $fileUrl,
-            'price_after_descount' => $category ? ( $data['price']) - ($category->descount *  $data['price']) :  $data['price'],
+            'price_after_descount' => $category ? ($data['price']) - ($category->descount *  $data['price']) :  $data['price'],
             'price_in_dollar' =>   $data['price'] /   $exchange->value,
 
         ]);
@@ -908,6 +913,7 @@ class ApisController extends Controller
 
                     'name' =>  $data['name'],
                     'price' =>  $data['price'],
+                    'category_id' =>  $data['category_id'],
                     'sell' =>   $data['sell'],
                     'img' =>    null,
                     'file_name' =>    $fileName,
@@ -951,17 +957,17 @@ class ApisController extends Controller
         // $paids = 0;
 
         $debtstotalSupplers = 0;
-        $debtstotalCustomers = 0 ;
+        $debtstotalCustomers = 0;
 
         $regions = Area::with(['users.account.accountDetails', 'users.account.invoices', 'users.userType'])
             ->get()
-            ->map(function ($region)use($userTypeExepted) {
+            ->map(function ($region) use ($userTypeExepted) {
 
 
                 $total = $region->users
-                    ->filter(function ($user)use($userTypeExepted) {
+                    ->filter(function ($user) use ($userTypeExepted) {
 
-                        if ( in_array(  $user->userType->type_name , $userTypeExepted  )) 
+                        if (in_array($user->userType->type_name, $userTypeExepted))
                             return true;
                         else
                             return false;
@@ -976,12 +982,12 @@ class ApisController extends Controller
                     });
 
                 $arresteds = $region->users
-                    ->filter(function ($user)use($userTypeExepted) {
+                    ->filter(function ($user) use ($userTypeExepted) {
 
-                        if ( in_array( $user->userType->type_name , $userTypeExepted )) 
-                        return true;
-                    else
-                        return false;
+                        if (in_array($user->userType->type_name, $userTypeExepted))
+                            return true;
+                        else
+                            return false;
 
                         // if ($user->userType->type_name != 'مورد' /*|| $user->userType->type_name != 'مدير'  */)
                         //     return true;
@@ -998,12 +1004,12 @@ class ApisController extends Controller
 
 
                 $paids = $region->users
-                    ->filter(function ($user)use($userTypeExepted) {
+                    ->filter(function ($user) use ($userTypeExepted) {
 
-                        if ( in_array(  $user->userType->type_name , $userTypeExepted  )) 
-                        return true;
-                    else
-                        return false;
+                        if (in_array($user->userType->type_name, $userTypeExepted))
+                            return true;
+                        else
+                            return false;
 
                         // if ($user->userType->type_name != 'مورد' /*|| $user->userType->type_name != 'مدير'  */)
                         //     return true;

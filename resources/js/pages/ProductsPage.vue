@@ -35,8 +35,16 @@
 
                                     </v-row>
                                     <v-row>
+                                       
+                                        <v-col cols="12" md="12" sm="12">
+                                            <v-text-field v-model="editedItem.code" label="الكود"></v-text-field>
+                                        </v-col>
 
-                                    
+
+                                    </v-row>
+                                    <v-row>
+
+
 
                                         <v-col cols="12" md="4" sm="12">
                                             <v-select v-model="editedItem.invoice_id" :items="invoices" item-title="id"
@@ -54,6 +62,18 @@
                                         </v-col>
 
                                     </v-row>
+
+                                    <v-row>
+                                        <v-col cols="12" md="8" sm="12">
+                                            <v-text-field v-model="editedItem.pricr_in_doller" label="السعر بالعملة الاجنبية"></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12" md="4" sm="12">
+                                            <v-text-field v-model="editedItem.notes" label="ملاحظات"></v-text-field>
+                                        </v-col>
+
+
+                                    </v-row>
+
                                     <v-row>
 
                                         <v-col cols="12" md="12" sm="12">
@@ -97,14 +117,16 @@ export default {
 
                 { title: 'التسلسل', key: 'id', sortable: false },
                 { title: 'الاسم', key: 'name', sortable: false },
+                { title: 'الكود', key: 'code', sortable: false },
                 { title: 'الشراء', key: 'price', sortable: false },
+                { title: 'الشراء بالعملة الثانوية', key: 'price_in_dollar', sortable: false },
                 { title: 'الشراء بعد الحسم', key: 'price_after_descount', sortable: false },
                 { title: 'الفاتورة', key: 'invoice_id', sortable: false },
 
                 { title: 'الصنف', key: 'category_id', sortable: false },
                 { title: 'التاريخ', key: 'date', sortable: false },
 
-                { title: 'المحدث', key: 'updatingPrice', sortable: false },
+                // { title: 'المحدث', key: 'updatingPrice', sortable: false },
                 { title: 'المبيع', key: 'sell', sortable: false },
                 { title: 'العمليات', key: 'actions', sortable: false },
 
@@ -120,11 +142,14 @@ export default {
                 id: 0,
                 name: '',
                 pricr: '',
+                pricr_in_doller : 0 ,
                 invoice_id: '',
                 category_id: '',
                 'file': '',
                 img: '',
                 sell: '',
+                code : '',
+                notes : '',
 
             },
             defaultItem: {
@@ -137,6 +162,7 @@ export default {
                 img: '',
                 sell: '',
                 'file': '',
+                pricr_in_doller : 0 ,
 
 
             },
@@ -149,7 +175,7 @@ export default {
         filteredItems() {
             return this.items.filter((item) => {
                 return (
-                    item.name.includes(this.search.toLowerCase())
+                    item.name.includes(this.search.toLowerCase()) ||  item.code.includes (this.search.toUpperCase() )    
                 );
             });
         },

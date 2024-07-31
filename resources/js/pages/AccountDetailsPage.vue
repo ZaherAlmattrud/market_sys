@@ -3,10 +3,13 @@
         <v-row>
 
             <v-col cols="12" md="1">
-                <v-button @click="$router.go(-1)"> العودة الى الحسابات </v-button>
+                <v-button @click="$router.go(-1)">كافة الحسابات</v-button>
+            </v-col>
+            <v-col cols="12" md="1">
+                <v-text-field> {{ book_number }} </v-text-field>
             </v-col>
 
-            <v-col cols="12" md="2">
+            <v-col cols="12" md="1">
                 <v-text-field v-model="search" label="البحث" @input="filterItems"></v-text-field>
             </v-col>
 
@@ -120,6 +123,7 @@ export default {
         return {
 
 
+            book_number : 0 ,
             account_persion: '',
             total: 0,
             invoices: 0,
@@ -208,6 +212,7 @@ export default {
         this.arresteds = response.data['arresteds'];
         this.debts = response.data['debts'];
         this.account_persion = response.data['account_persion'];;
+        this.book_number = response.data['book_number'];;
 
 
 
