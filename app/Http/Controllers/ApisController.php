@@ -164,7 +164,7 @@ class ApisController extends Controller
                 'account' => $item->id,
                 'number_in_book' => $item->number_in_book,
                 'mobile' => $item->mobile,
-             //   'debts' =>  $debts,
+               'debts' =>  $debts,
             ];
         });
 
