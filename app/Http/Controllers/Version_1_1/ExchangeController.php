@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Version_1_1;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\Exchange;
 
 class ExchangeController extends Controller
 {
@@ -13,7 +14,7 @@ class ExchangeController extends Controller
     public function getAll()
     {
 
-        $data = DB::table('exchange')->get();
+        $data =  Exchange::all();
         return response()->json($data);
     }
 

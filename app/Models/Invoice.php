@@ -8,9 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Invoice extends Model
 {
     use HasFactory;
+    
+    public $timestamps = false;
+
     protected $fillable = [
         'invoice_type',
         'account_id',
+        'img',
         'total',
         'file',
         'file_name',

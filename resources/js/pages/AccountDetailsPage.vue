@@ -92,6 +92,8 @@
                                         </v-col>
                                         <v-col cols="12" sm="6" md="6">
                                             <v-text-field v-model="editedItem.total" label="الإجمالي"></v-text-field>
+                                        
+                                            <!-- <mony   currency="EUR" locale="fr-FR" decimal="," thousand="," /> -->
                                         </v-col>
                                     </v-row>
                                 </v-container>
@@ -116,7 +118,13 @@
 </template>
 
 <script>
+
+import MoneyFormat from 'vue-money-format'
 export default {
+
+    components: {
+    'money-format': MoneyFormat
+    },
 
 
     data() {

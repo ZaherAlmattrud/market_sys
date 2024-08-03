@@ -36,7 +36,7 @@
     },
     methods: {
       login() {
-        if (this.username === 'user' && this.password === 'password') {
+        if (this.username === 'Zaher' && this.password === 'Zaher123@y') {
           localStorage.setItem('user', JSON.stringify({ username: this.username }));
           this.$router.push({ name: 'products' });
         } else {

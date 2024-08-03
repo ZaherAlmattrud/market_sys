@@ -12,6 +12,8 @@ use App\Http\Controllers\Version_1_1\AccountController;
 use App\Http\Controllers\Version_1_1\ArrestedsController;
 use App\Http\Controllers\Version_1_1\UsersController;
 use App\Http\Controllers\Version_1_1\PaidsController;
+use App\Http\Controllers\Version_1_1\InvoicesController;
+use App\Http\Controllers\Version_1_1\ProductsController;
 use App\Models\Area;
 
 class ApisController extends Controller
@@ -23,14 +25,19 @@ class ApisController extends Controller
     private $userController;
     private $arrestedsController;
     private $paidsController;
+    private $invoicesController;
+    private $productsController;
 
-    function __construct(AccountController $accountController, UsersController $userController, ArrestedsController $arrestedsController, PaidsController $paidsController)
+    function __construct(AccountController $accountController, UsersController $userController, ArrestedsController $arrestedsController, PaidsController $paidsController , InvoicesController $invoicesController ,
+    ProductsController $productsController )
     {
 
         $this->accountController = $accountController;
         $this->userController = $userController;
         $this->arrestedsController = $arrestedsController;
         $this->paidsController = $paidsController;
+        $this->invoicesController = $invoicesController;
+        $this->productsController = $productsController;
     }
 
     public function  getAllAreas()
@@ -685,44 +692,46 @@ class ApisController extends Controller
     public function createInvoice(Request $request)
     {
 
-        $data = $request->all();
+        return $this->invoicesController->create($request);
 
-        $user = DB::table('users')->where('id', $data['account_id'])->first();
+        // $data = $request->all();
 
-        $userTypeId = $user ? $user->user_type : null;
+        // $user = DB::table('users')->where('id', $data['account_id'])->first();
 
-        $userType = DB::table('usertypes')->where('id',  $userTypeId)->first();
+        // $userTypeId = $user ? $user->user_type : null;
 
-        $InvoiceType =   $userType->type_name == 'مورد' ? 'شراء' : 'بيع';
+        // $userType = DB::table('usertypes')->where('id',  $userTypeId)->first();
 
-        $fileName = '';
-        $filePath = '';
-        $fileUrl = '';
+        // $InvoiceType =   $userType->type_name == 'مورد' ? 'شراء' : 'بيع';
 
-        if ($request->hasFile('file')) {
+        // $fileName = '';
+        // $filePath = '';
+        // $fileUrl = '';
 
-            $file = $request->file('file');
-            $fileName  =  time() . '1' . $file->getClientOriginalName();
-            $filePath =    $file->storeAs('public', $fileName);
-            $fileUrl = Storage::url($filePath);
-        }
+        // if ($request->hasFile('file')) {
 
-        $res = DB::table('invoices')->insert([
+        //     $file = $request->file('file');
+        //     $fileName  =  time() . '1' . $file->getClientOriginalName();
+        //     $filePath =    $file->storeAs('public', $fileName);
+        //     $fileUrl = Storage::url($filePath);
+        // }
 
-            'invoice_type' =>  $InvoiceType,
-            'account_id' =>  $user ? $user->account_id : null,
-            'total' => $data['total'] ? $data['total'] : '0',
-            'num' => $data['num'],
-            'date' =>  Carbon::now()->format('Y-m-d H:i:s'),
-            'file' => '',
-            'file_name' =>  $fileName,
-            'file_path' =>   $filePath,
-            'file_url' =>   $fileUrl,
-        ]);
+        // $res = DB::table('invoices')->insert([
+
+        //     'invoice_type' =>  $InvoiceType,
+        //     'account_id' =>  $user ? $user->account_id : null,
+        //     'total' => $data['total'] ? $data['total'] : '0',
+        //     'num' => $data['num'],
+        //     'date' =>  Carbon::now()->format('Y-m-d H:i:s'),
+        //     'file' => '',
+        //     'file_name' =>  $fileName,
+        //     'file_path' =>   $filePath,
+        //     'file_url' =>   $fileUrl,
+        // ]);
 
 
 
-        return response()->json($res);
+        // return response()->json($res);
     }
 
     public function updateInvoice(Request $request, $id)
@@ -782,7 +791,7 @@ class ApisController extends Controller
                 'notes' => $item->notes,
                 'sell' => $item->sell,
                 'price_in_dollar' => $item->price_in_dollar,
-                'img' => $item->img,
+                //'img' => $item->img,
                 'invoice_id' => $item->invoice_id,
                 'category_id' => $category ?  $category->name : null,
                 'updatingPrice' => $item->price_in_dollar *   $exchange->value,
@@ -797,11 +806,14 @@ class ApisController extends Controller
     public function getProductImgLink($id)
     {
 
-        $data = [];
-        $invoice =     DB::table('products')->where('id', intval($id))->first();
-        $data['link']  =  $invoice ?  $invoice->file_url : null;
+        return $this->productsController->getProductImg($id);
+           
 
-        return response()->json($data);
+        // $data = [];
+        // $invoice =     DB::table('products')->where('id', intval($id))->first();
+        // $data['link']  =  $invoice ?  $invoice->file_url : null;
+
+        // return response()->json($data);
     }
 
     public function getAllProductsHealthy()
@@ -845,44 +857,46 @@ class ApisController extends Controller
     public function createProduct(Request $request)
     {
 
-        $data = $request->all();
+        return $this->productsController->create($request);
+
+        // $data = $request->all();
 
 
-        $fileName = '';
-        $filePath = '';
-        $fileUrl = '';
+        // $fileName = '';
+        // $filePath = '';
+        // $fileUrl = '';
 
-        if ($request->hasFile('file')) {
+        // if ($request->hasFile('file')) {
 
-            $file = $request->file('file');
-            $fileName  =  time() . '1' . $file->getClientOriginalName();
-            $filePath =    $file->storeAs('public', $fileName);
-            $fileUrl = Storage::url($filePath);
-        }
+        //     $file = $request->file('file');
+        //     $fileName  =  time() . '1' . $file->getClientOriginalName();
+        //     $filePath =    $file->storeAs('public', $fileName);
+        //     $fileUrl = Storage::url($filePath);
+        // }
 
-        $exchange =     DB::table('exchange')->first();
-        $category =     DB::table('categories')->where('id', $data['category_id'])->first();
+        // $exchange =     DB::table('exchange')->first();
+        // $category =     DB::table('categories')->where('id', $data['category_id'])->first();
 
-        $res = DB::table('products')->insert([
+        // $res = DB::table('products')->insert([
 
-            'name' =>  $data['name'],
-            'code' =>  $data['code'] ? $data['code'] : 0,
-            'price'     => $data['price'],
-            'notes' =>   $data['notes'],
-            'price_in_dollar' => $data['pricr_in_doller'],
-            'sell' =>  $data['sell'],
-            'img' =>  $data['img'],
-            'invoice_id' =>  $data['invoice_id'],
-            'category_id' =>  $data['category_id'],
-            'date' => Carbon::now()->format('Y-m-d H:i:s'),
-            'file_name' =>    $fileName,
-            'file_path' =>    $filePath,
-            'file_url' =>   $fileUrl,
-            'price_after_descount' => $category ? ($data['price']) - ($category->descount *  $data['price']) :  $data['price'],
-            'price_in_dollar' =>   $data['price'] /   $exchange->value,
+        //     'name' =>  $data['name'],
+        //     'code' =>  $data['code'] ? $data['code'] : 0,
+        //     'price'     => $data['price'],
+        //     'notes' =>   $data['notes'],
+        //     'price_in_dollar' => $data['pricr_in_doller'],
+        //     'sell' =>  $data['sell'],
+        //     'img' =>  $data['img'],
+        //     'invoice_id' =>  $data['invoice_id'],
+        //     'category_id' =>  $data['category_id'],
+        //     'date' => Carbon::now()->format('Y-m-d H:i:s'),
+        //     'file_name' =>    $fileName,
+        //     'file_path' =>    $filePath,
+        //     'file_url' =>   $fileUrl,
+        //     'price_after_descount' => $category ? ($data['price']) - ($category->descount *  $data['price']) :  $data['price'],
+        //     'price_in_dollar' =>   $data['price'] /   $exchange->value,
 
-        ]);
-        return response()->json($res);
+        // ]);
+        // return response()->json($res);
     }
 
     public function updateProduct(Request $request, $id)
@@ -935,13 +949,15 @@ class ApisController extends Controller
     public function getInvoiceImgLink($id)
     {
 
-        $data = [];
-        $invoice =     DB::table('invoices')->where('id', intval($id))->first();
-        $data['link']  =  $invoice ?  $invoice->file_url : null;
+        return $this->invoicesController->getInvoiceImg($id);
 
-        Log::info("getInvoiceImgLink");
-        Log::info($data);
-        return response()->json($data);
+        // $data = [];
+        // $invoice =     DB::table('invoices')->where('id', intval($id))->first();
+        // $data['link']  =  $invoice ?  $invoice->file_url : null;
+
+        // Log::info("getInvoiceImgLink");
+        // Log::info($data);
+        // return response()->json($data);
     }
 
 

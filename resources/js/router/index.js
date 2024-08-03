@@ -34,7 +34,7 @@ const routes = [
   { path: '/customers', component: CustomerPage, meta: { requiresAuth: false }, },
   { path: '/healthy', component: HealthyPage, meta: { requiresAuth: false }, },
   { path: '/accounts', component: AccountsPage, meta: { requiresAuth: true }, },
-  { path: '/users', component: UsersPage, meta: { requiresAuth: false }, },
+  { path: '/users', component: UsersPage, meta: { requiresAuth: true }, },
   { path: '/invoices', component: InvoicesPage, meta: { requiresAuth: true }, },
   { path: '/areas', component: AreasPage, meta: { requiresAuth: false }, },
   { path: '/category', component: CategoryPage, meta: { requiresAuth: false }, },
