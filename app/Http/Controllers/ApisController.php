@@ -124,25 +124,25 @@ class ApisController extends Controller
 
             $user = $item;
 
-            // $book =  DB::table('account_details')->where('account_id', $user->account_id)->sum('total'); //  الاجمالي
-            // $invoices =  DB::table('invoices')->where('account_id', $user->account_id)->sum('total'); //  الاجمالي
-            // $arresteds =  DB::table('arresteds')->where('account_id', $user->account_id)->sum('total'); // مقبوضات 
-            // $paids =  DB::table('paids')->where('account_id', $user->account_id)->sum('total'); // مدفوعات 
-            $userTypeRow = DB::table('usertypes')->where('id', $user->user_type)->first();
+             $book =  DB::table('account_details')->where('account_id', $user->account_id)->sum('total'); //  الاجمالي
+           $invoices =  DB::table('invoices')->where('account_id', $user->account_id)->sum('total'); //  الاجمالي
+            $arresteds =  DB::table('arresteds')->where('account_id', $user->account_id)->sum('total'); // مقبوضات 
+         $paids =  DB::table('paids')->where('account_id', $user->account_id)->sum('total'); // مدفوعات 
+          $userTypeRow = DB::table('usertypes')->where('id', $user->user_type)->first();
             $debts = 0;
 
-            // $total =  $book  +   $invoices;
+            $total =  $book  +   $invoices;
 
 
-            // if ($userTypeRow->type_name != 'مورد') {
+            if ($userTypeRow->type_name != 'مورد') {
 
-            //     $debts = $total -    $arresteds; // الباقي = رصيده المديون - المقبوضات
-            //     $debts =  $debts +   $paids; // الباقي النهائي = المدفوع + الباقي
+                $debts = $total -    $arresteds; // الباقي = رصيده المديون - المقبوضات
+                $debts =  $debts +   $paids; // الباقي النهائي = المدفوع + الباقي
 
-            // } else {
+            } else {
 
-            //     $debts = $total -   $paids;
-            // }
+                $debts = $total -   $paids;
+            }
 
 
             $userType =  DB::table('usertypes')
@@ -255,7 +255,7 @@ class ApisController extends Controller
         $res =  DB::table('users')
             ->where('id', $id)
             ->update([
-                'user_name' => $data['user_name'],
+              //  'user_name' => $data['user_name'],
                 'user_type' =>     $userTypeId,
                 'area_id' =>   $areaId,
                 'number_in_book' => $data['number_in_book'],

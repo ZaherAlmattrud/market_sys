@@ -127,9 +127,9 @@
         </v-toolbar>
       </template>
       <template v-slot:item.actions="{ item }">
-        <v-icon larg @click="editItem(item)">mdi-pencil</v-icon>
+        <!-- <v-icon larg @click="editItem(item)">mdi-pencil</v-icon>
 
-        <v-icon larg @click="deleteItem(item)">mdi-delete</v-icon>
+        <v-icon larg @click="deleteItem(item)">mdi-delete</v-icon> -->
 
         <v-icon larg @click="moveToProductImg(item)">mdi-account-eye-outline</v-icon>
       </template>

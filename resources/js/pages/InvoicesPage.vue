@@ -91,8 +91,8 @@
         </v-toolbar>
       </template>
       <template v-slot:item.actions="{ item }">
-        <v-icon larg @click="editItem(item)">mdi-pencil</v-icon>
-        <v-icon larg @click="deleteItem(item)">mdi-delete</v-icon>
+        <!-- <v-icon larg @click="editItem(item)">mdi-pencil</v-icon>
+        <v-icon larg @click="deleteItem(item)">mdi-delete</v-icon> -->
         <v-icon larg @click="moveToInvoiceImg(item)">mdi-invoice-text-outline</v-icon>
       </template>
     </v-data-table>
