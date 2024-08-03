@@ -124,25 +124,25 @@ class ApisController extends Controller
 
             $user = $item;
 
-            $book =  DB::table('account_details')->where('account_id', $user->account_id)->sum('total'); //  الاجمالي
-            $invoices =  DB::table('invoices')->where('account_id', $user->account_id)->sum('total'); //  الاجمالي
-            $arresteds =  DB::table('arresteds')->where('account_id', $user->account_id)->sum('total'); // مقبوضات 
-            $paids =  DB::table('paids')->where('account_id', $user->account_id)->sum('total'); // مدفوعات 
+            // $book =  DB::table('account_details')->where('account_id', $user->account_id)->sum('total'); //  الاجمالي
+            // $invoices =  DB::table('invoices')->where('account_id', $user->account_id)->sum('total'); //  الاجمالي
+            // $arresteds =  DB::table('arresteds')->where('account_id', $user->account_id)->sum('total'); // مقبوضات 
+            // $paids =  DB::table('paids')->where('account_id', $user->account_id)->sum('total'); // مدفوعات 
             $userTypeRow = DB::table('usertypes')->where('id', $user->user_type)->first();
             $debts = 0;
 
-            $total =  $book  +   $invoices;
+            // $total =  $book  +   $invoices;
 
 
-            if ($userTypeRow->type_name != 'مورد') {
+            // if ($userTypeRow->type_name != 'مورد') {
 
-                $debts = $total -    $arresteds; // الباقي = رصيده المديون - المقبوضات
-                $debts =  $debts +   $paids; // الباقي النهائي = المدفوع + الباقي
+            //     $debts = $total -    $arresteds; // الباقي = رصيده المديون - المقبوضات
+            //     $debts =  $debts +   $paids; // الباقي النهائي = المدفوع + الباقي
 
-            } else {
+            // } else {
 
-                $debts = $total -   $paids;
-            }
+            //     $debts = $total -   $paids;
+            // }
 
 
             $userType =  DB::table('usertypes')
@@ -164,7 +164,7 @@ class ApisController extends Controller
                 'account' => $item->id,
                 'number_in_book' => $item->number_in_book,
                 'mobile' => $item->mobile,
-                'debts' =>  $debts,
+             //   'debts' =>  $debts,
             ];
         });
 
