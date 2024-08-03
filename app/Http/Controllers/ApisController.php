@@ -982,6 +982,108 @@ class ApisController extends Controller
     }
 
 
+
+    public function getCustomersReport(){
+
+    }
+
+    public function getSupplersReport(){
+
+        
+        $data = [];
+        $userTypeExepted = ['مورد'];
+        $debtstotalCustomers = 0;
+
+        $regions = Area::with(['users.account.accountDetails', 'users.account.invoices', 'users.userType'])
+            ->get()
+            ->map(function ($region) use ($userTypeExepted) {
+
+
+                $total = $region->users
+                    ->filter(function ($user) use ($userTypeExepted) {
+
+                        if (in_array($user->userType->type_name, $userTypeExepted))
+                            return true;
+                        else
+                            return false;
+                    })
+                    ->sum(function ($user) {
+
+                        $account = $user->account;
+
+                        $accountDetailsSum = $account->accountDetails->sum('total');
+                        $invoicesSum = $account->invoices->sum('total');
+                        return $accountDetailsSum + $invoicesSum;
+                    });
+
+                $arresteds = $region->users
+                    ->filter(function ($user) use ($userTypeExepted) {
+
+                        if (in_array($user->userType->type_name, $userTypeExepted))
+                            return true;
+                        else
+                            return false;
+                    })
+                    ->sum(function ($user) {
+
+                        $account = $user->account;
+
+                        return   $account->arresteds->sum('total');
+                    });
+
+
+
+                $paids = $region->users
+                    ->filter(function ($user) use ($userTypeExepted) {
+
+                        if (in_array($user->userType->type_name, $userTypeExepted))
+                            return true;
+                        else
+                            return false;
+ 
+                    })
+                    ->sum(function ($user) {
+
+                        $account = $user->account;
+                        return   $account->paids->sum('total');
+                    });
+
+                $debts = $total +   $arresteds; // الباقي = رصيده المديون + المقبوضات
+                $debts =  $debts -   $paids; // الباقي النهائي = المدفوع - الباقي
+
+
+
+                return [
+                    'id' =>  $region->id,
+                    'name' => $region->name,
+                    'total' => $total,
+                    'arresteds' => $arresteds,
+                    'paids' => $paids,
+                    'debts' =>  $debts,
+                ];
+            });
+
+        foreach ($regions as $region) {
+
+            // $d['id'] = $region['id'];
+            // $d['name'] = $region['name'];
+            // $d['total'] = $region['total'];
+            // $d['arresteds'] = $region['arresteds'];
+            // $d['paids'] = $region['paids'];
+            $d['debts'] = $region['debts'];
+
+            $debtstotalCustomers =  $debtstotalCustomers +  $d['debts'];
+
+
+
+            array_push($data, $d);
+        }
+
+        return $debtstotalCustomers ;
+
+
+    }
+
     public function getReport()
     {
 
@@ -993,7 +1095,7 @@ class ApisController extends Controller
         // $arresteds = 0;
         // $paids = 0;
 
-        $debtstotalSupplers = 0;
+        $debtstotalSupplers = $this->getSupplersReport();
         $debtstotalCustomers = 0;
 
         $regions = Area::with(['users.account.accountDetails', 'users.account.invoices', 'users.userType'])
