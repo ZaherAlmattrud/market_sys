@@ -22,7 +22,6 @@ class InvoicesController extends Controller
      
         $finfo = new \finfo(FILEINFO_MIME_TYPE);
         $mimeType = $finfo->buffer($imageContent);
-      //  $mimeType = 'image/jpeg'; // Adjust this based on your actual image type
         return Response::make($imageContent, 200, ['Content-Type' => $mimeType]);
     
     }

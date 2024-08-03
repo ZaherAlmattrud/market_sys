@@ -17,52 +17,46 @@
     </v-row>
   </v-container>
 
-  <!-- <div v-if="fileUrl">
+  <div v-if="fileUrl">
         <img :src="fileUrl" style="height:100%;width:100%" alt="Invoice Image" />
-    </div> -->
+    </div>
 </template>
 <script>
 export default {
   data: () => ({
-    imageUrl: null,
+    fileUrl: null,
   }),
 
-  mounted() {
-    const invoiceId = this.$route.params.id;
-    this.fetchImage(invoiceId); // Replace 1 with the actual image ID
-  },
+  // mounted() {
+  //   const invoiceId = this.$route.params.id;
+  //   this.fetchImage(invoiceId); // Replace 1 with the actual image ID
+  // },
 
-  methods: {
-    async fetchImage(invoiceId) {
-      try {
+  // methods: {
+  //   async fetchImage(invoiceId) {
+  //     try {
 
-        const response = await axios.get(`/api/getInvoiceImgLink/${invoiceId}`);
-        const blob = await response.blob();
-        this.imageUrl = URL.createObjectURL(blob);
+  //       const response = await axios.get(`/api/getInvoiceImgLink/${invoiceId}`);
+  //       const blob = await response.blob();
+  //       this.imageUrl = URL.createObjectURL(blob);
         
-      } catch (error) {
-        console.error("Error fetching image:", error);
-      }
-    },
+  //     } catch (error) {
+  //       console.error("Error fetching image:", error);
+  //     }
+  //   },
 
-    // async beforeCreate() {
+    async beforeCreate() {
 
-    //     const invoiceId = this.$route.params.id;
+        const invoiceId = this.$route.params.id;
 
-    //     // console.log("=====================================");
-    //     // console.log(invoiceId);
-    //     // const response = await axios.get(`/api/getInvoiceImgLink/${invoiceId}`)
-    //     // console.log("=====================================");
-    //     // console.log(response.data);
-    //     // this.fileUrl = response.data['link']; // img link
+        console.log("=====================================");
+        console.log(invoiceId);
+        const response = await axios.get(`/api/getInvoiceImgLink/${invoiceId}`)
+        console.log("=====================================");
+        console.log(response.data);
+        this.fileUrl = response.data['link']; // img link
 
-    //     try {
-    //     const response = await fetch(`/api/getInvoiceImgLink/${invoiceId}`);
-    //     const blob = await response.blob();
-    //     this.fileUrl = URL.createObjectURL(blob);
-    //   } catch (error) {
-    //     console.error('Error fetching image:', error);
-    //   }
+       
   },
 };
 </script>

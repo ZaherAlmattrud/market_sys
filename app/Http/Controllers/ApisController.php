@@ -806,14 +806,26 @@ class ApisController extends Controller
     public function getProductImgLink($id)
     {
 
-        return $this->productsController->getProductImg($id);
+
+        if( $id > 560 ){
+
+            return $this->productsController->getProductImg($id);
+
+
+        }else{
+
+                $data = [];
+        $invoice =     DB::table('products')->where('id', intval($id))->first();
+        $data['link']  =  $invoice ?  $invoice->file_url : null;
+
+        return response()->json($data);
+
+
+        }
+        
            
 
-        // $data = [];
-        // $invoice =     DB::table('products')->where('id', intval($id))->first();
-        // $data['link']  =  $invoice ?  $invoice->file_url : null;
-
-        // return response()->json($data);
+    
     }
 
     public function getAllProductsHealthy()
@@ -949,15 +961,24 @@ class ApisController extends Controller
     public function getInvoiceImgLink($id)
     {
 
-        return $this->invoicesController->getInvoiceImg($id);
 
-        // $data = [];
-        // $invoice =     DB::table('invoices')->where('id', intval($id))->first();
-        // $data['link']  =  $invoice ?  $invoice->file_url : null;
+        if($id > 82 ){
 
-        // Log::info("getInvoiceImgLink");
-        // Log::info($data);
-        // return response()->json($data);
+          return $this->invoicesController->getInvoiceImg(intval($id));
+
+        }else{
+
+        $data = [];
+        $invoice =     DB::table('invoices')->where('id',  $id )->first();
+        $data['link']  =  $invoice ?  $invoice->file_url : null;
+        Log::info("getInvoiceImgLink");
+        Log::info($data);
+        return response()->json($data);
+
+
+        }
+      
+ 
     }
 
 

@@ -223,14 +223,18 @@ export default {
       await axios.delete(`/api/deleteInvoice/${item.id}`);
     },
 
-    
     moveToInvoiceImg(item) {
+      if (item.id > 82) {
 
-        window.open( `http://localhost:8000/api/getInvoiceImgLink/${item.id}`, '_blank', 'noopener,noreferrer');
-
-
-    //   window.location.href = `http://localhost:8000/api/getInvoiceImgLink/${item.id}`;
-      // this.$router.push({ name: 'invoiceImg', params: { id: item.id } });
+        window.open(
+          `http://localhost:8000/api/getInvoiceImgLink/${item.id}`,
+          "_blank",
+          "noopener,noreferrer"
+        );
+        
+      } else {
+        this.$router.push({ name: "invoiceImg", params: { id: item.id } });
+      }
     },
     close() {
       this.dialog = false;

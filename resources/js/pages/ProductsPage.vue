@@ -228,13 +228,23 @@ export default {
   },
   methods: {
     moveToProductImg(item) {
-      window.open(
+
+      if ( item.id > 560 ){
+
+        window.open(
         `http://localhost:8000/api/getProductImgLink/${item.id}`,
         "_blank",
         "noopener,noreferrer"
       );
 
-      // this.$router.push({ name: 'ProductImage', params: { url: item.id } });
+
+      }else{
+
+        this.$router.push({ name: 'ProductImage', params: { url: item.id } });
+      }
+
+
+
     },
     filterItems() {
       // This will automatically filter items as search input changes
