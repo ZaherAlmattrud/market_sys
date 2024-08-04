@@ -1,67 +1,112 @@
 <template>
   <v-card>
     <!-- <v-layout> -->
-      <v-navigation-drawer location="right" permanent :width="175">
-        <template v-slot:prepend>
-          <v-list-item lines="two" prepend-avatar="storage/uploads/profile.jpg" subtitle=""
-            title="المهندس زاهر "></v-list-item>
-        </template>
+    <v-navigation-drawer location="right" permanent :width="175">
+      <template v-slot:prepend>
+        <v-list-item
+          lines="two"
+          prepend-avatar="storage/uploads/profile.jpg"
+          subtitle=""
+          title="المهندس زاهر "
+        ></v-list-item>
+      </template>
 
-        <v-divider></v-divider>
+      <v-divider></v-divider>
 
-        <v-list density="compact" nav>
-          <RouterLink to="/"> <v-list-item prepend-icon="mdi-list-box-outline" title="المنتجات"
-              value="home"></v-list-item>
-          </RouterLink>
+      <v-list density="compact" nav>
+        <RouterLink to="/">
+          <v-list-item
+            prepend-icon="mdi-list-box-outline"
+            title="المنتجات"
+            value="home"
+          ></v-list-item>
+        </RouterLink>
 
-          <!-- <RouterLink to="/healthy"> <v-list-item prepend-icon="mdi-pipe-valve" title="الصحية"
+        <!-- <RouterLink to="/healthy"> <v-list-item prepend-icon="mdi-pipe-valve" title="الصحية"
               value="account"></v-list-item>
           </RouterLink> -->
-          <!-- <RouterLink to="/customers"> <v-list-item prepend-icon="mdi-account-box-outline" title="الزبائن"
+        <!-- <RouterLink to="/customers"> <v-list-item prepend-icon="mdi-account-box-outline" title="الزبائن"
               value="users"></v-list-item></RouterLink> -->
-          <RouterLink to="/users"> <v-list-item prepend-icon="mdi-briefcase-account-outline" title="الحسابات"
-              value="users"></v-list-item></RouterLink>
-          <RouterLink to="/arresteds"> <v-list-item prepend-icon="mdi-import" title="المقبوضات"
-              value="arresteds"></v-list-item>
-          </RouterLink>
-          <!-- <RouterLink to="/accounts"> <v-list-item prepend-icon="mdi-briefcase-account-outline" title="الحسابات"
+        <RouterLink to="/users">
+          <v-list-item
+            prepend-icon="mdi-briefcase-account-outline"
+            title="الحسابات"
+            value="users"
+          ></v-list-item
+        ></RouterLink>
+        <RouterLink to="/arresteds">
+          <v-list-item
+            prepend-icon="mdi-import"
+            title="المقبوضات"
+            value="arresteds"
+          ></v-list-item>
+        </RouterLink>
+        <!-- <RouterLink to="/accounts"> <v-list-item prepend-icon="mdi-briefcase-account-outline" title="الحسابات"
               value="accounts"></v-list-item></RouterLink> -->
 
+        <RouterLink to="/invoices">
+          <v-list-item
+            prepend-icon="mdi-invoice-text-multiple-outline"
+            title="الفواتير"
+            value="invoices"
+          ></v-list-item
+        ></RouterLink>
 
+        <RouterLink to="/paids">
+          <v-list-item
+            prepend-icon="mdi-export"
+            title="المدفوعات"
+            value="paids"
+          ></v-list-item>
+        </RouterLink>
+        <RouterLink to="/areas">
+          <v-list-item
+            prepend-icon="mdi-map-marker-multiple-outline"
+            title="المناطق"
+            value="areas"
+          ></v-list-item
+        ></RouterLink>
 
+        <RouterLink to="/days">
+          <v-list-item
+            prepend-icon="mdi-alarm-panel-outline"
+            title="اليومية"
+            value="days"
+          ></v-list-item>
+        </RouterLink>
 
+        <RouterLink to="/reports">
+          <v-list-item
+            prepend-icon="mdi-chart-bar"
+            title="التقارير"
+            value="reports"
+          ></v-list-item>
+        </RouterLink>
 
-          <RouterLink to="/invoices"> <v-list-item prepend-icon="mdi-invoice-text-multiple-outline" title="الفواتير"
-              value="invoices"></v-list-item></RouterLink>
+        <RouterLink to="/category">
+          <v-list-item
+            prepend-icon="mdi-shape-plus-outline"
+            title="الأصناف"
+            value="category"
+          ></v-list-item>
+        </RouterLink>
 
-          <RouterLink to="/paids"> <v-list-item prepend-icon="mdi-export" title="المدفوعات" value="paids"></v-list-item>
-          </RouterLink>
-          <RouterLink to="/areas"> <v-list-item prepend-icon="mdi-map-marker-multiple-outline" title="المناطق"
-              value="areas"></v-list-item></RouterLink>
-
-          <RouterLink to="/days"> <v-list-item prepend-icon="mdi-alarm-panel-outline" title="اليومية"
-              value="days"></v-list-item>
-          </RouterLink>
-
-          <RouterLink to="/reports"> <v-list-item prepend-icon="mdi-chart-bar" title="التقارير"
-              value="reports"></v-list-item>
-          </RouterLink>
-
-          <RouterLink to="/category"> <v-list-item prepend-icon="mdi-shape-plus-outline" title="الأصناف"
-              value="category"></v-list-item>        </RouterLink>
-
-              <RouterLink to="/exchange"> <v-list-item prepend-icon="mdi-currency-usd" title="الصرف"
-              value="exchange"></v-list-item>
-
-          </RouterLink>
-          <v-list-item @click="logout" prepend-icon="mdi-account-lock-outline" title="الخروج"
-            value="logOut"></v-list-item>
-
-
-        </v-list>
-
-      </v-navigation-drawer>
-      <!-- <v-main>
+        <RouterLink to="/exchange">
+          <v-list-item
+            prepend-icon="mdi-currency-usd"
+            title="الصرف"
+            value="exchange"
+          ></v-list-item>
+        </RouterLink>
+        <v-list-item
+          @click="logout"
+          prepend-icon="mdi-account-lock-outline"
+          title="الخروج"
+          value="logOut"
+        ></v-list-item>
+      </v-list>
+    </v-navigation-drawer>
+    <!-- <v-main>
         <RouterView />
 
       </v-main>
@@ -72,31 +117,19 @@
 export default {
   data() {
     return {
-
       loggedIn: false,
-
     };
   },
 
   beforeCreate() {
-
-    const loggedIn = localStorage.getItem('user');
-    if (loggedIn)
-      this.loggedIn = true;
-
-
+    const loggedIn = localStorage.getItem("user");
+    if (loggedIn) this.loggedIn = true;
   },
   methods: {
-
     logout() {
-
-      localStorage.removeItem('user');
-      this.$router.push({ name: 'login' });
+      localStorage.removeItem("user");
+      this.$router.push({ name: "login" });
     },
-
-
-
-
-  }
-}
+  },
+};
 </script>

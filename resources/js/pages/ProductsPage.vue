@@ -127,9 +127,9 @@
         </v-toolbar>
       </template>
       <template v-slot:item.actions="{ item }">
-        <!-- <v-icon larg @click="editItem(item)">mdi-pencil</v-icon>
+        <v-icon v-if="loggedIn" larg @click="editItem(item)">mdi-pencil</v-icon>
 
-        <v-icon larg @click="deleteItem(item)">mdi-delete</v-icon> -->
+        <v-icon v-if="loggedIn" larg @click="deleteItem(item)">mdi-delete</v-icon>
 
         <v-icon larg @click="moveToProductImg(item)">mdi-account-eye-outline</v-icon>
       </template>
@@ -141,6 +141,7 @@
 export default {
   data() {
     return {
+      loggedIn : false ,
       invoices: [],
       categories: [],
       search: "",
@@ -214,7 +215,14 @@ export default {
     },
   },
 
+  mounted(){
+
+    this.checkLogedIn();
+  },
+
+   
   async beforeCreate() {
+    
     const response = await axios.get("/api/getAllProducts");
     this.items = response.data;
 
@@ -227,24 +235,24 @@ export default {
     this.categories = response3.data;
   },
   methods: {
-    moveToProductImg(item) {
-
-      if ( item.id > 560 ){
-
-        window.open(
-        `http://localhost:8000/api/getProductImgLink/${item.id}`,
-        "_blank",
-        "noopener,noreferrer"
-      );
-
-
-      }else{
-
-        this.$router.push({ name: 'ProductImage', params: { url: item.id } });
+    checkLogedIn() {
+      const loggedIn = localStorage.getItem("user");
+      if (loggedIn) {
+        this.loggedIn = true;
+      } else {
+        this.loggedIn = false;
       }
-
-
-
+    },
+    moveToProductImg(item) {
+      if (item.id > 560) {
+        window.open(
+          `http://localhost:8000/api/getProductImgLink/${item.id}`,
+          "_blank",
+          "noopener,noreferrer"
+        );
+      } else {
+        this.$router.push({ name: "ProductImage", params: { url: item.id } });
+      }
     },
     filterItems() {
       // This will automatically filter items as search input changes

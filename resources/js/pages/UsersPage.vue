@@ -101,8 +101,8 @@
         </v-toolbar>
       </template>
       <template v-slot:item.actions="{ item }">
-        <v-icon larg @click="deleteItem(item)">mdi-delete</v-icon>
-        <v-icon larg @click="editItem(item)">mdi-pencil</v-icon>
+        <v-icon v-if="loggedIn" larg @click="deleteItem(item)">mdi-delete</v-icon>
+        <v-icon v-if="loggedIn" larg @click="editItem(item)">mdi-pencil</v-icon>
         <v-icon larg @click="moveToAccountDetails(item)">mdi-account-eye-outline</v-icon>
       </template>
     </v-data-table>
@@ -113,6 +113,7 @@
 export default {
   data() {
     return {
+      loggedIn: false,
       id: 0,
       user_types: [],
       areas: [],
@@ -188,7 +189,19 @@ export default {
     const response_2 = await axios.get("/api/getAllUserTypes");
     this.user_types = response_2.data;
   },
+
+  mounted() {
+    this.checkLogedIn();
+  },
   methods: {
+    checkLogedIn() {
+      const loggedIn = localStorage.getItem("user");
+      if (loggedIn) {
+        this.loggedIn = true;
+      } else {
+        this.loggedIn = false;
+      }
+    },
     moveToAccountDetails(item) {
       console.log("=======================");
 

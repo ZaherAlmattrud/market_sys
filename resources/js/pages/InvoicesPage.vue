@@ -91,8 +91,8 @@
         </v-toolbar>
       </template>
       <template v-slot:item.actions="{ item }">
-        <!-- <v-icon larg @click="editItem(item)">mdi-pencil</v-icon>
-        <v-icon larg @click="deleteItem(item)">mdi-delete</v-icon> -->
+        <v-icon v-if="loggedIn" larg @click="editItem(item)">mdi-pencil</v-icon>
+        <v-icon v-if="loggedIn" larg @click="deleteItem(item)">mdi-delete</v-icon>
         <v-icon larg @click="moveToInvoiceImg(item)">mdi-invoice-text-outline</v-icon>
       </template>
     </v-data-table>
@@ -103,6 +103,7 @@
 export default {
   data() {
     return {
+      loggedIn: false,
       users: [],
       areas: [],
       search: "",
@@ -183,6 +184,7 @@ export default {
   },
 
   async beforeCreate() {
+  
     const response = await axios.get("/api/getAllInvoices");
     console.log("Data Reponse");
 
@@ -194,7 +196,19 @@ export default {
     console.log(response2);
     this.users = response2.data;
   },
+
+  mounted() {
+    this.checkLogedIn();
+  },
   methods: {
+    checkLogedIn() {
+      const loggedIn = localStorage.getItem("user");
+      if (loggedIn) {
+        this.loggedIn = true;
+      } else {
+        this.loggedIn = false;
+      }
+    },
     moveToAccountDetails(item) {
       // this.$router.push({ name: 'accountDetails', params: { accountId: 1 } });
     },
@@ -225,13 +239,11 @@ export default {
 
     moveToInvoiceImg(item) {
       if (item.id > 82) {
-
         window.open(
           `http://localhost:8000/api/getInvoiceImgLink/${item.id}`,
           "_blank",
           "noopener,noreferrer"
         );
-        
       } else {
         this.$router.push({ name: "invoiceImg", params: { id: item.id } });
       }

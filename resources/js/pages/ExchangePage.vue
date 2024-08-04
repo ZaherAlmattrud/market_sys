@@ -40,9 +40,9 @@
                 </v-toolbar>
             </template>
             <template v-slot:item.actions="{ item }">
-                <v-icon larg @click="editItem(item)">mdi-pencil</v-icon>
-                <v-icon larg @click="deleteItem(item)">mdi-delete</v-icon>
-                <v-icon larg @click="moveToInvoiceImg(item)">mdi-invoice-text-outline</v-icon>
+                <v-icon v-if="loggedIn" larg @click="editItem(item)">mdi-pencil</v-icon>
+                <v-icon v-if="loggedIn" larg @click="deleteItem(item)">mdi-delete</v-icon>
+                <v-icon v-if="loggedIn" larg @click="moveToInvoiceImg(item)">mdi-invoice-text-outline</v-icon>
             </template>
         </v-data-table>
     </v-container>
@@ -53,6 +53,7 @@ export default {
     data() {
         return {
 
+            loggedIn : false ,
             users: [],
             areas: [],
             search: '',
@@ -150,6 +151,7 @@ export default {
     },
 
     async beforeCreate() {
+        
 
         const response = await axios.get('/api/getAll');
         this.items = response.data;
@@ -157,8 +159,26 @@ export default {
  
 
     },
+
+    mounted() {
+    this.checkLogedIn();
+  },
     methods: {
 
+
+        checkLogedIn(){
+
+const loggedIn = localStorage.getItem('user');
+if ( loggedIn ){
+
+     this.loggedIn = true ;
+}else{
+    this.loggedIn = false ;
+
+}
+
+
+},
         moveToAccountDetails(item) {
 
             // this.$router.push({ name: 'accountDetails', params: { accountId: 1 } });
