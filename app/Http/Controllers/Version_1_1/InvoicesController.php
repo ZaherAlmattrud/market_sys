@@ -68,7 +68,7 @@ class InvoicesController extends Controller
         $model->num = $data['num'];
         $model->date =  Carbon::now()->format('Y-m-d H:i:s');
         $model->save();
-        return response()->json($data);
+        return response()->json();
     }
 
     public function update(Request $request, $id)

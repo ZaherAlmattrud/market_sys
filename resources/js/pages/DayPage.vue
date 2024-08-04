@@ -15,8 +15,8 @@
                     <v-spacer></v-spacer>
                     <v-dialog v-model="dialog" max-width="500px">
                         <template v-slot:activator="{ on, attrs }">
-                            <!-- <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on"
-                                @click="dialog = true">إضافة حركة اليوم</v-btn> -->
+                            <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on"
+                                @click="dialog = true">إضافة حركة اليوم</v-btn>
                         </template>
                         <v-card>
                             <v-card-title>
