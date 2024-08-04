@@ -49,9 +49,9 @@ const routes = [
   { path: '/days', component: DayPage, meta: { requiresAuth: false }, },
   { path: '/exchange', component: ExchangePage, meta: { requiresAuth: false }, },
 
- { path: '/totalCatalog', component: TotalCatalog , name: 'TotalCatalog' ,   meta: { requiresAuth: true }, },
- { path: '/libraCatalog', component: LibraCatalog , name: 'LibraCatalog' ,   meta: { requiresAuth: true }, },
- { path: '/LibraRatingCatalog', component: LibraRatingCatalog , name: 'LibraRatingCatalog' ,   meta: { requiresAuth: true }, },
+ { path: '/totalCatalog', component: TotalCatalog , name: 'TotalCatalog' ,   meta: { requiresAuth: false }, },
+ { path: '/libraCatalog', component: LibraCatalog , name: 'LibraCatalog' ,   meta: { requiresAuth: false }, },
+ { path: '/LibraRatingCatalog', component: LibraRatingCatalog , name: 'LibraRatingCatalog' ,   meta: { requiresAuth: false }, },
 
  
 
