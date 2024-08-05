@@ -77,8 +77,25 @@ class InvoicesController extends Controller
     public function update(Request $request, $id)
     {
 
-        $data = [];
-        return response()->json($data);
+        Log::info("updateeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+        $data =  $request->all();
+        Log::info(    $data );
+        $model = Invoice::find($id);
+      
+        $res = false ;
+        if( $model  ){
+            // $model->total = $data['total'];
+            if ($request->hasFile('file')) {
+                $image = $request->file('file');
+                $imageData = file_get_contents($image->getRealPath());
+                $imageData = base64_encode( $imageData );
+                Log::info(     $imageData );
+                $model->img = $imageData;     
+            }
+            $res =  $model->save();         
+        }
+
+        return response()->json($res);
     }
 
     public function delete($id)

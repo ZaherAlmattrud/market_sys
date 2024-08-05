@@ -283,7 +283,11 @@ export default {
 
         console.log("update");
         Object.assign(this.items[this.editedIndex], this.editedItem); // update local data
-        const response = axios.put("/api/updateInvoice/" + this.id, this.editedItem); // update in data base
+        const response = axios.put("/api/updateInvoice/" + this.id, this.editedItem,{
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }); // update in data base
       }
 
       this.close();

@@ -738,28 +738,33 @@ class ApisController extends Controller
     {
 
 
-        $oldInvoice = DB::table('invoices')->where('id', $id)->first();
-
         Log::info($request->all());
+           
+     return $this->invoicesController->update( $request, $id);
 
-        $data = $request->all();
 
-        $res =  DB::table('invoices')
-            ->where('id', $id)
-            ->update(
+        // $oldInvoice = DB::table('invoices')->where('id', $id)->first();
 
-                [
-                    'invoice_type' =>  $oldInvoice->invoice_type,
-                    'total' => $data['total'],
-                    'date' =>  Carbon::now()->format('Y-m-d H:i:s'),
-                    'num' => $data['num'],
-                    'file' => '',
+        // Log::info($request->all());
 
-                ]
+        // $data = $request->all();
 
-            );
+        // $res =  DB::table('invoices')
+        //     ->where('id', $id)
+        //     ->update(
 
-        return response()->json($res);
+        //         [
+        //             'invoice_type' =>  $oldInvoice->invoice_type,
+        //             'total' => $data['total'],
+        //             'date' =>  Carbon::now()->format('Y-m-d H:i:s'),
+        //             'num' => $data['num'],
+        //             'file' => '',
+
+        //         ]
+
+        //     );
+
+        // return response()->json($res);
     }
 
     public function deleteInvoice($id)
