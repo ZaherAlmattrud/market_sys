@@ -10,6 +10,7 @@ use App\Models\Product;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Response ;
+use DB ;
  
 
 class ProductsController extends Controller
@@ -31,7 +32,40 @@ class ProductsController extends Controller
     public function getAll()
     {
         $data = [];
-        return response()->json($data);
+
+        
+         $data =  Product::orderBy('id', 'desc')->get();
+
+        $itemsArray = $data->map(function ($item) {
+
+            $invoice =     DB::table('invoices')->where('id', $item->invoice_id)->first();
+            $category =     DB::table('categories')->where('id', $item->category_id)->first();
+            $exchange =     DB::table('exchange')->first();
+
+
+
+            return [
+                'id' => $item->id,
+                'name' => $item->name,
+                'code' => $item->code,
+                'date' => $invoice ? $invoice->date :  $item->date ,
+                'price'     => $item->price,
+                'price_after_descount'     =>  $category ? ($item->price) - ($category->descount * $item->price) : $item->price,
+                'notes' => $item->notes,
+                'sell' => $item->sell,
+                'price_in_dollar' => $item->price_in_dollar,
+                //'img' => $item->img,
+                'invoice_id' => $item->invoice_id,
+                'category_id' => $category ?  $category->name : null,
+                'updatingPrice' => $item->price_in_dollar *   $exchange->value,
+
+
+            ];
+        });
+
+        return response()->json($itemsArray);
+
+       // return response()->json($data);
     }
 
     public function get($id)
@@ -60,11 +94,11 @@ class ProductsController extends Controller
         $exchange =   Exchange::where('name' , 'dollar')->first();
         $category =   Category::where('id' ,$data['category_id'] )->first();   
 
-      
+        $code = array_key_exists('code' , $data) ? $data['code']  : 0 ;
         $model = new Product();
         $model->img = $imageData;
         $model->name =  $data['name'];
-        $model->code=  $data['code'] ? $data['code'] : 0;
+        $model->code=   $code  ;
         $model->price    = $data['price'];
          $model->notes =  null;
          $model->price_in_dollar = $data['pricr_in_doller'];

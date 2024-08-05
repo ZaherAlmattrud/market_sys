@@ -174,7 +174,7 @@ export default {
         invoice_id: "",
         category_id: "",
         file: "",
-
+        code : 0 ,
         sell: "",
         code: "",
         notes: "",
@@ -185,7 +185,7 @@ export default {
         pricr: "",
         invoice_id: "",
         category_id: "",
-
+        code : 0 ,
         sell: "",
         file: "",
         pricr_in_doller: 0,

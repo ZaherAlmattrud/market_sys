@@ -776,36 +776,38 @@ class ApisController extends Controller
     public function getAllProducts()
     {
 
-        $data = DB::table('products')->orderBy('id', 'desc')->get();
+        return $this->productsController->getAll();
 
-        $itemsArray = $data->map(function ($item) {
+        // $data = DB::table('products')->orderBy('id', 'desc')->get();
 
-            $invoice =     DB::table('invoices')->where('id', $item->invoice_id)->first();
-            $category =     DB::table('categories')->where('id', $item->category_id)->first();
-            $exchange =     DB::table('exchange')->first();
+        // $itemsArray = $data->map(function ($item) {
 
-
-
-            return [
-                'id' => $item->id,
-                'name' => $item->name,
-                'code' => $item->code,
-                'date' => $invoice ? $invoice->date :  $item->date ,
-                'price'     => $item->price,
-                'price_after_descount'     =>  $category ? ($item->price) - ($category->descount * $item->price) : $item->price,
-                'notes' => $item->notes,
-                'sell' => $item->sell,
-                'price_in_dollar' => $item->price_in_dollar,
-                //'img' => $item->img,
-                'invoice_id' => $item->invoice_id,
-                'category_id' => $category ?  $category->name : null,
-                'updatingPrice' => $item->price_in_dollar *   $exchange->value,
+        //     $invoice =     DB::table('invoices')->where('id', $item->invoice_id)->first();
+        //     $category =     DB::table('categories')->where('id', $item->category_id)->first();
+        //     $exchange =     DB::table('exchange')->first();
 
 
-            ];
-        });
 
-        return response()->json($itemsArray);
+        //     return [
+        //         'id' => $item->id,
+        //         'name' => $item->name,
+        //         'code' => $item->code,
+        //         'date' => $invoice ? $invoice->date :  $item->date ,
+        //         'price'     => $item->price,
+        //         'price_after_descount'     =>  $category ? ($item->price) - ($category->descount * $item->price) : $item->price,
+        //         'notes' => $item->notes,
+        //         'sell' => $item->sell,
+        //         'price_in_dollar' => $item->price_in_dollar,
+        //         //'img' => $item->img,
+        //         'invoice_id' => $item->invoice_id,
+        //         'category_id' => $category ?  $category->name : null,
+        //         'updatingPrice' => $item->price_in_dollar *   $exchange->value,
+
+
+        //     ];
+        // });
+
+        // return response()->json($itemsArray);
     }
 
     public function getProductImgLink($id)
