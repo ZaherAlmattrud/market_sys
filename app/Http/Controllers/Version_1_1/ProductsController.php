@@ -94,18 +94,18 @@ class ProductsController extends Controller
         $exchange =   Exchange::where('name' , 'dollar')->first();
         $category =   Category::where('id' ,$data['category_id'] )->first();   
 
-        $code = array_key_exists('code' , $data) ? $data['code']  : 0 ;
+       // $code = array_key_exists('code' , $data) ? $data['code']  : 0 ;
         $model = new Product();
         $model->img = $imageData;
         $model->name =  $data['name'];
-        $model->code=   $code  ;
+        $model->code=    $data['code'] ?  $data['code'] : 0 ;
         $model->price    = $data['price'];
          $model->notes =  null;
          $model->price_in_dollar = $data['pricr_in_doller'];
        $model->sell=  $data['sell'];
      
           $model->invoice_id =  $data['invoice_id'];
-          $model->category_id =  $data['category_id'];
+          $model->category_id =  $data['category_id'] ? $data['category_id'] : 4 ;
          $model->date = Carbon::now()->format('Y-m-d H:i:s');
       
         
