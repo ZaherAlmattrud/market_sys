@@ -19,9 +19,11 @@ class InvoicesController extends Controller
     public function getInvoiceImg($id){
 
         $imageContent = Invoice::where('id',$id)->first()->img;
-     
+        $imageContent = base64_decode( $imageContent);
+ 
         $finfo = new \finfo(FILEINFO_MIME_TYPE);
         $mimeType = $finfo->buffer($imageContent);
+        // $mimeType = 'image/jpeg'; // Adjust this based on your actual image type
         return Response::make($imageContent, 200, ['Content-Type' => $mimeType]);
     
     }
@@ -53,9 +55,10 @@ class InvoicesController extends Controller
         if ($request->hasFile('file')) {
             $image = $request->file('file');
             $imageData = file_get_contents($image->getRealPath());
+            $imageData = base64_encode( $imageData );
 
             Log::info("Img : ");
-            Log::info(  $imageData );
+         //   Log::info(  $imageData );
 
             
         }

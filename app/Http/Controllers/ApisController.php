@@ -964,7 +964,7 @@ class ApisController extends Controller
 
         if($id > 82 ){
 
-          return $this->invoicesController->getInvoiceImg(intval($id));
+         return $this->invoicesController->getInvoiceImg(intval($id));
 
         }else{
 

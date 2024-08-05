@@ -102,7 +102,7 @@
       </template>
       <template v-slot:item.actions="{ item }">
         <v-icon v-if="loggedIn" larg @click="deleteItem(item)">mdi-delete</v-icon>
-        <v-icon v-if="loggedIn" larg @click="editItem(item)">mdi-pencil</v-icon>
+        <v-icon  larg @click="editItem(item)">mdi-pencil</v-icon>
         <v-icon larg @click="moveToAccountDetails(item)">mdi-account-eye-outline</v-icon>
       </template>
     </v-data-table>

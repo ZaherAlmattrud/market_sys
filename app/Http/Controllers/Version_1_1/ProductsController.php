@@ -19,6 +19,7 @@ class ProductsController extends Controller
     public function getProductImg($id){
 
         $imageContent = Product::where('id',$id)->first()->img;
+        $imageContent = base64_decode( $imageContent);
      
         $finfo = new \finfo(FILEINFO_MIME_TYPE);
         $mimeType = $finfo->buffer($imageContent);
@@ -50,9 +51,8 @@ class ProductsController extends Controller
         if ($request->hasFile('file')) {
             $image = $request->file('file');
             $imageData = file_get_contents($image->getRealPath());
+            $imageData = base64_encode($imageData);
 
-            Log::info("Img : ");
-            Log::info(  $imageData );
 
             
         }
