@@ -10,6 +10,7 @@ use App\Models\Invoice ;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Response;
+ 
 
 class InvoicesController extends Controller
 {
@@ -30,7 +31,31 @@ class InvoicesController extends Controller
     public function getAll()
     {
         $data = [];
-        return response()->json($data);
+
+        $data = Invoice::orderBy('id', 'desc')->get();
+
+
+        $itemsArray = $data->map(function ($item) {
+
+            $user =     User::where('account_id', $item->account_id)->first();
+
+            return [
+
+                'id' => $item->id,
+                'file_url' =>  $item->file_url ?   $item->file_url  : null,
+                'num' => $item->num ? $item->num : 'لا يوجد',
+                'invoice_type' => $item->invoice_type,
+                'account_id' =>  $user ? $user->user_name : null,
+                'total' => $item->total,
+                'date' => $item->date,
+                'file' => $item->file,
+
+
+            ];
+        });
+
+        return response()->json($itemsArray);
+ 
     }
 
     public function get($id)

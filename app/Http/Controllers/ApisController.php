@@ -664,29 +664,30 @@ class ApisController extends Controller
     public function getAllInvoices()
     {
 
-        $data = DB::table('invoices')->orderBy('id', 'desc')->get();
+        return $this->invoicesController->getAll();
+        // $data = DB::table('invoices')->orderBy('id', 'desc')->get();
 
 
-        $itemsArray = $data->map(function ($item) {
+        // $itemsArray = $data->map(function ($item) {
 
-            $user =     DB::table('users')->where('account_id', $item->account_id)->first();
+        //     $user =     DB::table('users')->where('account_id', $item->account_id)->first();
 
-            return [
+        //     return [
 
-                'id' => $item->id,
-                'file_url' =>  $item->file_url ?   $item->file_url  : null,
-                'num' => $item->num ? $item->num : 'لا يوجد',
-                'invoice_type' => $item->invoice_type,
-                'account_id' =>  $user ? $user->user_name : null,
-                'total' => $item->total,
-                'date' => $item->date,
-                'file' => $item->file,
+        //         'id' => $item->id,
+        //         'file_url' =>  $item->file_url ?   $item->file_url  : null,
+        //         'num' => $item->num ? $item->num : 'لا يوجد',
+        //         'invoice_type' => $item->invoice_type,
+        //         'account_id' =>  $user ? $user->user_name : null,
+        //         'total' => $item->total,
+        //         'date' => $item->date,
+        //         'file' => $item->file,
 
 
-            ];
-        });
+        //     ];
+        // });
 
-        return response()->json($itemsArray);
+        // return response()->json($itemsArray);
     }
 
     public function createInvoice(Request $request)
