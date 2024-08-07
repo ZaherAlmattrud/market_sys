@@ -5,40 +5,33 @@ import { createStore } from 'vuex'
 const store = createStore({
     state() {
         return {
-            count: 0,
-            loggedIn: false,
-            user: null,
+            drawer: true
         }
     },
     mutations: {
-        increment(state) {
-            state.count++
-        },
-
-        switchLoggedInStatus(state) {
-
-            state.loggedIn = !state.loggedIn;
-        }
-
+     
+        toggleDrawer(state) {
+                  state.drawer = !state.drawer;
+                }
     },
 
     actions: {
-        logIn({ commit }, userData) {
-            
-            const response = axios.post('/api/logIn', userData); // 
-            const res = response.data;
-            commit('switchLoggedInStatus');
-        },
 
-        logOut({ commit }) {
-
-            const response = axios.get('/api/logOut'); // 
-            const res = response.data;
-            commit('switchLoggedInStatus');
-        }
+        toggleDrawer({ commit }) {
+                  commit('toggleDrawer');
+                }
+  
     }
+
+    ,
+  getters: {
+    drawerVisible: state => state.drawer
+  }
 })
 
 export default store
+
+ 
+
 
 

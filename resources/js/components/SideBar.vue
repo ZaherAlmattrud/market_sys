@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <!-- <v-layout> -->
-    <v-navigation-drawer location="right" permanent :width="175">
+    <v-navigation-drawer location="right" permanent :width="200" :value="drawerVisible">
       <template v-slot:prepend>
         <v-list-item
           lines="two"
@@ -114,17 +114,34 @@
   </v-card>
 </template>
 <script>
+ 
+
 export default {
+  props: {
+    drawer: {
+      type: Boolean,
+      required: true,
+    },
+  },
   data() {
     return {
       loggedIn: false,
     };
   },
 
+  computed: {
+    drawerVisible() {
+      return this.$store.getters.drawerVisible; // الحصول على حالة الشريط الجانبي من Vuex
+    }
+  },
+
   beforeCreate() {
     const loggedIn = localStorage.getItem("user");
     if (loggedIn) this.loggedIn = true;
   },
+
+ 
+
   methods: {
     logout() {
       localStorage.removeItem("user");

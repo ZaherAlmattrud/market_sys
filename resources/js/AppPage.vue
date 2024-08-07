@@ -1,8 +1,8 @@
 <template>
   <v-app app>
-    <SideBar app />
+    <SideBar  app />
 
-    <NavbarComponent app  />
+    <NavbarComponent    app  />
 
     
     <v-main>
@@ -27,6 +27,7 @@ import NavbarComponent from './components/NavbarComponent.vue';
 export default {
   data: () => ({
     loggedIn: false,
+    drawer: true,
   }),
   components: {
     SideBar,
@@ -40,6 +41,12 @@ export default {
       console.log(val);
     }
   },
+
+  methods: {
+    toggleDrawer() {
+      this.drawer = !this.drawer;
+    }
+  } ,
 
   beforeCreate() {
 
