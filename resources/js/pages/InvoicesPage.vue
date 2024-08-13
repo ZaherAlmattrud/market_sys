@@ -240,7 +240,7 @@ export default {
     moveToInvoiceImg(item) {
       if (item.id > 82) {
         window.open(
-          `http://localhost:8000/api/getInvoiceImgLink/${item.id}`,
+           window.location.origin+`/api/getInvoiceImgLink/${item.id}`,
           "_blank",
           "noopener,noreferrer"
         );

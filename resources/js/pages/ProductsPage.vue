@@ -246,7 +246,7 @@ export default {
     moveToProductImg(item) {
       if (item.id > 560) {
         window.open(
-          `http://localhost:8000/api/getProductImgLink/${item.id}`,
+          window.location.origin+`/api/getProductImgLink/${item.id}`,
           "_blank",
           "noopener,noreferrer"
         );
