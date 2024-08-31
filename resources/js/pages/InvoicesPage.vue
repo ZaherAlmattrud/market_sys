@@ -106,7 +106,7 @@ export default {
       loggedIn: false,
       users: [],
       areas: [],
-      search: "",
+      search: '',
       dialog: false,
       dialogDelete: false,
 
@@ -152,7 +152,7 @@ export default {
     },
     filteredItems() {
       return this.items.filter((item) => {
-        if (this.search != "") {
+        if (this.search != '') {
           return (
             //   item.account_id == this.search
 

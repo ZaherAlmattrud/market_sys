@@ -11,7 +11,7 @@
         >
           {{ link }}
         </v-btn> -->
-        <v-col class="text-center mt-4" cols="12">
+        <v-col class="text-center" cols="12">
           {{ new Date().getFullYear() }} — <strong>مركز المطرود التجاري</strong>
         </v-col>
       </v-row>

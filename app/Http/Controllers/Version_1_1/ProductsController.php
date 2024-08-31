@@ -104,7 +104,7 @@ class ProductsController extends Controller
          $model->price_in_dollar = $data['pricr_in_doller'];
        $model->sell=  $data['sell'];
      
-          $model->invoice_id =  $data['invoice_id'];
+          $model->invoice_id =  $data['invoice_id'] ? $data['invoice_id'] : 0;
           $model->category_id =  $data['category_id'] ? $data['category_id'] : 4 ;
          $model->date = Carbon::now()->format('Y-m-d H:i:s');
       

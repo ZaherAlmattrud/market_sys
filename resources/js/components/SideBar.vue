@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <!-- <v-layout> -->
-    <v-navigation-drawer location="right" permanent :width="200" :value="drawerVisible">
+    <v-navigation-drawer location="right" permanent :width="200" v-model="drawerVisible":value="drawerVisible">
       <template v-slot:prepend>
         <v-list-item
           lines="two"
