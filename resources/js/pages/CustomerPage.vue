@@ -38,6 +38,7 @@
                       <v-text-field
                         v-model="editedItem.name"
                         label="الأسم"
+                          variant="outlined"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="6">
@@ -45,6 +46,7 @@
                         v-model="editedItem.area"
                         :items="areas"
                         label="البلدة"
+                          variant="outlined"
                       ></v-select>
                     </v-col>
                   </v-row>

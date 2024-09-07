@@ -41,12 +41,14 @@
                       <v-text-field
                         v-model="editedItem.name"
                         label="الاسم"
+                          variant="outlined"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" md="4" sm="12">
                       <v-text-field
                         v-model="editedItem.price"
                         label="الشراء"
+                          variant="outlined"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -55,23 +57,31 @@
                       <v-text-field
                         v-model="editedItem.code"
                         label="الكود"
+                          variant="outlined"
                       ></v-text-field>
                     </v-col>
                   </v-row>
                   <v-row>
                     <v-col cols="12" md="4" sm="12">
+
+                      <label>الفاتورة</label>
                       <v-select
+                        label="I"
                         v-model="editedItem.invoice_id"
                         :items="invoices"
                         item-title="id"
                         item-value="id"
                         persistent-hint
                         single-line
-                        label="الفاتورة"
-                      ></v-select>
+                      
+                        variant="outlined"
+                        
+                      >    </v-select>
+                    
                     </v-col>
 
                     <v-col cols="12" md="4" sm="12">
+                     <label>الصنف</label>
                       <v-select
                         v-model="editedItem.category_id"
                         :items="categories"
@@ -79,13 +89,18 @@
                         item-value="id"
                         persistent-hint
                         single-line
-                        label="الصنف"
+                       
+                         variant="outlined"
+                         outlined
+                         dense
                       ></v-select>
                     </v-col>
                     <v-col cols="12" md="4" sm="12">
+                      <label>الصورة</label>
                       <v-file-input
                         v-model="editedItem.file"
                         label="الملف"
+                          variant="outlined"
                         outlined
                         dense
                       ></v-file-input>
@@ -97,12 +112,14 @@
                       <v-text-field
                         v-model="editedItem.pricr_in_doller"
                         label="السعر بالعملة الاجنبية"
+                          variant="outlined"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" md="4" sm="12">
                       <v-text-field
                         v-model="editedItem.notes"
                         label="ملاحظات"
+                          variant="outlined"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -112,6 +129,7 @@
                       <v-text-field
                         v-model="editedItem.sell"
                         label="البيع"
+                          variant="outlined"
                       ></v-text-field>
                     </v-col>
                   </v-row>

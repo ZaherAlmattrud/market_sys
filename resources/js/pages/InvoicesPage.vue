@@ -17,7 +17,7 @@
     >
       <template v-slot:top>
         <v-toolbar flat>
-          <v-toolbar-title>الفواتير</v-toolbar-title>
+          <v-toolbar-title>فواتير المشتريات</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-dialog v-model="dialog" max-width="500px">
             <template v-slot:activator="{ on, attrs }">
@@ -52,6 +52,7 @@
                         label="صاحب الفاتورة"
                         placeholder="ابدأ البحث"
                         crearable
+                          variant="outlined"
                       >
                       </v-autocomplete>
                     </v-col>
@@ -59,6 +60,7 @@
                       <v-text-field
                         v-model="editedItem.total"
                         label="الرصيد الإجمالي"
+                          variant="outlined"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -69,6 +71,7 @@
                         label="الملف"
                         outlined
                         dense
+                          variant="outlined"
                       ></v-file-input>
                     </v-col>
 
@@ -76,6 +79,7 @@
                       <v-text-field
                         v-model="editedItem.num"
                         label="رقم الفاتورة المطبوع"
+                          variant="outlined"
                       ></v-text-field>
                     </v-col>
                   </v-row>

@@ -10,12 +10,14 @@
                   v-model="username"
                   label="أسم المستخدم"
                   required
+                    variant="outlined"
                 ></v-text-field>
                 <v-text-field
                   v-model="password"
                   label="كلمة المرور"
                   type="password"
                   required
+                    variant="outlined"
                 ></v-text-field>
                 <v-btn type="submit" color="primary">تسجيل الدخول</v-btn>
               </v-form>

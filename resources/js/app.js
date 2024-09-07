@@ -5,6 +5,7 @@ import './bootstrap';
 import { createApp } from 'vue';
 import AppPage from './AppPage.vue';
 import '@mdi/font/css/materialdesignicons.css'
+import 'vuetify/dist/vuetify.min.css';
 import router from './router'
 import store from './vuex'
 import ToastPlugin from 'vue-toast-notification';

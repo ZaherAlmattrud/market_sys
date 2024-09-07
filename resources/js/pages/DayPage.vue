@@ -34,6 +34,7 @@
                       <v-text-field
                         v-model="editedItem.arresteds"
                         label="المقبوضات"
+                          variant="outlined"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -42,6 +43,7 @@
                       <v-text-field
                         v-model="editedItem.paids"
                         label="المدفوعات"
+                          variant="outlined"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -50,6 +52,7 @@
                       <v-text-field
                         v-model="editedItem.box"
                         label="الصندوق"
+                          variant="outlined"
                       ></v-text-field>
                     </v-col>
                   </v-row>

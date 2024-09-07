@@ -41,6 +41,7 @@
                       <v-text-field
                         v-model="editedItem.user_name"
                         label="الأسم"
+                          variant="outlined"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -53,6 +54,7 @@
                         item-value="id"
                         label="المنطقة"
                         placeholder="المنطقة"
+                          variant="outlined"
                         crearable
                       >
                       </v-autocomplete>
@@ -62,6 +64,7 @@
                       <v-text-field
                         v-model="editedItem.number_in_book"
                         label="رقمه بالدفتر"
+                          variant="outlined"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -75,7 +78,7 @@
                         item-value="id"
                         label="نوع المستخدم"
                         persistent-hint
-                        single-line
+                        single-line  variant="outlined"
                       ></v-select>
 
                       <!-- <v-select v-model="editedItem.area" :items="areas" item-title="name"
@@ -86,6 +89,7 @@
                       <v-text-field
                         v-model="editedItem.mobile"
                         label="موبايل"
+                          variant="outlined"
                       ></v-text-field>
                     </v-col>
                   </v-row>

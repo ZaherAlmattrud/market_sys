@@ -42,6 +42,7 @@
                       <v-text-field
                         v-model="editedItem.name"
                         label="الاسم"
+                          variant="outlined"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -50,6 +51,7 @@
                       <v-text-field
                         v-model="editedItem.descount"
                         label="الحسم"
+                          variant="outlined"
                       ></v-text-field>
                     </v-col>
                   </v-row>

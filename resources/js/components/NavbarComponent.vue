@@ -1,16 +1,19 @@
 <template>
-  <v-app-bar app color="gray">
+  <v-app-bar class="h-15" app color="white">
     <template v-slot:prepend>
       <v-btn @click="toggleDrawer" icon>
-        <v-icon>mdi-menu</v-icon>
+       <v-icon>mdi-menu</v-icon> 
+      
       </v-btn>
     </template>
 
-    <!-- <v-app-bar-title>مركز المطرود التجاري</v-app-bar-title> -->
+   <!-- <v-app-bar-title>مركز المطرود التجاري</v-app-bar-title>  -->
 
     <template v-slot:append>
-      <v-row justify="center" no-gutters>
-        <v-btn
+      <v-row >
+
+        <img src="/public/logo.png" height="125">
+   <!-- <v-btn
           v-for="link in links"
           :key="id"
           class="mx-1"
@@ -19,7 +22,7 @@
           variant="text"
         >
           <v-btn @click="moveTo(link.page)"> {{ link.title }} </v-btn>
-        </v-btn>
+        </v-btn> -->
       </v-row>
     </template>
   </v-app-bar>
@@ -28,6 +31,8 @@
 <script>
 export default {
   data: () => ({
+
+    
     links: [
       { id: 8, title: "دليل البراغي", page: "TotalCatalog", pdf: "totalCatolog2024.pdf" },
 

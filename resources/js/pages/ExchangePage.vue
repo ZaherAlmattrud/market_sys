@@ -23,7 +23,10 @@
 
                                         <v-col cols="12" sm="6" md="12">
                                             <v-text-field v-model="editedItem.value"
-                                                label="سعر الصرف"></v-text-field>
+                                                label="سعر الصرف"
+                                                  variant="outlined"
+                                                
+                                                ></v-text-field>
 
 
                                         </v-col>

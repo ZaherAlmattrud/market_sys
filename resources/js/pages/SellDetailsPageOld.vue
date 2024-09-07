@@ -2,44 +2,22 @@
   <v-container>
     <v-row>
       <v-col cols="12" md="1">
-        <v-button @click="$router.go(-1)">كافة الحسابات</v-button>
-      </v-col>
-      <v-col cols="12" md="1">
-        <v-text-field> {{ book_number }} </v-text-field>
+        <v-button @click="$router.go(-1)">كافة المبيعات</v-button>
       </v-col>
 
-      <v-col cols="12" md="1">
+      <v-col cols="12" md="5">
         <v-text-field v-model="search" label="البحث" @input="filterItems"></v-text-field>
       </v-col>
 
       <v-col cols="12" md="3">
-        <v-text-field> {{ account_persion }} </v-text-field>
+        <v-text-field>  {{ sellId }} </v-text-field>
       </v-col>
 
       <v-col cols="12" md="3">
         <v-text-field> {{ total }} : الاجمالي </v-text-field>
       </v-col>
-
-      <v-col cols="12" md="3">
-        <v-text-field> {{ debts }} : المتبقي </v-text-field>
-      </v-col>
     </v-row>
-    <v-row>
-      <v-col cols="12" md="3">
-        <v-text-field> {{ paids }} : المدفوعات </v-text-field>
-      </v-col>
-      <v-col cols="12" md="3">
-        <v-text-field> {{ arresteds }} : المقبوضات </v-text-field>
-      </v-col>
 
-      <v-col cols="12" md="3">
-        <v-text-field> {{ invoices }} : الفواتير </v-text-field>
-      </v-col>
-
-      <v-col cols="12" md="3">
-        <v-text-field> {{ book }}: الدفتر </v-text-field>
-      </v-col>
-    </v-row>
     <v-data-table
       :headers="headers"
       :items="filteredItems"
@@ -48,7 +26,7 @@
     >
       <template v-slot:top>
         <v-toolbar flat>
-          <v-toolbar-title>تفاصيل الحساب</v-toolbar-title>
+          <v-toolbar-title>تفاصيل الفاتورة</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-dialog v-model="dialog" max-width="600px">
             <template v-slot:activator="{ on, attrs }">
@@ -62,6 +40,8 @@
               >
                 بيان جديد</v-btn
               >
+
+              <!-- <h6>مركز المطرود التجاري</h6> -->
             </template>
             <v-card>
               <v-card-title>
@@ -72,35 +52,40 @@
                   <v-row>
                     <v-col cols="12" sm="6" md="6">
                       <v-text-field
-                        v-model="editedItem.quantity"
-                        label="الكمية"
-                          variant="outlined"
+                        v-model="selectedItem.salePriceOne"
+                        label="الإفرادي"
+                        @change="updatePriceAllatUpdate"
                       ></v-text-field>
                     </v-col>
+
                     <v-col cols="12" sm="6" md="6">
-                      <v-text-field
-                        v-model="editedItem.description"
-                        label="البيان"
-                          variant="outlined"
-                      ></v-text-field>
+                      <v-autocomplete
+                        v-model="selectedItem.description"
+                        :items="products"
+                        item-title="name"
+                        item-value="id"
+                        label="المنتج"
+                        placeholder="المنتج"
+                        crearable
+                        @update:modelValue="updatePriceOne"
+                      >
+                      </v-autocomplete>
                     </v-col>
                   </v-row>
                   <v-row>
                     <v-col cols="12" sm="6" md="6">
                       <v-text-field
-                        v-model="editedItem.price"
-                        label="الأفرادي"
-                          variant="outlined"
+                        v-model="selectedItem.salePriceAll"
+                        label="الإجمالي"
                       ></v-text-field>
                     </v-col>
+
                     <v-col cols="12" sm="6" md="6">
                       <v-text-field
-                        v-model="editedItem.total"
-                        label="الإجمالي"
-                          variant="outlined"
+                        v-model="selectedItem.quantity"
+                        label="الكمية"
+                        @change="updatePriceAll"
                       ></v-text-field>
-
-                      <!-- <mony   currency="EUR" locale="fr-FR" decimal="," thousand="," /> -->
                     </v-col>
                   </v-row>
                 </v-container>
@@ -133,6 +118,9 @@ export default {
 
   data() {
     return {
+
+      sellId : 0 ,
+      user_id : 0 ,
       loggedIn: false,
       book_number: 0,
       account_persion: "",
@@ -158,10 +146,22 @@ export default {
 
         { title: "العمليات", key: "actions", sortable: false },
       ],
+
+      products:[],
       items: [],
+      selectedItem: {
+        id : 0 ,
+        sellId : 0 ,
+        description: 0,
+        price: 0,
+        total: 0,
+        quantity :  1,
+      },
+      salePriceOne: 0,
+      salePriceAll: 0,
       editedIndex: -1,
       editedItem: {
-        id: 1,
+        id: 0,
         total: "",
         description: "",
         quantity: "",
@@ -182,9 +182,9 @@ export default {
       return this.editedIndex === -1 ? "بيان جديد" : "تحديث معلومات بيان";
     },
     filteredItems() {
-      return this.items.filter((item) => {
-        return item.description.toLowerCase().includes(this.search.toLowerCase());
-      });
+      // return this.items.filter((item) => {
+      //   return true ;
+      // });
     },
   },
 
@@ -198,27 +198,45 @@ export default {
   },
 
   async beforeCreate() {
-    const accountId = this.$route.params.accountId;
+    
+    this.sellId =   this.$route.params.sellId;
+    
 
-    console.log("account id");
-    console.log(accountId);
-    const response = await axios.get("/api/getAccountDetails/" + accountId);
-    this.items = response.data["data"]; // users
+    // console.log("account id");
+    // console.log(accountId);
+    const response = await axios.get("/api/getAllProducts");
+    this.products = response.data; // 
 
-    this.invoices = response.data["invoices"];
-    this.total = response.data["total"];
-    this.book = response.data["book"];
-    this.paids = response.data["paids"];
-    this.arresteds = response.data["arresteds"];
-    this.debts = response.data["debts"];
-    this.account_persion = response.data["account_persion"];
-    this.book_number = response.data["book_number"];
+    // this.invoices = response.data["invoices"];
+    // this.total = response.data["total"];
+    // this.book = response.data["book"];
+    // this.paids = response.data["paids"];
+    // this.arresteds = response.data["arresteds"];
+    // this.debts = response.data["debts"];
+    // this.account_persion = response.data["account_persion"];
+    // this.book_number = response.data["book_number"];
   },
 
   mounted() {
     this.checkLogedIn();
   },
   methods: {
+    updatePriceOne() {
+      const item = this.products.find((i) => i.id === this.selectedItem.id);
+
+      if (item) {
+        this.selectedItem.salePriceOne = item.sell;
+        this.selectedItem.salePriceAll = item.sell;
+      }
+
+      console.log("ittttttttttttttttttttem : ".item);
+    },
+    updatePriceAll() {
+
+      this.selectedItem.salePriceAll =  this.selectedItem.salePriceOne *  this.selectedItem.quantity ;
+
+    },
+
     checkLogedIn() {
       const loggedIn = localStorage.getItem("user");
       if (loggedIn) {
@@ -279,12 +297,12 @@ export default {
           "/api/createAccountDetail/" + this.$route.params.accountId,
           this.editedItem
         ); // add to data base
-        this.items.push(this.editedItem);
+        this.items.push(this.selectedItem);
       } else {
         // update current area
 
         console.log("update");
-        Object.assign(this.items[this.editedIndex], this.editedItem); // update local data
+        Object.assign(this.items[this.editedIndex], this.selectedItem); // update local data
         const response = axios.put(
           "/api/updateAccountDetail/" + this.id,
           this.editedItem

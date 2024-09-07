@@ -33,7 +33,22 @@
             title="الحسابات"
             value="users"
           ></v-list-item
-        ></RouterLink>
+        >
+
+      </RouterLink>
+
+        <RouterLink to="/SellsPage">
+          <v-list-item
+            prepend-icon="mdi-invoice-text-multiple-outline"
+            title="المبيعات"
+            value="SellsPage"
+          ></v-list-item
+        >
+
+        
+        
+        
+        </RouterLink>
         <RouterLink to="/arresteds">
           <v-list-item
             prepend-icon="mdi-import"
@@ -47,7 +62,7 @@
         <RouterLink to="/invoices">
           <v-list-item
             prepend-icon="mdi-invoice-text-multiple-outline"
-            title="الفواتير"
+            title="المشتريات"
             value="invoices"
           ></v-list-item
         ></RouterLink>

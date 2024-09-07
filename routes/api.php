@@ -3,6 +3,8 @@
 use App\Http\Controllers\ApisController;
 use App\Http\Controllers\Version_1_1\DayController;
 use App\Http\Controllers\Version_1_1\ExchangeController;
+use App\Http\Controllers\Version_1_1\SellController;
+use App\Http\Controllers\Version_1_1\SellDetailController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -77,4 +79,18 @@ Route::delete('/deleteDay/{Id}', [DayController::class, 'delete']);
 Route::get('/getAll', [ExchangeController::class, 'getAll']);
 Route::post('/createExchange', [ExchangeController::class, 'create']);
 Route::put('/updateExchange/{Id}', [ExchangeController::class, 'update']);
+
+//=============================================================================
+Route::get('/getAllSells', [SellController::class, 'index']);
+Route::post('/createSell', [SellController::class, 'store']);
+// Route::put('/updateDay/{Id}', [DayController::class, 'update']);
+Route::delete('/deleteSell/{Id}', [SellController::class, 'destroy']);
+//=============================================================================
+
+//=============================================================================
+Route::get('/getAllSellDetails/{sellId}', [SellDetailController::class, 'index']);
+Route::post('/createSellDetail/{sellId}', [SellDetailController::class, 'store']);
+// Route::put('/updateDay/{Id}', [SellDetailController::class, 'update']);
+Route::delete('/deleteSellDetail/{Id}', [SellDetailController::class, 'destroy']);
+//=============================================================================
 

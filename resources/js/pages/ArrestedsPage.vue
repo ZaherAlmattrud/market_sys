@@ -35,6 +35,7 @@
                       <v-text-field
                         v-model="editedItem.total"
                         label="المبلغ"
+                          variant="outlined"
                       ></v-text-field>
                     </v-col>
 
@@ -53,6 +54,7 @@
                         label="صاحب الحساب"
                         placeholder="ابدأ البحث"
                         crearable
+                          variant="outlined"
                       >
                       </v-autocomplete>
                     </v-col>
@@ -63,6 +65,7 @@
                       <v-text-field
                         v-model="editedItem.notes"
                         label="الملاحظات"
+                          variant="outlined"
                       ></v-text-field>
                     </v-col>
                   </v-row>

@@ -23,6 +23,9 @@ import ExchangePage from "@/pages/ExchangePage.vue"
  import LibraCatalog from "@/pages/LibraCatalog.vue"
  import LibraRatingCatalog from "@/pages/LibraRatingCatalog.vue"
 
+ import SellDetailsPage from "@/pages/SellDetailsPage.vue"
+ import SellsPage from "@/pages/SellsPage.vue"
+
  
  
  
@@ -31,6 +34,8 @@ import ExchangePage from "@/pages/ExchangePage.vue"
 
 const routes = [
   { path: '/', component: ProductPage, name: 'products', meta: { requiresAuth: false }, },
+  { path: '/SellsPage', component: SellsPage, name: 'SellsPage', meta: { requiresAuth: false }, },
+  { path: '/SellDetailsPage:sellId', component: SellDetailsPage, name: 'sellDetails', meta: { requiresAuth: false }, },
   { path: '/customers', component: CustomerPage, meta: { requiresAuth: false }, },
   { path: '/healthy', component: HealthyPage, meta: { requiresAuth: false }, },
   { path: '/accounts', component: AccountsPage, meta: { requiresAuth: true }, },
