@@ -100,8 +100,7 @@
                           variant="outlined"
                       ></v-text-field>
 
-                      <!-- <mony   currency="EUR" locale="fr-FR" decimal="," thousand="," /> -->
-                    </v-co
+                     </v-col>
                   </v-row>
                 </v-container>
               </v-card-text>
