@@ -101,7 +101,7 @@
                       ></v-text-field>
 
                       <!-- <mony   currency="EUR" locale="fr-FR" decimal="," thousand="," /> -->
-                    </v-col>
+                    </v-co
                   </v-row>
                 </v-container>
               </v-card-text>
