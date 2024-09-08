@@ -45,7 +45,7 @@
                     </v-col>
 
                     <v-col cols="12" sm="6" md="6">
-                      <v-autocomplete
+                      <!-- <v-autocomplete
                         v-model="editedItem.description"
                         :items="products"
                         item-title="name"
@@ -54,8 +54,22 @@
                         placeholder="المنتج"
                         crearable
                         @update:modelValue="updatePrice"
+                   
                       >
-                      </v-autocomplete>
+                      </v-autocomplete> -->
+
+                      <v-combobox
+                        v-model="editedItem.description"
+                        :items="products"
+                        item-title="name"
+                        item-value="name"
+                        label="المنتج"
+                        placeholder="المنتج"
+                        crearable
+                        @update:modelValue="updatePrice"
+                   
+                      >
+                      </v-combobox>
                     </v-col>
                   </v-row>
                   <v-row>
@@ -150,6 +164,8 @@ export default {
       products: [],
       items: [],
       editedIndex: -1,
+
+
       editedItem: {
         id: 0,
         total: 0,
@@ -157,6 +173,8 @@ export default {
         quantity: 1,
         price: 0,
       },
+
+
       defaultItem: {
         id: 1,
         total: "",
@@ -215,12 +233,34 @@ export default {
     this.checkLogedIn();
   },
   methods: {
+
+    addNewItem(){
+
+
+      const newItemName = this.editedItem.description ;
+
+      console.log(" NEWWWWWWWWWWWWWWWWWWW");
+      console.log(this.editedItem.description );
+
+      // if( !this.products.name.includes(newItemName)){
+      //   !this.products.push( { id : -1 , name : newItemName , sell : 0 });
+      // }
+      // this.editedItem.id = 0 ; 
+      // this.editedItem.total= 0;
+      // this.editedItem.description= newItemName;
+      // this.editedItem.quantity = 1;
+      // this.editedItem.price =0;
+    },
     updatePrice() {
       const item = this.products.find((i) => i.name === this.editedItem.description);
 
       if (item) {
         this.editedItem.price = item.sell;
         this.editedItem.total = item.sell;
+      }else{
+
+        this.editedItem.price = 0;
+        this.editedItem.total = 0;
       }
     },
 
