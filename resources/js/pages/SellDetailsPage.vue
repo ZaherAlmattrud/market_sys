@@ -234,25 +234,23 @@ export default {
   },
   methods: {
 
-    addNewItem(){
-
-
-      const newItemName = this.editedItem.description ;
-
-      console.log(" NEWWWWWWWWWWWWWWWWWWW");
-      console.log(this.editedItem.description );
-
-      // if( !this.products.name.includes(newItemName)){
-      //   !this.products.push( { id : -1 , name : newItemName , sell : 0 });
-      // }
-      // this.editedItem.id = 0 ; 
-      // this.editedItem.total= 0;
-      // this.editedItem.description= newItemName;
-      // this.editedItem.quantity = 1;
-      // this.editedItem.price =0;
-    },
+   
     updatePrice() {
-      const item = this.products.find((i) => i.name === this.editedItem.description);
+
+
+      var itemName = '';
+
+
+        if ( this.editedItem.description && typeof this.editedItem.description == 'object' ){
+         itemName = this.editedItem.description.name;
+               
+        } else{
+
+         itemName = this.editedItem.description
+
+        }
+
+      const item = this.products.find((i) => i.name === itemName);
 
       if (item) {
         this.editedItem.price = item.sell;
@@ -321,6 +319,16 @@ export default {
 
       if (this.id == 0) {
         // create new area
+
+
+
+        if ( this.editedItem.description && typeof this.editedItem.description == 'object' ){
+          this.editedItem.description = this.editedItem.description.name
+               
+        }
+
+
+        console.log(this.editedItem.description);
 
         console.log("create");
         // add to local data array
