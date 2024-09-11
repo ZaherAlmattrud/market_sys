@@ -18,7 +18,7 @@
         <v-toolbar flat>
           <v-toolbar-title>المنتجات</v-toolbar-title>
           <v-spacer></v-spacer>
-          <v-dialog v-model="dialog" max-width="500px">
+          <v-dialog v-model="dialog" max-width="550px">
             <template v-slot:activator="{ on, attrs }">
               <v-btn
                 color="primary"

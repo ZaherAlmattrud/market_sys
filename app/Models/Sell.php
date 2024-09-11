@@ -13,9 +13,12 @@ class Sell extends Model
 
     protected $table = 'sells';
     
+  
+
     protected $fillable = [
         'user_id',
         'total',
         'date',
+        'is_paid'
     ];
 }

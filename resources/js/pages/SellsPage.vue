@@ -36,7 +36,6 @@
               </v-card-title>
               <v-card-text>
                 <v-container>
-                 
                   <v-row>
                     <v-col cols="12" sm="12" md="12">
                       <v-autocomplete
@@ -47,23 +46,31 @@
                         label="صاحب الفاتورة"
                         placeholder="صاحب الفاتورة"
                         crearable
+                          single-line  variant="outlined"
                       >
                       </v-autocomplete>
                     </v-col>
-
-                   
                   </v-row>
 
-                  <!-- <v-row>
+                  <v-row>
                     <v-col cols="12" sm="6" md="12">
-                      <v-text-field
-                        v-model="editedItem.user_name"
-                        label="الإجمالي"
-                      ></v-text-field>
-                    </v-col>
-                  </v-row> -->
 
-                
+                      <v-select
+                        v-model="editedItem.is_paid"
+                        :items="invoice_status"
+                        item-title="title"
+                        item-value="value"
+                        label="مدفوعة ؟"
+                        persistent-hint
+                        single-line  variant="outlined"
+                      ></v-select>
+
+                      <!-- <v-text-field
+                        v-model="editedItem.is_paid"
+                        label="مدفوعة ؟"
+                      ></v-text-field> -->
+                    </v-col>
+                  </v-row>
                 </v-container>
               </v-card-text>
               <v-card-actions>
@@ -77,7 +84,7 @@
       </template>
       <template v-slot:item.actions="{ item }">
         <v-icon v-if="loggedIn" larg @click="deleteItem(item)">mdi-delete</v-icon>
-        <v-icon  larg @click="editItem(item)">mdi-pencil</v-icon>
+        <v-icon larg @click="editItem(item)">mdi-pencil</v-icon>
         <v-icon larg @click="moveToAccountDetails(item)">mdi-account-eye-outline</v-icon>
       </template>
     </v-data-table>
@@ -102,23 +109,34 @@ export default {
         { title: "الإجمالي", key: "total", sortable: false },
 
         { title: "التاريخ", key: "date", sortable: false },
-        
+        { title: "حالة الفاتورة", key: "is_paid", sortable: false },
+
         { title: "العمليات", key: "actions", sortable: false },
       ],
       items: [],
       allUsers: 0,
 
-      users:[],
+      users: [],
       editedIndex: -1,
-    
+
+      invoice_status: [
+        {
+          title: "مدفوعة",
+          value:  "مدفوعة",
+        },
+
+        {
+          title: "غير مدفوعة",
+          value:"غير مدفوعة",
+        },
+      ],
       editedItem: {
         id: 0,
         user_id: "",
         total: "",
         date: "",
-        
+        is_paid: "غير مدفوعة",
       },
-
     };
   },
   computed: {
@@ -127,7 +145,7 @@ export default {
     },
     filteredItems() {
       return this.items.filter((item) => {
-           return true ;
+        return true;
       });
     },
   },
@@ -142,14 +160,11 @@ export default {
   },
   async beforeCreate() {
     const response = await axios.get("/api/getAllSells");
-    this.items = response.data; 
+    this.items = response.data;
 
     const response2 = await axios.get("/api/getAllUsers");
 
- 
-this.users = response2.data;
-
-  
+    this.users = response2.data;
   },
 
   mounted() {

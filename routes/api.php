@@ -83,7 +83,7 @@ Route::put('/updateExchange/{Id}', [ExchangeController::class, 'update']);
 //=============================================================================
 Route::get('/getAllSells', [SellController::class, 'index']);
 Route::post('/createSell', [SellController::class, 'store']);
-// Route::put('/updateDay/{Id}', [DayController::class, 'update']);
+Route::put('/updateSell/{Id}', [SellController::class, 'update']);
 Route::delete('/deleteSell/{Id}', [SellController::class, 'destroy']);
 //=============================================================================
 
