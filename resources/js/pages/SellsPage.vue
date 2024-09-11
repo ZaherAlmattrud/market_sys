@@ -2,10 +2,10 @@
   <v-container>
     <v-row>
       <v-col cols="12" md="10">
-        <v-text-field v-model="search" label="البحث" @input="filterItems"></v-text-field>
+        <v-text-field   variant="outlined" v-model="search" label="البحث" @input="filterItems"></v-text-field>
       </v-col>
       <v-col cols="12" md="2">
-        <v-text-field>{{ filteredItems.length }}</v-text-field>
+        <v-text-field   variant="outlined" >{{ filteredItems.length }}</v-text-field>
       </v-col>
     </v-row>
     <v-data-table
@@ -27,6 +27,7 @@
                 v-bind="attrs"
                 v-on="on"
                 @click="dialog = true"
+                  variant="outlined"
                 >فاتورة جديدة</v-btn
               >
             </template>
@@ -38,12 +39,13 @@
                 <v-container>
                   <v-row>
                     <v-col cols="12" sm="12" md="12">
+                      <!-- <label>صاحب الفاتورة</label> -->
                       <v-autocomplete
                         v-model="editedItem.user_id"
                         :items="users"
                         item-title="user_name"
                         item-value="id"
-                        label="صاحب الفاتورة"
+                       label="صاحب الفاتورة"
                         placeholder="صاحب الفاتورة"
                         crearable
                           single-line  variant="outlined"
@@ -86,8 +88,8 @@
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="close">إلغاء</v-btn>
-                <v-btn color="blue darken-1" text @click="save">حفظ</v-btn>
+                <v-btn   variant="outlined" color="blue darken-1" text @click="close">إلغاء</v-btn>
+                <v-btn   variant="outlined" color="blue darken-1" text @click="save">حفظ</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>

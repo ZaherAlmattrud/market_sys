@@ -3,6 +3,7 @@
     <v-row>
       <v-col cols="12" md="12">
         <v-text-field
+           variant="outlined"
           v-model="search"
           label="صاحب الفاتورة"
           @input="filterItems"
@@ -28,6 +29,7 @@
                 v-bind="attrs"
                 v-on="on"
                 @click="dialog = true"
+                   variant="outlined"
               >
                 فاتورة جديدة</v-btn
               >
@@ -87,8 +89,8 @@
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="close">إلغاء</v-btn>
-                <v-btn color="blue darken-1" text @click="save">حفظ</v-btn>
+                <v-btn   variant="outlined" color="blue darken-1" text @click="close">إلغاء</v-btn>
+                <v-btn   variant="outlined"  color="blue darken-1" text @click="save">حفظ</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>

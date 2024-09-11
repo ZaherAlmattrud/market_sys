@@ -5,41 +5,41 @@
         <v-button @click="$router.go(-1)">كافة الحسابات</v-button>
       </v-col>
       <v-col cols="12" md="1">
-        <v-text-field> {{ book_number }} </v-text-field>
-      </v-col>
-
-      <v-col cols="12" md="1">
-        <v-text-field v-model="search" label="البحث" @input="filterItems"></v-text-field>
+        <v-text-field    variant="outlined"> {{ book_number }} </v-text-field>
       </v-col>
 
       <v-col cols="12" md="3">
-        <v-text-field> {{ account_persion }} </v-text-field>
+        <v-text-field    variant="outlined" v-model="search" label="البحث" @input="filterItems"></v-text-field>
+      </v-col>
+
+      <v-col cols="12" md="4">
+        <v-text-field    variant="outlined"> {{ account_persion }} </v-text-field>
       </v-col>
 
       <v-col cols="12" md="3">
-        <v-text-field> {{ total }} : الاجمالي </v-text-field>
+        <v-text-field    variant="outlined"> {{ total }} : الاجمالي </v-text-field>
       </v-col>
 
-      <v-col cols="12" md="3">
-        <v-text-field> {{ debts }} : المتبقي </v-text-field>
-      </v-col>
+      <!-- <v-col cols="12" md="3">
+        <v-text-field    variant="outlined"> {{ debts }} : المتبقي </v-text-field>
+      </v-col> -->
     </v-row>
-    <v-row>
+    <!-- <v-row>
       <v-col cols="12" md="3">
-        <v-text-field> {{ paids }} : المدفوعات </v-text-field>
+        <v-text-field    variant="outlined"> {{ paids }} : المدفوعات </v-text-field>
       </v-col>
       <v-col cols="12" md="3">
-        <v-text-field> {{ arresteds }} : المقبوضات </v-text-field>
-      </v-col>
-
-      <v-col cols="12" md="3">
-        <v-text-field> {{ invoices }} : الفواتير </v-text-field>
+        <v-text-field    variant="outlined"> {{ arresteds }} : المقبوضات </v-text-field>
       </v-col>
 
       <v-col cols="12" md="3">
-        <v-text-field> {{ book }}: الدفتر </v-text-field>
+        <v-text-field    variant="outlined"> {{ invoices }} : الفواتير </v-text-field>
       </v-col>
-    </v-row>
+
+      <v-col cols="12" md="3">
+        <v-text-field    variant="outlined"> {{ book }}: الدفتر </v-text-field>
+      </v-col>
+    </v-row> -->
     <v-data-table
       :headers="headers"
       :items="filteredItems"
@@ -59,6 +59,7 @@
                 v-bind="attrs"
                 v-on="on"
                 @click="dialog = true"
+                   variant="outlined"
               >
                 بيان جديد</v-btn
               >
@@ -106,8 +107,8 @@
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="close">إلغاء</v-btn>
-                <v-btn color="blue darken-1" text @click="save">حفظ</v-btn>
+                <v-btn   variant="outlined" color="blue darken-1" text @click="close">إلغاء</v-btn>
+                <v-btn   variant="outlined" color="blue darken-1" text @click="save">حفظ</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>

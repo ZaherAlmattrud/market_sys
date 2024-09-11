@@ -26,6 +26,10 @@ import ExchangePage from "@/pages/ExchangePage.vue"
  import SellDetailsPage from "@/pages/SellDetailsPage.vue"
  import SellsPage from "@/pages/SellsPage.vue"
 
+ import AccountSummryPage from "@/pages/AccountSummryPage.vue"
+
+ 
+
  
  
  
@@ -34,6 +38,8 @@ import ExchangePage from "@/pages/ExchangePage.vue"
 
 const routes = [
   { path: '/', component: ProductPage, name: 'products', meta: { requiresAuth: false }, },
+  
+  { path: '/AccountSummryPage:accountId', component: AccountSummryPage, name: 'accountSummary', meta: { requiresAuth: false }, },
   { path: '/SellsPage', component: SellsPage, name: 'SellsPage', meta: { requiresAuth: false }, },
   { path: '/SellDetailsPage:sellId', component: SellDetailsPage, name: 'sellDetails', meta: { requiresAuth: false }, },
   { path: '/customers', component: CustomerPage, meta: { requiresAuth: false }, },

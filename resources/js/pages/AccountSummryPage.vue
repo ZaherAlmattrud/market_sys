@@ -1,80 +1,23 @@
 <template>
   <v-container>
-    <v-row>
-      <v-col cols="12" md="10">
-        <v-text-field    variant="outlined" v-model="search" label="البحث" @input="filterItems"></v-text-field>
-      </v-col>
-
-      <v-col cols="12" md="2">
-        <v-text-field    variant="outlined">{{ filteredItems.length }}</v-text-field>
-      </v-col>
-    </v-row>
     <v-data-table
       :headers="headers"
       :items="filteredItems"
+    :items-per-page="5000"
       item-key="id"
       class="elevation-1"
+      hide-default-footer
     >
       <template v-slot:top>
         <v-toolbar flat>
-          <v-toolbar-title>المدفوعات</v-toolbar-title>
+          <v-toolbar-title>كشف حساب</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-dialog v-model="dialog" max-width="500px">
             <template v-slot:activator="{ on, attrs }">
-              <v-btn    variant="outlined" v-if="loggedIn" color="primary" dark class="mb-2" v-bind="attrs" v-on="on" @click="dialog = true">دفع
-                                جديد</v-btn>
+
+              <label>    الســــــــــــــــــــيــد :   {{ user_name }}  </label>
+              
             </template>
-            <v-card>
-              <v-card-title>
-                <span class="headline">{{ formTitle }}</span>
-              </v-card-title>
-              <v-card-text>
-                <v-container>
-                  <v-row>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field
-                        v-model="editedItem.total"
-                        label="المبلغ"
-                          variant="outlined"
-                      ></v-text-field>
-                    </v-col>
-
-                    <v-col cols="12" sm="6" md="4">
-                      <!-- <v-text-field v-model="editedItem.account_id" label="الحساب"></v-text-field> -->
-
-                      <!-- <v-select v-model="editedItem.account_id" :items="users"
-                                                item-title="user_name" item-value="id" label="صاحب الحساب"
-                                                persistent-hint single-line></v-select> -->
-
-                      <v-autocomplete
-                        v-model="editedItem.account_id"
-                        :items="users"
-                        item-title="user_name"
-                        item-value="id"
-                        label="صاحب الحساب"
-                        placeholder="ابدأ البحث"
-                        crearable
-                          variant="outlined"
-                      >
-                      </v-autocomplete>
-                    </v-col>
-
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field
-                        v-model="editedItem.notes"
-                        label="الملاحظات"
-                          variant="outlined"
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
-                </v-container>
-              </v-card-text>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn   variant="outlined" color="blue darken-1" text @click="close">إلغاء</v-btn>
-                <v-btn   variant="outlined" color="blue darken-1" text @click="save">حفظ</v-btn>
-              </v-card-actions>
-            </v-card>
           </v-dialog>
         </v-toolbar>
       </template>
@@ -84,6 +27,25 @@
                 <v-icon v-if="loggedIn" larg @click="deleteItem(item)">mdi-delete</v-icon>
       </template>
     </v-data-table>
+
+    <v-row>
+     
+
+      
+
+     
+
+     <v-col cols="6" md="6">
+       <v-text-field>   الرصيد الصافي :  {{  total }}</v-text-field>
+     </v-col>
+
+     <v-col cols="6" md="6">
+       <v-text-field>   المحاسب : أبو معاذ 0932826948</v-text-field>
+     </v-col>
+
+    
+
+   </v-row>
   </v-container>
 </template>
 
@@ -91,6 +53,9 @@
 export default {
   data() {
     return {
+
+      total : 0 ,
+        user_name : 'صاحب الحساب',
         loggedIn : false ,
       users: [],
       id: 0,
@@ -102,12 +67,13 @@ export default {
       dialogDelete: false,
 
       headers: [
+
         { title: "التسلسل", key: "id", sortable: false },
-        { title: "رقم الحساب", key: "account_id", sortable: false },
+        { title: "البيان", key: "description", sortable: false },
         { title: "المبلغ", key: "total", sortable: false },
         { title: "التاريخ", key: "date", sortable: false },
         { title: "الملاحظات", key: "notes", sortable: false },
-        { title: "العمليات", key: "actions", sortable: false },
+     
       ],
       items: [],
       editedIndex: -1,
@@ -158,11 +124,13 @@ export default {
   },
   async beforeCreate() {
     
-    const response2 = await axios.get("/api/getAllUsers");
-    this.users = response2.data; // users
+  
+    const accountId = this.$route.params.accountId;
+    const response = await axios.get("/api/getAccountSummary/" + accountId);
+    this.items = response.data['data'];
+    this.user_name = response.data['user_name'];
+    this.total =  response.data['total'];
 
-    const response = await axios.get("/api/getAllPaids");
-    this.items = response.data;
   },
 
   mounted() {

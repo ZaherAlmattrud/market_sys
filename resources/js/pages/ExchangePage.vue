@@ -8,7 +8,7 @@
                     <v-spacer></v-spacer>
                     <v-dialog v-model="dialog" max-width="500px">
                         <template v-slot:activator="{ on, attrs }">
-                            <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on" @click="dialog = true">
+                            <v-btn    variant="outlined" color="primary" dark class="mb-2" v-bind="attrs" v-on="on" @click="dialog = true">
                                 صرف جديد</v-btn>
                         </template>
                         <v-card>
@@ -35,8 +35,8 @@
                             </v-card-text>
                             <v-card-actions>
                                 <v-spacer></v-spacer>
-                                <v-btn color="blue darken-1" text @click="close">إلغاء</v-btn>
-                                <v-btn color="blue darken-1" text @click="save">حفظ</v-btn>
+                                <v-btn   variant="outlined" color="blue darken-1" text @click="close">إلغاء</v-btn>
+                                <v-btn   variant="outlined" color="blue darken-1" text @click="save">حفظ</v-btn>
                             </v-card-actions>
                         </v-card>
                     </v-dialog>

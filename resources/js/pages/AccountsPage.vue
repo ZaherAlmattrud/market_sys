@@ -32,6 +32,7 @@
                 v-bind="attrs"
                 v-on="on"
                 @click="dialog = false"
+                   variant="outlined"
               >
                 حساب جديد</v-btn
               >
@@ -48,6 +49,7 @@
                         v-model="editedItem.account"
                         label="رقم الحساب"
                           variant="outlined"
+                          
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -55,15 +57,16 @@
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="close">إلغاء</v-btn>
-                <v-btn color="blue darken-1" text @click="save">حفظ</v-btn>
+                <v-btn   variant="outlined" color="blue darken-1" text @click="close">إلغاء</v-btn>
+                <v-btn   variant="outlined" color="blue darken-1" text @click="save">حفظ</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
         </v-toolbar>
       </template>
       <template v-slot:item.actions="{ item }">
-        <v-icon larg @click="editItem(item)">mdi-pencil</v-icon>
+        <!-- <v-icon larg @click="editItem(item)">mdi-pencil</v-icon>
+        <v-icon larg @click="moveToAccountDetails(item)">mdi-account-eye-outline</v-icon> -->
         <v-icon larg @click="moveToAccountDetails(item)">mdi-account-eye-outline</v-icon>
       </template>
     </v-data-table>

@@ -8,8 +8,10 @@
     <v-data-table
       :headers="headers"
       :items="filteredItems"
+      :items-per-page="5000"
       item-key="id"
       class="elevation-1"
+      hide-default-footer
     >
       <template v-slot:top>
         <v-toolbar flat>
@@ -25,6 +27,7 @@
                 v-bind="attrs"
                 v-on="on"
                 @click="dialog = true"
+                  variant="outlined"
               >
                 بيان جديد</v-btn
               >
@@ -97,8 +100,8 @@
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="close">إلغاء</v-btn>
-                <v-btn color="blue darken-1" text @click="save">حفظ</v-btn>
+                <v-btn   variant="outlined" color="blue darken-1" text @click="close">إلغاء</v-btn>
+                <v-btn   variant="outlined" color="blue darken-1" text @click="save">حفظ</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>

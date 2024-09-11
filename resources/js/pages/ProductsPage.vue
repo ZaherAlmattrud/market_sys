@@ -2,10 +2,10 @@
   <v-container>
     <v-row>
       <v-col cols="12" md="10">
-        <v-text-field v-model="search" label="البحث" @input="filterItems"></v-text-field>
+        <v-text-field    variant="outlined" v-model="search" label="البحث" @input="filterItems"></v-text-field>
       </v-col>
       <v-col cols="12" md="2">
-        <v-text-field>{{ filteredItems.length }}</v-text-field>
+        <v-text-field      variant="outlined">{{ filteredItems.length }}</v-text-field>
       </v-col>
     </v-row>
     <v-data-table
@@ -27,6 +27,7 @@
                 v-bind="attrs"
                 v-on="on"
                 @click="dialog = true"
+                   variant="outlined"
                 >منتج جديد</v-btn
               >
             </template>
@@ -137,8 +138,8 @@
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="close">إلغاء</v-btn>
-                <v-btn color="blue darken-1" text @click="save">حفظ</v-btn>
+                <v-btn   variant="outlined" color="blue darken-1" text @click="close">إلغاء</v-btn>
+                <v-btn   variant="outlined" color="blue darken-1" text @click="save">حفظ</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -326,8 +327,13 @@ export default {
         // update current area
 
         console.log("update");
+        console.log("update");
         Object.assign(this.items[this.editedIndex], this.editedItem); // update local data
-        const response = axios.put("/api/updateProduct/" + this.id, this.editedItem); // update in data base
+        const response = axios.put("/api/updateProduct/" + this.id, this.editedItem, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }); // update in data base
       }
 
       this.close();

@@ -440,14 +440,17 @@ class ApisController extends Controller
     public function getAccountSummary($accountId)
     {
 
-        $data = DB::table('account_details')->where('account_id', $accountId)->get();
 
-        $res = $data->map(function ($item) {
+        return $this->accountController->getAccountSummary($accountId);
 
-            return  $item;
-        });
+        // $data = DB::table('account_details')->where('account_id', $accountId)->get();
 
-        return response()->json($res);
+        // $res = $data->map(function ($item) {
+
+        //     return  $item;
+        // });
+
+        // return response()->json($res);
     }
 
 
@@ -924,40 +927,42 @@ class ApisController extends Controller
 
 
 
-        $data = $request->all();
+        return $this->productsController->update( $request , $id);
 
-        $fileName = '';
-        $filePath = '';
-        $fileUrl = '';
+        // $data = $request->all();
 
-        if ($request->hasFile('file')) {
+        // $fileName = '';
+        // $filePath = '';
+        // $fileUrl = '';
 
-            $file = $request->file('file');
-            $fileName  =  time() . '1' . $file->getClientOriginalName();
-            $filePath =    $file->storeAs('public', $fileName);
-            $fileUrl = Storage::url($filePath);
-        }
+        // if ($request->hasFile('file')) {
+
+        //     $file = $request->file('file');
+        //     $fileName  =  time() . '1' . $file->getClientOriginalName();
+        //     $filePath =    $file->storeAs('public', $fileName);
+        //     $fileUrl = Storage::url($filePath);
+        // }
 
 
-        $res =  DB::table('products')
-            ->where('id', $id)
-            ->update(
+        // $res =  DB::table('products')
+        //     ->where('id', $id)
+        //     ->update(
 
-                [
+        //         [
 
-                    'name' =>  $data['name'],
-                    'price' =>  $data['price'],
-                    'category_id' =>  $data['category_id'],
-                    'sell' =>   $data['sell'],
-                    'img' =>    null,
-                    'file_name' =>    $fileName,
-                    'file_path' =>    $filePath,
-                    'file_url' =>   $fileUrl,
-                ]
+        //             'name' =>  $data['name'],
+        //             'price' =>  $data['price'],
+        //             'category_id' =>  $data['category_id'],
+        //             'sell' =>   $data['sell'],
+        //             'img' =>    null,
+        //             'file_name' =>    $fileName,
+        //             'file_path' =>    $filePath,
+        //             'file_url' =>   $fileUrl,
+        //         ]
 
-            );
+        //     );
 
-        return response()->json($res);
+        // return response()->json($res);
     }
 
     public function deleteProduct($id)

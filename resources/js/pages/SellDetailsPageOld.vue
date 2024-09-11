@@ -21,6 +21,7 @@
     <v-data-table
       :headers="headers"
       :items="filteredItems"
+      :items-per-page="5000"
       item-key="id"
       class="elevation-1"
     >

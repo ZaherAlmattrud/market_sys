@@ -2,11 +2,11 @@
   <v-container>
     <v-row>
       <v-col cols="12" md="10">
-        <v-text-field v-model="search" label="البحث" @input="filterItems"></v-text-field>
+        <v-text-field    variant="outlined" v-model="search" label="البحث" @input="filterItems"></v-text-field>
       </v-col>
 
       <v-col cols="12" md="2">
-        <v-text-field>{{ filteredItems.length }}</v-text-field>
+        <v-text-field    variant="outlined">{{ filteredItems.length }}</v-text-field>
       </v-col>
     </v-row>
     <v-data-table
@@ -21,7 +21,7 @@
           <v-spacer></v-spacer>
           <v-dialog v-model="dialog" max-width="500px">
             <template v-slot:activator="{ on, attrs }">
-              <v-btn v-if="loggedIn" color="primary" dark class="mb-2" v-bind="attrs" v-on="on" @click="dialog = true">قبض
+              <v-btn    variant="outlined" v-if="loggedIn" color="primary" dark class="mb-2" v-bind="attrs" v-on="on" @click="dialog = true">قبض
                                 جديد</v-btn>
             </template>
             <v-card>
@@ -73,8 +73,8 @@
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="close">إلغاء</v-btn>
-                <v-btn color="blue darken-1" text @click="save">حفظ</v-btn>
+                <v-btn   variant="outlined" color="blue darken-1" text @click="close">إلغاء</v-btn>
+                <v-btn   variant="outlined" color="blue darken-1" text @click="save">حفظ</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>

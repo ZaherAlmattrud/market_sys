@@ -122,6 +122,8 @@ class ProductsController extends Controller
     public function update(Request $request, $id)
     {
 
+
+     
         $data =  $request->all();
         $model = Product::where('id',$id)->first();
         $res = false ;
@@ -131,14 +133,18 @@ class ProductsController extends Controller
 
         if( $model  ){
            //$model->user_id = array_key_exists('user_id' , $data) ? $data['user_id']  :   $model->user_id  ;
-            $model->sell = array_key_exists('sell' , $data) ? $data['is_paid']  :  $model->sell ; 
+            $model->sell = array_key_exists('sell' , $data) ? $data['sell']  :  $model->sell ; 
+            $imageData = null ;
             if ($request->hasFile('file')) {
+
+                Log::info("=======================");
                 $image = $request->file('file');
                 $imageData = file_get_contents($image->getRealPath());
                 $imageData = base64_encode($imageData); 
-                $model->img = $imageData;
+               
             }
-            
+
+            $model->img =    $imageData ?   $imageData :  $model->img ; 
             $res =  $model->save();         
         };
 
