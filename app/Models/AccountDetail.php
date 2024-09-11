@@ -9,6 +9,8 @@ class AccountDetail extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     protected $fillable = [
         'account_id',
         'total',

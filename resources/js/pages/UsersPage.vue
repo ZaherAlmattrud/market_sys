@@ -258,6 +258,17 @@ export default {
         this.editedIndex = -1;
       });
     },
+
+    async clearAccount(account){
+
+
+console.log("account clear");
+
+console.log(account);
+
+await axios.delete(`/api/clearAccount/${account.id}`);
+
+},
     save() {
       // this.dialog = true;
       // if (this.editedIndex > -1) {
@@ -287,5 +298,7 @@ export default {
       this.close();
     },
   },
+
+  
 };
 </script>

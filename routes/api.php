@@ -5,6 +5,8 @@ use App\Http\Controllers\Version_1_1\DayController;
 use App\Http\Controllers\Version_1_1\ExchangeController;
 use App\Http\Controllers\Version_1_1\SellController;
 use App\Http\Controllers\Version_1_1\SellDetailController;
+use App\Http\Controllers\Version_1_1\AccountController;
+use App\Http\Controllers\Version_1_1\AccountDetailsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -31,10 +33,12 @@ Route::delete('/deleteUser/{id}', [ApisController::class, 'deleteUser']);
 Route::get('/getAllAccounts', [ApisController::class, 'getAllAccounts']);
 Route::put('/updateAccount/{id}', [ApisController::class, 'updateAccount']);
 Route::get('/getAccountSummary', [ApisController::class, 'getAccountSummary']);
+Route::delete('/clearAccount/{id}', [AccountController::class, 'clearAccount']);
+
 //===============================================================================
 Route::get('/getAccountDetails/{accountId}', [ApisController::class, 'getAccountDetails']);
 Route::post('/createAccountDetail/{accountId}', [ApisController::class, 'createAccountDetail']);
-Route::put('/updateAccountDetail/{accountDetailId}', [ApisController::class, 'updateAccountDetail']);
+Route::put('/updateAccountDetail/{accountDetailId}', [AccountDetailsController::class, 'update']);
 Route::delete('/deleteAccountDetail/{accountDetailId}', [ApisController::class, 'deleteAccountDetail']);
 Route::get('/getAccountSummary/{accountId}', [ApisController::class, 'getAccountSummary']);
 //===============================================================================
@@ -90,7 +94,7 @@ Route::delete('/deleteSell/{Id}', [SellController::class, 'destroy']);
 //=============================================================================
 Route::get('/getAllSellDetails/{sellId}', [SellDetailController::class, 'index']);
 Route::post('/createSellDetail/{sellId}', [SellDetailController::class, 'store']);
-// Route::put('/updateDay/{Id}', [SellDetailController::class, 'update']);
+Route::put('/updateSellDetail/{Id}', [SellDetailController::class, 'update']);
 Route::delete('/deleteSellDetail/{Id}', [SellDetailController::class, 'destroy']);
 //=============================================================================
 

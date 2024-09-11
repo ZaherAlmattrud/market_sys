@@ -45,6 +45,7 @@
       :items="filteredItems"
       item-key="id"
       class="elevation-1"
+         :items-per-page="5000"
     >
       <template v-slot:top>
         <v-toolbar flat>

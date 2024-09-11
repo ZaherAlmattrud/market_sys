@@ -18,6 +18,31 @@ class AccountController extends Controller
 {
     //
 
+
+
+    public function clearAccount($accountId){
+
+
+     
+
+        $user = User::where('account_id' ,$accountId )->first();
+
+        AccountDetail::where('account_id' ,$accountId )->delete();
+
+        $sellInvoicesIds  = Sell::where('user_id' ,$user->id )->pluck('id')->toArray();
+
+        SellDetail::whereIn('sell_id' , $sellInvoicesIds )->delete();
+
+        Sell::where('user_id' ,$user->id )->delete();
+
+        Invoice::where('account_id' ,$accountId )->update(['total'=>'0']);
+
+        Arrested::where('account_id' ,$accountId )->delete();
+
+        Paid::where('account_id' ,$accountId )->delete();
+
+    }
+
     public function getAll()
     {
 

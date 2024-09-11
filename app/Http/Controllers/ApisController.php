@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Version_1_1\AccountController;
+use App\Http\Controllers\Version_1_1\AccountDetailsController;
 use App\Http\Controllers\Version_1_1\ArrestedsController;
 use App\Http\Controllers\Version_1_1\UsersController;
 use App\Http\Controllers\Version_1_1\PaidsController;
@@ -20,7 +21,7 @@ class ApisController extends Controller
 {
     //
 
-
+    private $accountDetailController;
     private $accountController;
     private $userController;
     private $arrestedsController;
@@ -28,10 +29,11 @@ class ApisController extends Controller
     private $invoicesController;
     private $productsController;
 
-    function __construct(AccountController $accountController, UsersController $userController, ArrestedsController $arrestedsController, PaidsController $paidsController , InvoicesController $invoicesController ,
+    function __construct(AccountDetailsController $accountDetailController , AccountController $accountController, UsersController $userController, ArrestedsController $arrestedsController, PaidsController $paidsController , InvoicesController $invoicesController ,
     ProductsController $productsController )
     {
 
+        $this->accountDetailController = $accountDetailController;
         $this->accountController = $accountController;
         $this->userController = $userController;
         $this->arrestedsController = $arrestedsController;
@@ -410,24 +412,25 @@ class ApisController extends Controller
     public function updateAccountDetail(Request $request, $id)
     {
 
-        $data = $request->all();
+         
 
+        return $this->accountDetailsController->update($request , $accountId);
 
-        $res =  DB::table('account_details')
-            ->where('id', $id)
-            ->update(
+        // $res =  DB::table('account_details')
+        //     ->where('id', $id)
+        //     ->update(
 
-                [
-                    'description' => $data['description'],
-                    'quantity' => $data['quantity'],
-                    'total' => $data['total'],
-                    'price' => $data['price'],
+        //         [
+        //             'description' => $data['description'],
+        //             'quantity' => $data['quantity'],
+        //             'total' => $data['total'],
+        //             'price' => $data['price'],
 
-                ]
+        //         ]
 
-            );
+        //     );
 
-        return response()->json($res);
+        // return response()->json($res);
     }
 
     public function deleteAccountDetail($id)

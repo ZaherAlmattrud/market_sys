@@ -80,9 +80,23 @@ class SellDetailController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateSellDetailRequest $request, SellDetail $sellDetail)
+    public function update(Request $request, $id)
     {
         //
+
+     
+        $data =  $request->all();
+        $model = SellDetail::where('id',$id)->first();
+        $res = false ;
+        if( $model  ){
+
+            $model->total = array_key_exists('total' , $data) ? $data['total']  :   $model->total  ;
+            $model->quantity = array_key_exists('quantity' , $data) ? $data['quantity']  :  $model->quantity ; 
+            $model->price = array_key_exists('price' , $data) ? $data['price']  :  $model->price ; 
+            $res =  $model->save();         
+        };
+
+        return response()->json($res);
     }
 
     /**

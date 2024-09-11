@@ -350,7 +350,7 @@ export default {
         console.log("update");
         Object.assign(this.items[this.editedIndex], this.editedItem); // update local data
         const response = axios.put(
-          "/api/updateAccountDetail/" + this.id,
+          "/api/updateSellDetail/" + this.id,
           this.editedItem
         ); // update in data base
       }
