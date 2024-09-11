@@ -62,6 +62,7 @@ class SellController extends Controller
         $model->user_id = array_key_exists('user_id' , $data) ? $data['user_id']  : null ;
         $model->date =  Carbon::now()->format('Y-m-d H:i:s'); ; 
         $model->is_paid = array_key_exists('is_paid' , $data) ? $data['is_paid']  : null;
+        $model->notes = array_key_exists('notes' , $data) ? $data['notes']  : null;
         $model->save();
         return response()->json($model);
     }
@@ -95,6 +96,7 @@ class SellController extends Controller
         if( $model  ){
            //$model->user_id = array_key_exists('user_id' , $data) ? $data['user_id']  :   $model->user_id  ;
             $model->is_paid = array_key_exists('is_paid' , $data) ? $data['is_paid']  :  $model->is_paid ; 
+            $model->notes = array_key_exists('notes' , $data) ? $data['notes']  :  $model->notes ; 
             $res =  $model->save();         
         };
 

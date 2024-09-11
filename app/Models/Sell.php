@@ -19,6 +19,7 @@ class Sell extends Model
         'user_id',
         'total',
         'date',
-        'is_paid'
+        'is_paid',
+        'notes',
     ];
 }

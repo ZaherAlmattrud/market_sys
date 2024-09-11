@@ -122,8 +122,27 @@ class ProductsController extends Controller
     public function update(Request $request, $id)
     {
 
-        $data = [];
-        return response()->json($data);
+        $data =  $request->all();
+        $model = Product::where('id',$id)->first();
+        $res = false ;
+
+        $imageData = null ;
+      
+
+        if( $model  ){
+           //$model->user_id = array_key_exists('user_id' , $data) ? $data['user_id']  :   $model->user_id  ;
+            $model->sell = array_key_exists('sell' , $data) ? $data['is_paid']  :  $model->sell ; 
+            if ($request->hasFile('file')) {
+                $image = $request->file('file');
+                $imageData = file_get_contents($image->getRealPath());
+                $imageData = base64_encode($imageData); 
+                $model->img = $imageData;
+            }
+            
+            $res =  $model->save();         
+        };
+
+        return response()->json($res);
     }
 
     public function delete($id)

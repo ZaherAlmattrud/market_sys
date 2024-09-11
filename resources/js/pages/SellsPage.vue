@@ -71,6 +71,17 @@
                       ></v-text-field> -->
                     </v-col>
                   </v-row>
+                  <v-row>
+                    <v-col cols="12" sm="6" md="12">
+
+                      <v-text-field
+                        v-model="editedItem.notes"
+                        label="ملاحظات"
+                          variant="outlined"
+                      ></v-text-field>
+ 
+                    </v-col>
+                  </v-row>
                 </v-container>
               </v-card-text>
               <v-card-actions>
@@ -110,6 +121,7 @@ export default {
 
         { title: "التاريخ", key: "date", sortable: false },
         { title: "حالة الفاتورة", key: "is_paid", sortable: false },
+        { title: "الملاحظات", key: "notes", sortable: false },
 
         { title: "العمليات", key: "actions", sortable: false },
       ],
@@ -135,6 +147,7 @@ export default {
         user_id: "",
         total: "",
         date: "",
+        notes : "",
         is_paid: "غير مدفوعة",
       },
     };
