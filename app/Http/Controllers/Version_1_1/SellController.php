@@ -25,11 +25,9 @@ class SellController extends Controller
         $res = $data->map(function ($item){
             $user = User::where('id' , $item['user_id']  )->first();
 
-        
-
             $item['user_id'] =  $user ? $user->user_name : 'بدون اسم';
 
-            $item['total'] = SellDetail::where('sell_id' , $item['id'])->sum('total');
+            $item['total'] = ( $item['is_paid'] == 'مدفوعة' || $item['is_paid'] == 'تسعير')  ? 0 : SellDetail::where('sell_id' , $item['id'])->sum('total');
             return $item;
         });
 

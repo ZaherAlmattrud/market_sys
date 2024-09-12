@@ -156,7 +156,7 @@ class AccountController extends Controller
 
             $it['id'] = $id ;
             $it['description'] = 'فاتورة مبيعات رقم :  ' . $item['id'] ; ;
-            $it['total'] = SellDetail::where('sell_id' , $item['id'] )->sum('total') ;
+            $it['total'] = ( $item['is_paid'] == 'مدفوعة' || $item['is_paid'] == 'تسعير')  ? 0 : SellDetail::where('sell_id' , $item['id'] )->sum('total') ;
             $it['date'] = $item['date'] ;
             $it['notes'] = $item['notes'] ;
 

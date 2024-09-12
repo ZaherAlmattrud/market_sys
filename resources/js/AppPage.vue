@@ -5,8 +5,8 @@
     <NavbarComponent  v-if="!isPrintMode" class="sidebar"   app  />
 
     
-    <v-main>
-      <v-container fluid>
+    <v-main  >
+      <v-container   fluid>
         <router-view />
       </v-container>
     </v-main>
@@ -97,6 +97,13 @@ this.isPrintMode = event.matches ;
     visibility: hidden;
   }
  
+}
+
+.body{
+
+
+background: orange;
+
 }
 
 </style>

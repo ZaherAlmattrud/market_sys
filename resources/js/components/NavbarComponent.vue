@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar  app color="gray">
+  <v-app-bar  app color="gray" image="storage/uploads/sidebar.png">
     <template v-slot:prepend>
       <v-btn @click="toggleDrawer" icon>
         <v-icon>mdi-menu</v-icon>

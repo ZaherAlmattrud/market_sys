@@ -9,6 +9,7 @@
       </v-col>
     </v-row>
     <v-data-table
+    color="blue"
       :headers="headers"
       :items="filteredItems"
       item-key="id"
@@ -168,7 +169,7 @@ export default {
       dialogDelete: false,
       headers: [
       //  { title: "التسلسل", key: "id", sortable: false },
-        { title: "الاسم", key: "name", sortable: false },
+        { title: "الاسم", key: "name", sortable: false , class: "blue" },
         { title: "الكود", key: "code", sortable: false },
         { title: "الشراء", key: "price", sortable: false },
         { title: "الشراء بالعملة الثانوية", key: "price_in_dollar", sortable: false },

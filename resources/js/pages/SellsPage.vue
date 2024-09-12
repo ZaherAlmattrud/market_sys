@@ -143,6 +143,12 @@ export default {
           title: "غير مدفوعة",
           value:"غير مدفوعة",
         },
+
+        {
+          title: "تسعير",
+          value:"تسعير",
+        },
+
       ],
       editedItem: {
         id: 0,
@@ -151,6 +157,7 @@ export default {
         date: "",
         notes : "",
         is_paid: "غير مدفوعة",
+
       },
     };
   },

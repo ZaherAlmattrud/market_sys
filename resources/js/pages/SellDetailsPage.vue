@@ -420,6 +420,13 @@ export default {
 </script>
 <style scoped>
 
+
+.userName {
+
+font-size: 3rem !important;
+}
+
+
 .dataTableTitle {
 
   font-size: 1rem !important;

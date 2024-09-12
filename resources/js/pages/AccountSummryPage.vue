@@ -13,7 +13,7 @@
 
   <v-row>
       <v-col cols="8" md="8">
-        <v-text-field  variant="outlined">  الســــــــــــــــيــد  : {{ user_name }}</v-text-field>
+        <v-text-field style="font-size: 50px;" variant="outlined">  الســــــــــــــــيــد  : {{ user_name }}</v-text-field>
       </v-col>
      
 
@@ -222,3 +222,10 @@ export default {
   },
 };
 </script>
+<style>
+
+.userName {
+
+font-size: 3rem !important;
+}
+</style>

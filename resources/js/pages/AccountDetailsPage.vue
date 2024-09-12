@@ -25,8 +25,8 @@
         <v-text-field    variant="outlined" v-model="search" label="البحث" @input="filterItems"></v-text-field>
       </v-col>
 
-      <v-col   cols="12" md="7">
-        <v-text-field    variant="outlined">الســـــــــــــــيـــد :  {{ account_persion }} </v-text-field>
+      <v-col  class="userName"  cols="12" md="7">
+        <v-text-field     variant="outlined">الســـــــــــــــيـــد :  {{ account_persion }} </v-text-field>
       </v-col>
 
       <!-- <v-col   cols="2" md="2">
@@ -399,6 +399,11 @@ this.editedItem.total = this.editedItem.price * this.editedItem.quantity;
 };
 </script>
 <style scoped>
+
+.userName {
+
+font-size: 3rem !important;
+}
 
 
 @media print {

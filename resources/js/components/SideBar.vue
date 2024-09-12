@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <!-- <v-layout> -->
-    <v-navigation-drawer location="right" permanent :width="200" v-model="drawerVisible":value="drawerVisible">
+    <v-navigation-drawer  color="orange-lighten-5"  location="right" permanent :width="200" v-model="drawerVisible":value="drawerVisible">
       <template v-slot:prepend>
         <v-list-item
           lines="two"
@@ -14,11 +14,13 @@
       <v-divider></v-divider>
 
       <v-list density="compact" nav>
-        <RouterLink to="/">
+        <RouterLink   to="/">
           <v-list-item
             prepend-icon="mdi-list-box-outline"
             title="المنتجات"
             value="home"
+             color="blue"
+           
           ></v-list-item>
         </RouterLink>
 
@@ -32,6 +34,7 @@
             prepend-icon="mdi-briefcase-account-outline"
             title="الحسابات"
             value="users"
+             color="purple"
           ></v-list-item
         >
 
@@ -41,6 +44,7 @@
           <v-list-item
             prepend-icon="mdi-invoice-text-multiple-outline"
             title="المبيعات"
+             color="indigo"
             value="SellsPage"
           ></v-list-item
         >
@@ -54,6 +58,7 @@
             prepend-icon="mdi-import"
             title="المقبوضات"
             value="arresteds"
+              color="green"
           ></v-list-item>
         </RouterLink>
         <!-- <RouterLink to="/accounts"> <v-list-item prepend-icon="mdi-briefcase-account-outline" title="الحسابات"
@@ -64,6 +69,7 @@
             prepend-icon="mdi-invoice-text-multiple-outline"
             title="المشتريات"
             value="invoices"
+             color="orange"
           ></v-list-item
         ></RouterLink>
 
@@ -72,6 +78,8 @@
             prepend-icon="mdi-export"
             title="المدفوعات"
             value="paids"
+            
+             color="red"
           ></v-list-item>
         </RouterLink>
         <RouterLink to="/areas">
@@ -79,6 +87,7 @@
             prepend-icon="mdi-map-marker-multiple-outline"
             title="المناطق"
             value="areas"
+             color="brown"
           ></v-list-item
         ></RouterLink>
 
@@ -87,6 +96,7 @@
             prepend-icon="mdi-alarm-panel-outline"
             title="اليومية"
             value="days"
+                      color="lime"
           ></v-list-item>
         </RouterLink>
 
@@ -95,6 +105,7 @@
             prepend-icon="mdi-chart-bar"
             title="التقارير"
             value="reports"
+            color="orange"
           ></v-list-item>
         </RouterLink>
 
@@ -103,6 +114,7 @@
             prepend-icon="mdi-shape-plus-outline"
             title="الأصناف"
             value="category"
+             color="purple"
           ></v-list-item>
         </RouterLink>
 
@@ -111,6 +123,7 @@
             prepend-icon="mdi-currency-usd"
             title="الصرف"
             value="exchange"
+             color="blue"
           ></v-list-item>
         </RouterLink>
         <v-list-item
@@ -118,6 +131,7 @@
           prepend-icon="mdi-account-lock-outline"
           title="الخروج"
           value="logOut"
+           color="red"
         ></v-list-item>
       </v-list>
     </v-navigation-drawer>
