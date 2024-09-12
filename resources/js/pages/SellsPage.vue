@@ -160,7 +160,9 @@ export default {
     },
     filteredItems() {
       return this.items.filter((item) => {
-        return true;
+        
+
+        return item.user_id.includes(this.search.toLowerCase()) 
       });
     },
   },
