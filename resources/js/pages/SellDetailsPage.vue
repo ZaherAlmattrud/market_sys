@@ -1,9 +1,43 @@
 <template>
+
+
+
   <v-container>
      
+    <v-row>
+      <v-col cols="12" md="12">
+    <img src="/public/logo.png" height="150"  >
+    </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col cols="12" md="12">
+        <!-- <v-divider></v-divider> -->
+    </v-col>
+    </v-row>
+
+  
+   
+    <v-row>
      
+
+      
+
+     
+
+     <v-col cols="8" md="8">
+       <v-text-field   variant="outlined">   الســـــــــــيد  :  {{  userName  }}</v-text-field>
+     </v-col>
+
+     <v-col cols="4" md="4">
+       <v-text-field   variant="outlined">   رقم الفاتورة  :  {{  this.$route.params.sellId  }}</v-text-field>
+     </v-col>
+
     
 
+    
+
+   </v-row>
      
     <v-data-table
       :headers="headers"
@@ -15,7 +49,7 @@
     >
       <template v-slot:top>
         <v-toolbar flat>
-          <v-toolbar-title class="dataTableTitle"> {{ userName }}</v-toolbar-title>
+          <v-toolbar-title class="dataTableTitle"> تفاصيل الفاتورة</v-toolbar-title>
 
           <v-spacer></v-spacer>
           <v-dialog v-model="dialog" max-width="600px">
@@ -23,7 +57,7 @@
               <v-btn
                 color="primary"
                 dark
-                class="mb-2"
+                class="newItemButton mb-2 hidenAtPrint"
                 v-bind="attrs"
                 v-on="on"
                 @click="dialog = true"
@@ -107,14 +141,17 @@
           </v-dialog>
         </v-toolbar>
       </template>
-      <template v-slot:item.actions="{ item }">
+      <template v-if="!isPrintMode" v-slot:item.actions="{ item }">
         <v-icon v-if="loggedIn" size="small" @click="deleteItem(item)">
           mdi-delete
         </v-icon>
         <v-icon v-if="loggedIn" larg @click="editItem(item)">mdi-pencil</v-icon>
       </template>
     </v-data-table>
-
+    <v-row>
+      <v-col cols="12" md="12"></v-col>
+    </v-row>
+   
     <v-row>
      
 
@@ -123,11 +160,11 @@
      
 
       <v-col cols="6" md="6">
-        <v-text-field>   الاجمالي :  {{  invoiceTotal }}</v-text-field>
+        <v-text-field   variant="outlined">   الاجمالي :  {{  invoiceTotal }}</v-text-field>
       </v-col>
 
       <v-col cols="6" md="6">
-        <v-text-field>   المحاسب : أبو معاذ 0932826948</v-text-field>
+        <v-text-field     variant="outlined">{{dateNow}}</v-text-field>
       </v-col>
 
      
@@ -141,6 +178,12 @@ export default {
   data() {
     return {
 
+      
+      dateNow :  new Date().getFullYear()+"-"+(new Date().getMonth()+1)+"-"+new Date().getDate() + " | "+ new Date().getHours()+" : "+new Date().getMinutes(),
+     
+
+      sellId : 0 ,
+      isPrintMode : false ,
       userName : 'صاحب الفاتورة',
       invoiceTotal : 0 ,
       loggedIn: false,
@@ -214,12 +257,12 @@ export default {
   },
 
   async beforeCreate() {
-    const selltId = this.$route.params.sellId;
-
+    const sellId = this.$route.params.sellId;
+    this.sellId= sellId ;
     const responses = await axios.get("/api/getAllProducts");
     this.products = responses.data; //
 
-    const response = await axios.get("/api/getAllSellDetails/" + selltId);
+    const response = await axios.get("/api/getAllSellDetails/" + sellId);
     this.items = response.data["data"]; // 
 
 
@@ -237,9 +280,24 @@ export default {
   },
 
   mounted() {
+
+    this.mediaQueryList = window.matchMedia('print');
+
+    this.mediaQueryList.addEventListener('change',this.updatePrintMode);
     this.checkLogedIn();
+
+   
+  },
+
+  beforeUnmount() {
+    this.mediaQueryList.removeEventListener('change',this.updatePrintMode);
   },
   methods: {
+
+    updatePrintMode (event){
+
+                   this.isPrintMode = event.matches ;
+    },
 
    
     updatePrice() {
@@ -364,7 +422,32 @@ export default {
 
 .dataTableTitle {
 
-  font-size: 0.75rem !important;
+  font-size: 1rem !important;
 }
 
+@media print{
+
+
+.newItemButton {
+  
+  display: none;
+}
+
+.hidenAtPrint{
+
+display: none;
+}
+
+
+.operation {
+
+ 
+}
+
+}
+
+
+
+
+ 
 </style>

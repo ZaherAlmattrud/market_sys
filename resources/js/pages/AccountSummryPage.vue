@@ -1,9 +1,33 @@
 <template>
+ 
+
   <v-container>
+
+    <v-row>
+    <v-col cols="12" md="12">
+      <img src="/public/logo.png" height="125" />
+    </v-col>
+  </v-row>
+
+  <v-row> <v-col cols="12" md="12"></v-col></v-row>
+
+  <v-row>
+      <v-col cols="8" md="8">
+        <v-text-field  variant="outlined">  الســــــــــــــــيــد  : {{ user_name }}</v-text-field>
+      </v-col>
+     
+
+     
+      <v-col cols="4" md="4">
+        <v-text-field  variant="outlined">  رقم الحساب : {{  this.$route.params.accountId }}</v-text-field>
+      </v-col>
+      </v-row>
+
+
     <v-data-table
       :headers="headers"
       :items="filteredItems"
-    :items-per-page="5000"
+      :items-per-page="5000"
       item-key="id"
       class="elevation-1"
       hide-default-footer
@@ -14,9 +38,7 @@
           <v-spacer></v-spacer>
           <v-dialog v-model="dialog" max-width="500px">
             <template v-slot:activator="{ on, attrs }">
-
-              <label>    الســــــــــــــــــــيــد :   {{ user_name }}  </label>
-              
+            
             </template>
           </v-dialog>
         </v-toolbar>
@@ -24,28 +46,21 @@
       <template v-slot:item.actions="{ item }">
         <v-icon v-if="loggedIn" larg @click="editItem(item)">mdi-pencil</v-icon>
 
-                <v-icon v-if="loggedIn" larg @click="deleteItem(item)">mdi-delete</v-icon>
+        <v-icon v-if="loggedIn" larg @click="deleteItem(item)">mdi-delete</v-icon>
       </template>
     </v-data-table>
 
+    <v-row> <v-col cols="12" md="12"></v-col></v-row>
+
     <v-row>
-     
+      <v-col cols="6" md="6">
+        <v-text-field  variant="outlined"> الرصيد الصافي : {{ total }}</v-text-field>
+      </v-col>
 
-      
-
-     
-
-     <v-col cols="6" md="6">
-       <v-text-field>   الرصيد الصافي :  {{  total }}</v-text-field>
-     </v-col>
-
-     <v-col cols="6" md="6">
-       <v-text-field>   المحاسب : أبو معاذ 0932826948</v-text-field>
-     </v-col>
-
-    
-
-   </v-row>
+      <v-col cols="6" md="6">
+        <v-text-field  variant="outlined">  {{ dateNow }}</v-text-field>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -54,9 +69,13 @@ export default {
   data() {
     return {
 
-      total : 0 ,
-        user_name : 'صاحب الحساب',
-        loggedIn : false ,
+    
+      dateNow :  new Date().getFullYear()+"-"+(new Date().getMonth()+1)+"-"+new Date().getDate() + " | "+ new Date().getHours()+" : "+new Date().getMinutes(),
+     
+     
+      total: 0,
+      user_name: "صاحب الحساب",
+      loggedIn: false,
       users: [],
       id: 0,
       user_types: [],
@@ -67,13 +86,11 @@ export default {
       dialogDelete: false,
 
       headers: [
-
         { title: "التسلسل", key: "id", sortable: false },
         { title: "البيان", key: "description", sortable: false },
         { title: "المبلغ", key: "total", sortable: false },
         { title: "التاريخ", key: "date", sortable: false },
         { title: "الملاحظات", key: "notes", sortable: false },
-     
       ],
       items: [],
       editedIndex: -1,
@@ -123,14 +140,11 @@ export default {
     },
   },
   async beforeCreate() {
-    
-  
     const accountId = this.$route.params.accountId;
     const response = await axios.get("/api/getAccountSummary/" + accountId);
-    this.items = response.data['data'];
-    this.user_name = response.data['user_name'];
-    this.total =  response.data['total'];
-
+    this.items = response.data["data"];
+    this.user_name = response.data["user_name"];
+    this.total = response.data["total"];
   },
 
   mounted() {

@@ -360,8 +360,13 @@ class ApisController extends Controller
      
         $res['account_persion'] = $user->user_name;
         $res['book_number'] = $user->number_in_book;
-        $res['data'] = $data->map(function ($item) {
 
+        $id = 1 ;
+        $res['data'] = $data->map(function ($item)use(&$id) {
+
+
+            $item->id = $id ;
+            $id++ ;
             return  $item;
         });
 

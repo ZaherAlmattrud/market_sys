@@ -19,7 +19,23 @@ class SellDetailController extends Controller
     public function index($sellId)
     {
         //
-        $data['data'] = SellDetail::where('sell_id' , $sellId)->get();
+
+        $id = 1 ;
+        $dd =  SellDetail::where('sell_id' , $sellId)->get();
+
+         $data['data'] = $dd->map(function($item)use(&$id){
+
+
+            $item['id'] = $id ;
+
+            $id++ ;
+
+            return $item ;
+
+
+
+         });
+
         $data['total'] = SellDetail::where('sell_id' , $sellId)->sum('total');
 
 

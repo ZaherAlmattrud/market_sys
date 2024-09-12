@@ -1,24 +1,37 @@
 <template>
+
+
+
   <v-container>
+
     <v-row>
-      <v-col cols="12" md="1">
+      <v-col cols="12" md="12">
+    <img src="/public/logo.png" height="125">
+    </v-col>
+    </v-row>
+    <v-row>
+    </v-row>
+
+
+    <v-row>
+      <v-col class="hidenAtPrint" cols="1" md="1">
         <v-button @click="$router.go(-1)">كافة الحسابات</v-button>
       </v-col>
-      <v-col cols="12" md="1">
+      <v-col class="hidenAtPrint"cols="1" md="1">
         <v-text-field    variant="outlined"> {{ book_number }} </v-text-field>
       </v-col>
 
-      <v-col cols="12" md="3">
+      <v-col class="hidenAtPrint" cols="3" md="3">
         <v-text-field    variant="outlined" v-model="search" label="البحث" @input="filterItems"></v-text-field>
       </v-col>
 
-      <v-col cols="12" md="4">
-        <v-text-field    variant="outlined"> {{ account_persion }} </v-text-field>
+      <v-col   cols="12" md="7">
+        <v-text-field    variant="outlined">الســـــــــــــــيـــد :  {{ account_persion }} </v-text-field>
       </v-col>
 
-      <v-col cols="12" md="3">
+      <!-- <v-col   cols="2" md="2">
         <v-text-field    variant="outlined"> {{ total }} : الاجمالي </v-text-field>
-      </v-col>
+      </v-col> -->
 
       <!-- <v-col cols="12" md="3">
         <v-text-field    variant="outlined"> {{ debts }} : المتبقي </v-text-field>
@@ -46,6 +59,7 @@
       item-key="id"
       class="elevation-1"
          :items-per-page="5000"
+         hide-default-footer
     >
       <template v-slot:top>
         <v-toolbar flat>
@@ -56,7 +70,7 @@
               <v-btn
                 color="primary"
                 dark
-                class="mb-2"
+                class="mb-2 hidenAtPrint"
                 v-bind="attrs"
                 v-on="on"
                 @click="dialog = true"
@@ -141,14 +155,31 @@
           </v-dialog>
         </v-toolbar>
       </template>
-      <template v-slot:item.actions="{ item }">
-        <v-icon v-if="loggedIn" size="small" @click="deleteItem(item)">
+      <template   v-slot:item.actions="{ item }">
+        <v-icon class="hidenAtPrint" v-if="loggedIn" size="small" @click="deleteItem(item)">
           mdi-delete
         </v-icon>
-        <v-icon v-if="loggedIn" larg @click="editItem(item)">mdi-pencil</v-icon>
+        <v-icon class="hidenAtPrint" v-if="loggedIn" larg @click="editItem(item)">mdi-pencil</v-icon>
       </template>
     </v-data-table>
+
+
+     <v-row> <v-col cols="12" md="12"></v-col></v-row>
+
+<v-row>
+  <v-col cols="6" md="6">
+        <v-text-field  variant="outlined" >   الاجمالي :  {{  total }}</v-text-field>
+      </v-col>
+
+      <v-col cols="6" md="6">
+        <v-text-field  variant="outlined"> {{ dateNow }}</v-text-field>
+      </v-col>
+
+</v-row>
+   
   </v-container>
+
+  
 </template>
 
 <script>
@@ -160,6 +191,10 @@ export default {
 
   data() {
     return {
+
+      
+      dateNow :  new Date().getFullYear()+"-"+(new Date().getMonth()+1)+"-"+new Date().getDate() + " | "+ new Date().getHours()+" : "+new Date().getMinutes(),
+     
       loggedIn: false,
       book_number: 0,
       account_persion: "",
@@ -175,7 +210,7 @@ export default {
       dialog: false,
       dialogDelete: false,
       headers: [
-        // { title: "التسلسل", key: "id", sortable: false },
+        { title: "التسلسل", key: "id", sortable: false },
         { title: " البيــــــــــــان ", key: "description", sortable: false },
         { title: "القيمة الإجمالية", key: "total", sortable: false },
         { title: "السعر الإفرادي", key: "price", sortable: false },
@@ -363,3 +398,18 @@ this.editedItem.total = this.editedItem.price * this.editedItem.quantity;
   },
 };
 </script>
+<style scoped>
+
+
+@media print {
+
+
+  .hidenAtPrint{
+
+       display: none;
+}
+
+}
+
+
+</style>

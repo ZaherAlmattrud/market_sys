@@ -31,7 +31,8 @@
               <v-card-text>
                 <v-container>
                   <v-row>
-                    <v-col cols="12" sm="6" md="4">
+
+                    <v-col cols="12" sm="8" md="6">
                       <v-text-field
                         v-model="editedItem.total"
                         label="المبلغ"
@@ -39,7 +40,7 @@
                       ></v-text-field>
                     </v-col>
 
-                    <v-col cols="12" sm="6" md="4">
+                    <v-col cols="12" sm="6" md="6">
                       <!-- <v-text-field v-model="editedItem.account_id" label="الحساب"></v-text-field> -->
 
                       <!-- <v-select v-model="editedItem.account_id" :items="users"
@@ -59,7 +60,14 @@
                       </v-autocomplete>
                     </v-col>
 
-                    <v-col cols="12" sm="6" md="4">
+                 
+
+                  </v-row>
+                  <v-row>
+
+                   
+
+                    <v-col cols="12" sm="12" md="12">
                       <v-text-field
                         v-model="editedItem.notes"
                         label="الملاحظات"
