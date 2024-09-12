@@ -7,6 +7,7 @@ use App\Http\Controllers\Version_1_1\SellController;
 use App\Http\Controllers\Version_1_1\SellDetailController;
 use App\Http\Controllers\Version_1_1\AccountController;
 use App\Http\Controllers\Version_1_1\AccountDetailsController;
+use App\Http\Controllers\Version_1_1\ProductsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -65,11 +66,13 @@ Route::delete('/deleteInvoice/{InvoiceId}', [ApisController::class, 'deleteInvoi
 
 
 //=============================================================================
+
+Route::put('/updateProduct/{ProductId}', [ProductsController::class, 'update']);
 Route::get('/getAllProducts', [ApisController::class, 'getAllProducts']);
 Route::get('/getProductImgLink/{productId}', [ApisController::class, 'getProductImgLink']);
 Route::get('/getAllProductsHealthy', [ApisController::class, 'getAllProductsHealthy']);
 Route::post('/createProduct', [ApisController::class, 'createProduct']);
-Route::put('/updateProduct/{ProductId}', [ApisController::class, 'updateProduct']);
+
 Route::delete('/deleteProduct/{ProductId}', [ApisController::class, 'deleteProduct']);
 //=============================================================================
 Route::get('/report', [ApisController::class, 'getReport']);

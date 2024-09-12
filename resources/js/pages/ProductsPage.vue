@@ -167,13 +167,14 @@ export default {
       dialog: false,
       dialogDelete: false,
       headers: [
-        { title: "التسلسل", key: "id", sortable: false },
+      //  { title: "التسلسل", key: "id", sortable: false },
         { title: "الاسم", key: "name", sortable: false },
         { title: "الكود", key: "code", sortable: false },
         { title: "الشراء", key: "price", sortable: false },
         { title: "الشراء بالعملة الثانوية", key: "price_in_dollar", sortable: false },
         { title: "الشراء بعد الحسم", key: "price_after_descount", sortable: false },
         { title: "الفاتورة", key: "invoice_id", sortable: false },
+        { title: "صاحب الفاتورة", key: "suppler", sortable: false },
 
         { title: "الصنف", key: "category_id", sortable: false },
         { title: "التاريخ", key: "date", sortable: false },
@@ -317,11 +318,7 @@ export default {
 
         console.log("create");
         // add to local data array
-        const response = axios.post("/api/createProduct", this.editedItem, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }); // add to data base
+        const response = axios.post("/api/createProduct", this.editedItem); // add to data base
         this.items.push(this.editedItem);
       } else {
         // update current area
@@ -329,11 +326,14 @@ export default {
         console.log("update");
         console.log("update");
         Object.assign(this.items[this.editedIndex], this.editedItem); // update local data
-        const response = axios.put("/api/updateProduct/" + this.id, this.editedItem, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }); // update in data base
+        const response = axios.put("/api/updateProduct/" + this.id, this.editedItem
+        // , {
+        //   headers: {
+        //     "Content-Type": "multipart/form-data",
+        //   },
+        // }
+      
+      ); // update in data base
       }
 
       this.close();

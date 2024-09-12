@@ -58,9 +58,10 @@ class ProductsController extends Controller
                 'price_after_descount'     =>  $category ? ($item->price) - ($category->descount * $item->price) : $item->price,
                 'notes' => $item->notes,
                 'sell' => $item->sell,
+                'suppler'=> $suppler ?  $suppler->user_name  : 'غير معروف',
                 'price_in_dollar' => $item->price_in_dollar,
                 //'img' => $item->img,
-                'invoice_id' =>     $suppler ?  $suppler->user_name  : $item->invoice_id,
+                'invoice_id' =>   $item->invoice_id, //  $suppler ?  $suppler->user_name  : 
                // 'suppler' => $item->invoice_id,
                 'category_id' => $category ?  $category->name : null,
                 'updatingPrice' => $item->price_in_dollar *   $exchange->value,
@@ -127,30 +128,31 @@ class ProductsController extends Controller
     {
 
 
+
+        Log::info("update");
+       
      
         $data =  $request->all();
+
+        Log::info($data);
+
         $model = Product::where('id',$id)->first();
         $res = false ;
 
-        $imageData = null ;
+
+        $category =     DB::table('categories')->where('id', $data['category_id'] )->first();
       
 
         if( $model  ){
-           //$model->user_id = array_key_exists('user_id' , $data) ? $data['user_id']  :   $model->user_id  ;
+
            $model->name = array_key_exists('name' , $data) ? $data['name']  :  $model->name ; 
-            $model->sell = array_key_exists('sell' , $data) ? $data['sell']  :  $model->sell ; 
-            $imageData = null ;
-            if ($request->hasFile('file')) {
-
-                Log::info("=======================");
-                $image = $request->file('file');
-                $imageData = file_get_contents($image->getRealPath());
-                $imageData = base64_encode($imageData); 
-               
-            }
-
-            $model->img =    $imageData ?   $imageData :  $model->img ; 
-            $res =  $model->save();         
+           $model->price = array_key_exists('price' , $data) ? $data['price']  :  $model->price ; 
+           $model->sell = array_key_exists('sell' , $data) ? $data['sell']  :  $model->sell ;
+           $model->invoice_id = array_key_exists('invoice_id' , $data) ? $data['invoice_id']  :  $model->invoice_id ; 
+           $model->code = array_key_exists('code' , $data) ? $data['code']  :  $model->code ; 
+           $model->category_id = array_key_exists('category_id' , $data) ? $data['category_id']  :  $model->category_id ; 
+           $model->price_after_descount = $category ? ($data['price']) - ($category->descount *  $data['price']) :  $data['price'];
+           $res =  $model->save();         
         };
 
         return response()->json($res);
