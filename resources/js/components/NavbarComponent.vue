@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar class="h-15" app color="white">
+  <v-app-bar  app color="gray">
     <template v-slot:prepend>
       <v-btn @click="toggleDrawer" icon>
         <v-icon>mdi-menu</v-icon>
@@ -9,7 +9,7 @@
     <!-- <v-app-bar-title>مركز المطرود التجاري</v-app-bar-title>  -->
 
     <template v-slot:append>
-      <v-row>
+      <v-row justify="center" no-gutters>
         <v-btn
           v-for="link in links"
           :key="id"

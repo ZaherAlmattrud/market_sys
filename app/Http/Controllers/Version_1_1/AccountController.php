@@ -155,7 +155,7 @@ class AccountController extends Controller
         $sellInvoices->map(function ( $item) use ( &$items , &$id , &$sellInvoicesTotal){
 
             $it['id'] = $id ;
-            $it['description'] = 'فاتورة مبيعات '  ;
+            $it['description'] = 'فاتورة مبيعات رقم :  ' . $item['id'] ; ;
             $it['total'] = SellDetail::where('sell_id' , $item['id'] )->sum('total') ;
             $it['date'] = $item['date'] ;
             $it['notes'] = $item['notes'] ;
