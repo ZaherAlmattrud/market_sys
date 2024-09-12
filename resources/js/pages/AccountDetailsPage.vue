@@ -70,39 +70,65 @@
                 <span class="headline">{{ formTitle }}</span>
               </v-card-title>
               <v-card-text>
+              
                 <v-container>
                   <v-row>
                     <v-col cols="12" sm="6" md="6">
                       <v-text-field
                         v-model="editedItem.quantity"
                         label="الكمية"
-                          variant="outlined"
+                        @change="updateTotal"
+                        variant="outlined"
                       ></v-text-field>
                     </v-col>
+
                     <v-col cols="12" sm="6" md="6">
-                      <v-text-field
+                      <!-- <v-autocomplete
                         v-model="editedItem.description"
-                        label="البيان"
-                          variant="outlined"
-                      ></v-text-field>
+                        :items="products"
+                        item-title="name"
+                        item-value="name"
+                        label="المنتج"
+                        placeholder="المنتج"
+                        crearable
+                        @update:modelValue="updatePrice"
+                   
+                      >
+                      </v-autocomplete> -->
+
+                      <v-combobox
+                        v-model="editedItem.description"
+                        :items="products"
+                        item-title="name"
+                        item-value="name"
+                        label="المنتج"
+                        placeholder="المنتج"
+                        crearable
+                        @update:modelValue="updatePrice"
+                        variant="outlined"
+                   
+                      >
+                      </v-combobox>
                     </v-col>
                   </v-row>
                   <v-row>
                     <v-col cols="12" sm="6" md="6">
                       <v-text-field
                         v-model="editedItem.price"
-                        label="الأفرادي"
-                          variant="outlined"
+                        label="الإفرادي"
+                        @change="updateTotal"
+                        variant="outlined"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="6">
                       <v-text-field
                         v-model="editedItem.total"
                         label="الإجمالي"
-                          variant="outlined"
+                        variant="outlined"
                       ></v-text-field>
 
-                     </v-col>
+                      <!-- <mony   currency="EUR" locale="fr-FR" decimal="," thousand="," /> -->
+                    </v-col>
                   </v-row>
                 </v-container>
               </v-card-text>
@@ -149,7 +175,7 @@ export default {
       dialog: false,
       dialogDelete: false,
       headers: [
-        { title: "التسلسل", key: "id", sortable: false },
+        // { title: "التسلسل", key: "id", sortable: false },
         { title: " البيــــــــــــان ", key: "description", sortable: false },
         { title: "القيمة الإجمالية", key: "total", sortable: false },
         { title: "السعر الإفرادي", key: "price", sortable: false },
@@ -171,11 +197,12 @@ export default {
       },
       defaultItem: {
         id: 1,
-        total: "",
+        total: 0,
         description: "",
-        quantity: "",
-        price: "",
+        quantity: 1,
+        price: 0,
       },
+      products:[],
     };
   },
   computed: {
@@ -201,17 +228,20 @@ export default {
   async beforeCreate() {
     const accountId = this.$route.params.accountId;
 
+    const responses = await axios.get("/api/getAllProducts");
+    this.products = responses.data; //
+
     console.log("account id");
     console.log(accountId);
     const response = await axios.get("/api/getAccountDetails/" + accountId);
     this.items = response.data["data"]; // users
 
-    this.invoices = response.data["invoices"];
+    // this.invoices = response.data["invoices"];
     this.total = response.data["total"];
-    this.book = response.data["book"];
-    this.paids = response.data["paids"];
-    this.arresteds = response.data["arresteds"];
-    this.debts = response.data["debts"];
+    // this.book = response.data["book"];
+    // this.paids = response.data["paids"];
+    // this.arresteds = response.data["arresteds"];
+    // this.debts = response.data["debts"];
     this.account_persion = response.data["account_persion"];
     this.book_number = response.data["book_number"];
   },
@@ -220,6 +250,37 @@ export default {
     this.checkLogedIn();
   },
   methods: {
+
+    updatePrice() {
+
+
+var itemName = '';
+
+
+  if ( this.editedItem.description && typeof this.editedItem.description == 'object' ){
+   itemName = this.editedItem.description.name;
+         
+  } else{
+
+   itemName = this.editedItem.description
+
+  }
+
+const item = this.products.find((i) => i.name === itemName);
+
+if (item) {
+  this.editedItem.price = item.sell;
+  this.editedItem.total = item.sell;
+}else{
+
+  this.editedItem.price = 0;
+  this.editedItem.total = 0;
+}
+},
+
+updateTotal() {
+this.editedItem.total = this.editedItem.price * this.editedItem.quantity;
+},
     checkLogedIn() {
       const loggedIn = localStorage.getItem("user");
       if (loggedIn) {
@@ -273,6 +334,11 @@ export default {
 
       if (this.id == 0) {
         // create new area
+
+        if ( this.editedItem.description && typeof this.editedItem.description == 'object' ){
+          this.editedItem.description = this.editedItem.description.name
+               
+        }
 
         console.log("create");
         // add to local data array

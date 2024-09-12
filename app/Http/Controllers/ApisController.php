@@ -351,34 +351,13 @@ class ApisController extends Controller
 
         $data = DB::table('account_details')->where('account_id', $accountId)->get();
 
-        $book =  DB::table('account_details')->where('account_id', $accountId)->sum('total'); //  الاجمالي
-        $invoices =  DB::table('invoices')->where('account_id', $accountId)->sum('total'); //  الاجمالي
-        $arresteds =  DB::table('arresteds')->where('account_id', $accountId)->sum('total'); // مقبوضات 
-        $paids =  DB::table('paids')->where('account_id', $accountId)->sum('total'); // مدفوعات 
-
+        $total =  DB::table('account_details')->where('account_id', $accountId)->sum('total'); //  الاجمالي
+       
         $user = DB::table('users')->where('account_id', $accountId)->first();
         $userTypeRow = DB::table('usertypes')->where('id', $user->user_type)->first();
-        $debts = 0;
-
-        $total =  $book  +   $invoices;
-
-
-        if ($userTypeRow->type_name != 'مورد') {
-
-            $debts = $total -    $arresteds; // الباقي = رصيده المديون - المقبوضات
-            $debts =  $debts +   $paids; // الباقي النهائي = المدفوع + الباقي
-
-        } else {
-
-            $debts = $total -   $paids;
-        }
-
+        
         $res['total'] = $total;
-        $res['invoices'] = $invoices;
-        $res['book'] = $book;
-        $res['arresteds'] = $arresteds;
-        $res['paids'] = $paids;
-        $res['debts'] = $debts;
+     
         $res['account_persion'] = $user->user_name;
         $res['book_number'] = $user->number_in_book;
         $res['data'] = $data->map(function ($item) {

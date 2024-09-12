@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Exchange;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Invoice;
+use App\Models\Users;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Response ;
@@ -38,11 +40,14 @@ class ProductsController extends Controller
 
         $itemsArray = $data->map(function ($item) {
 
-            $invoice =     DB::table('invoices')->where('id', $item->invoice_id)->first();
+           
             $category =     DB::table('categories')->where('id', $item->category_id)->first();
             $exchange =     DB::table('exchange')->first();
-
-
+            $suppler = null ;
+            $invoice = null ;
+            $invoice =     DB::table('invoices')->where('id', $item->invoice_id)->first();
+            if(   $invoice )
+             $suppler =    DB::table('users')->where('account_id' , $invoice->account_id )->first();
 
             return [
                 'id' => $item->id,
@@ -55,11 +60,10 @@ class ProductsController extends Controller
                 'sell' => $item->sell,
                 'price_in_dollar' => $item->price_in_dollar,
                 //'img' => $item->img,
-                'invoice_id' => $item->invoice_id,
+                'invoice_id' =>     $suppler ?  $suppler->user_name  : $item->invoice_id,
+               // 'suppler' => $item->invoice_id,
                 'category_id' => $category ?  $category->name : null,
                 'updatingPrice' => $item->price_in_dollar *   $exchange->value,
-
-
             ];
         });
 
@@ -133,6 +137,7 @@ class ProductsController extends Controller
 
         if( $model  ){
            //$model->user_id = array_key_exists('user_id' , $data) ? $data['user_id']  :   $model->user_id  ;
+           $model->name = array_key_exists('name' , $data) ? $data['name']  :  $model->name ; 
             $model->sell = array_key_exists('sell' , $data) ? $data['sell']  :  $model->sell ; 
             $imageData = null ;
             if ($request->hasFile('file')) {
