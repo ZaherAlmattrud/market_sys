@@ -131,7 +131,7 @@ export default {
       headers: [
         { title: "التسلسل", key: "id", sortable: false },
         { title: "الأسم", key: "user_name", sortable: false },
-        { title: "المتبقي", key: "debts", sortable: false },
+       
 
         { title: "رقمه بالدفتر", key: "number_in_book", sortable: false },
         { title: "نوع المستخدم", key: "user_type", sortable: false },

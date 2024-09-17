@@ -201,7 +201,7 @@ export default {
       dialog: false,
       dialogDelete: false,
       headers: [
-        { title: "التسلسل", key: "id", sortable: false  },
+        { title: "التسلسل", key: "identity", sortable: false  },
         { title: " البيــــــــــــان ", key: "description", sortable: false },
         { title: "القيمة الإجمالية", key: "total", sortable: false },
         { title: "السعر الإفرادي", key: "price", sortable: false },

@@ -137,7 +137,7 @@ class AccountController extends Controller
 
         $bookItems->map(function ( $item) use ( &$items , &$id , &$bookItemsTotal ){
 
-            $it['id'] = $id ;
+            $it['identity'] = $id ;
             $it['description'] = $item['description']. ' في دفتر الديون';
             $it['total'] = $item['total'] ;
             $it['date'] = $item['date'] ;
@@ -154,7 +154,7 @@ class AccountController extends Controller
 
         $sellInvoices->map(function ( $item) use ( &$items , &$id , &$sellInvoicesTotal){
 
-            $it['id'] = $id ;
+            $it['identity'] = $id ; 
             $it['description'] = 'فاتورة مبيعات رقم :  ' . $item['id'] ; ;
             $it['total'] = ( $item['is_paid'] == 'مدفوعة' || $item['is_paid'] == 'تسعير')  ? 0 : SellDetail::where('sell_id' , $item['id'] )->sum('total') ;
             $it['date'] = $item['date'] ;
@@ -171,7 +171,7 @@ class AccountController extends Controller
 
         $purchoiceInvoices->map(function ( $item) use ( &$items , &$id , &$purchoiceInvoicesTotal){
 
-            $it['id'] = $id ;
+            $it['identity'] = $id ; 
             $it['description'] = '  فاتورة مشتريات رقم  :   ' . $item['num'] ;
             $it['total'] = $item['total']   ;
             $it['date'] = $item['date'] ;
@@ -188,8 +188,7 @@ class AccountController extends Controller
         $arresteds = Arrested::where('account_id' ,$accountId )->get();
 
         $arresteds->map(function ( $item) use ( &$items , &$id, &$arrestedsTotals){
-
-            $it['id'] = $id ;
+            $it['identity'] = $id ; 
             $it['description'] = 'رصيد مقبوض' ;
             $it['total'] = $item['total']   ;
             $it['date'] = $item['date'] ;
@@ -207,7 +206,7 @@ class AccountController extends Controller
 
         $paids->map(function ( $item) use ( &$items , &$id, &$paidsTotals){
 
-            $it['id'] = $id ;
+            $it['identity'] = $id ; 
             $it['description'] = 'رصيد مدفوع' ;
             $it['total'] = $item['total']   ;
             $it['date'] = $item['date'] ;

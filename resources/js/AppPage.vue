@@ -10,7 +10,7 @@
         <router-view />
       </v-container>
     </v-main>
-    <FooterComponent app />
+    <FooterComponent v-if="!isPrintMode" app />
   </v-app>
    
 

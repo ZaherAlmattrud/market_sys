@@ -26,7 +26,7 @@ class SellDetailController extends Controller
          $data['data'] = $dd->map(function($item)use(&$id){
 
 
-            $item['id'] = $id ;
+            $item['identity'] = $id ;
 
             $id++ ;
 

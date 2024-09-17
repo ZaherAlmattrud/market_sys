@@ -48,7 +48,7 @@ class AccountDetailsController extends Controller
         };
 
         return response()->json($res);
-    }
+}
 
     public function delete($id)
     {

@@ -118,7 +118,6 @@ export default {
 
       headers: [
         { title: "التسلسل", key: "id", sortable: false },
-        { title: "نوع الفاتورة", key: "invoice_type", sortable: false },
         { title: "صاحب الفاتورة", key: "account_id", sortable: false },
         { title: "الرصيد الإجمالي", key: "total", sortable: false },
         { title: "رقم الفاتورة المطبوع", key: "num", sortable: false },
