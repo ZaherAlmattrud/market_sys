@@ -140,7 +140,7 @@ class ProductsController extends Controller
         $res = false ;
 
 
-        $category =     DB::table('categories')->where('id', $data['category_id'] )->first();
+     //   $category =     DB::table('categories')->where('id', $data['category_id'] )->first();
       
 
         if( $model  ){
@@ -150,8 +150,8 @@ class ProductsController extends Controller
            $model->sell = array_key_exists('sell' , $data) ? $data['sell']  :  $model->sell ;
            $model->invoice_id = array_key_exists('invoice_id' , $data) ? $data['invoice_id']  :  $model->invoice_id ; 
            $model->code = array_key_exists('code' , $data) ? $data['code']  :  $model->code ; 
-           $model->category_id = array_key_exists('category_id' , $data) ? $data['category_id']  :  $model->category_id ; 
-           $model->price_after_descount = $category ? ($data['price']) - ($category->descount *  $data['price']) :  $data['price'];
+         //  $model->category_id = array_key_exists('category_id' , $data) ? $data['category_id']  :  $model->category_id ; 
+         //  $model->price_after_descount = $category ? ($data['price']) - ($category->descount *  $data['price']) :  $data['price'];
            $res =  $model->save();         
         };
 

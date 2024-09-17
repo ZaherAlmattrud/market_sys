@@ -160,9 +160,17 @@ class AccountController extends Controller
             $it['date'] = $item['date'] ;
             $it['notes'] = $item['notes'] ;
 
-           $items[] = $it;
-            $id++ ;
-            $sellInvoicesTotal =  $sellInvoicesTotal +  $it['total'] ;
+
+            if ( ! ($item['is_paid'] == 'مدفوعة' || $item['is_paid'] == 'تسعير') ){
+
+
+                $items[] = $it;
+                $id++ ;
+                $sellInvoicesTotal =  $sellInvoicesTotal +  $it['total'] ;
+
+            }
+
+        
 
         });
 
@@ -177,10 +185,17 @@ class AccountController extends Controller
             $it['date'] = $item['date'] ;
             $it['notes'] = $item['notes'] ;
 
-           $items[] = $it;
-            $id++ ;
-            $purchoiceInvoicesTotal =   $purchoiceInvoicesTotal +  $it['total'] ;
+            if ( $item['total']  != 0  ){
 
+
+                $items[] = $it;
+                $id++ ;
+                $purchoiceInvoicesTotal =   $purchoiceInvoicesTotal +  $it['total'] ;
+    
+
+            }
+
+   
         });
 
 
