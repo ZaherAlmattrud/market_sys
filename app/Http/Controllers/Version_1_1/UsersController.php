@@ -67,8 +67,17 @@ class UsersController extends Controller
     public function update(Request $request, $id)
     {
 
-        $data = [];
-        return response()->json($data);
+        $data =  $request->all();
+        $model = User::where('id',$id)->first();
+        $res = false ;
+        if( $model  ){
+            $model->user_name = array_key_exists('user_name' , $data) ? $data['user_name']  :  $model->user_name ; 
+            $model->mobile = array_key_exists('mobile' , $data) ? $data['mobile']  :  $model->mobile ; 
+            $model->number_in_book = array_key_exists('number_in_book' , $data) ? $data['number_in_book']  :  $model->number_in_book ; 
+            $res =  $model->save();         
+        };
+
+        return response()->json($res);
     }
 
     public function delete($id)

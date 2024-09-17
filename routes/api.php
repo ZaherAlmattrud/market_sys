@@ -8,6 +8,7 @@ use App\Http\Controllers\Version_1_1\SellDetailController;
 use App\Http\Controllers\Version_1_1\AccountController;
 use App\Http\Controllers\Version_1_1\AccountDetailsController;
 use App\Http\Controllers\Version_1_1\ProductsController;
+use App\Http\Controllers\Version_1_1\UsersController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -28,7 +29,7 @@ Route::get('/getAllUserTypes', [ApisController::class, 'getAllUserTypes']);
 //================================================================================//
 Route::get('/getAllUsers', [ApisController::class, 'getAllUsers']);
 Route::post('/createUser', [ApisController::class, 'createUser']);
-Route::put('/updateUser/{id}', [ApisController::class, 'updateUser']);
+Route::put('/updateUser/{id}', [UsersController::class, 'update']);
 Route::delete('/deleteUser/{id}', [ApisController::class, 'deleteUser']);
 //===============================================================================
 Route::get('/getAllAccounts', [ApisController::class, 'getAllAccounts']);
