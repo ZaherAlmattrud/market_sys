@@ -180,7 +180,7 @@ class AccountController extends Controller
         $purchoiceInvoices->map(function ( $item) use ( &$items , &$id , &$purchoiceInvoicesTotal){
 
             $it['identity'] = $id ; 
-            $it['description'] = '  فاتورة مشتريات رقم  :   ' . $item['num'] ;
+            $it['description'] = '  فاتورة مشتريات رقم  :   ' . $item['id'] ;
             $it['total'] = $item['total']   ;
             $it['date'] = $item['date'] ;
             $it['notes'] = $item['notes'] ;
