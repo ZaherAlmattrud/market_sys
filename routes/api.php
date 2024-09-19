@@ -9,6 +9,7 @@ use App\Http\Controllers\Version_1_1\AccountController;
 use App\Http\Controllers\Version_1_1\AccountDetailsController;
 use App\Http\Controllers\Version_1_1\ProductsController;
 use App\Http\Controllers\Version_1_1\UsersController;
+use App\Http\Controllers\Version_1_1\InvoicesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -62,7 +63,7 @@ Route::delete('/deleteCategory/{CategoryId}', [ApisController::class, 'deleteCat
 Route::get('/getAllInvoices', [ApisController::class, 'getAllInvoices']);
 Route::get('/getInvoiceImgLink/{invoiceId}', [ApisController::class, 'getInvoiceImgLink']);
 Route::post('/createInvoice', [ApisController::class, 'createInvoice']);
-Route::put('/updateInvoice/{InvoiceId}', [ApisController::class, 'updateInvoice']);
+Route::put('/updateInvoice/{InvoiceId}', [InvoicesController::class, 'update']);
 Route::delete('/deleteInvoice/{InvoiceId}', [ApisController::class, 'deleteInvoice']);
 
 

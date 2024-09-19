@@ -117,6 +117,9 @@ class InvoicesController extends Controller
                 Log::info(     $imageData );
                 $model->img = $imageData;     
             }
+
+            $model->total = array_key_exists('total' , $data) ? $data['total']  :  $model->total ; 
+            $model->account_id = array_key_exists('account_id' , $data) ? $data['account_id']  :  $model->account_id ; 
             $res =  $model->save();         
         }
 
