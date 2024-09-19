@@ -474,7 +474,9 @@ class ApisController extends Controller
         $res = DB::table('paids')->insert([
 
             'total' =>  $data['total'],
-            'date' =>    Carbon::now()->format('Y-m-d H:i:s'),
+            // 'date' =>    Carbon::now()->format('Y-m-d H:i:s'),
+
+            'date'=>$data['date'],
             'notes' =>   $data['notes'],
             'account_id' => $user->account_id,
         ]);
@@ -553,7 +555,8 @@ class ApisController extends Controller
         $res = DB::table('arresteds')->insert([
 
             'total' =>  $data['total'],
-            'date' =>    Carbon::now()->format('Y-m-d H:i:s'),
+            // 'date' =>    Carbon::now()->format('Y-m-d H:i:s'),
+            'date'=>$data['date'],
             'notes' =>   $data['notes'],
             'account_id' =>  $user->account_id,
         ]);
@@ -576,6 +579,7 @@ class ApisController extends Controller
                 [
                     'total' =>  $data['total'],
                     //  'date' =>   Carbon::now()->format('Y-m-d H:i:s'),
+                    'date' =>  $data['date'],
                     'notes' =>   $data['notes'],
                     'account_id' =>  $user->account_id,
 

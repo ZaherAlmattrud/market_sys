@@ -2,11 +2,16 @@
   <v-container>
     <v-row>
       <v-col cols="12" md="10">
-        <v-text-field    variant="outlined" v-model="search" label="البحث" @input="filterItems"></v-text-field>
+        <v-text-field
+          variant="outlined"
+          v-model="search"
+          label="البحث"
+          @input="filterItems"
+        ></v-text-field>
       </v-col>
 
       <v-col cols="12" md="2">
-        <v-text-field    variant="outlined">{{ filteredItems.length }}</v-text-field>
+        <v-text-field variant="outlined">{{ filteredItems.length }}</v-text-field>
       </v-col>
     </v-row>
     <v-data-table
@@ -21,8 +26,17 @@
           <v-spacer></v-spacer>
           <v-dialog v-model="dialog" max-width="500px">
             <template v-slot:activator="{ on, attrs }">
-              <v-btn    variant="outlined" v-if="loggedIn" color="primary" dark class="mb-2" v-bind="attrs" v-on="on" @click="dialog = true">دفع
-                                جديد</v-btn>
+              <v-btn
+                variant="outlined"
+                v-if="loggedIn"
+                color="primary"
+                dark
+                class="mb-2"
+                v-bind="attrs"
+                v-on="on"
+                @click="dialog = true"
+                >دفع جديد</v-btn
+              >
             </template>
             <v-card>
               <v-card-title>
@@ -31,12 +45,11 @@
               <v-card-text>
                 <v-container>
                   <v-row>
-
                     <v-col cols="12" sm="8" md="6">
                       <v-text-field
                         v-model="editedItem.total"
                         label="المبلغ"
-                          variant="outlined"
+                        variant="outlined"
                       ></v-text-field>
                     </v-col>
 
@@ -55,23 +68,36 @@
                         label="صاحب الحساب"
                         placeholder="ابدأ البحث"
                         crearable
-                          variant="outlined"
+                        variant="outlined"
                       >
                       </v-autocomplete>
                     </v-col>
-
-                 
-
                   </v-row>
+
                   <v-row>
+                    <v-col cols="12" sm="12" md="12">
+                      
+                      <v-text-field
+                        label="التاريخ"
+                        type="date"
+                       
+                        variant="outlined"
+                        v-model="editedItem.date"
+                      
+                        clearable
+                        
+                      >
+                      </v-text-field>
+                      
+                    </v-col>
+                  </v-row>
 
-                   
-
+                  <v-row>
                     <v-col cols="12" sm="12" md="12">
                       <v-text-field
                         v-model="editedItem.notes"
                         label="الملاحظات"
-                          variant="outlined"
+                        variant="outlined"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -79,8 +105,12 @@
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn   variant="outlined" color="blue darken-1" text @click="close">إلغاء</v-btn>
-                <v-btn   variant="outlined" color="blue darken-1" text @click="save">حفظ</v-btn>
+                <v-btn variant="outlined" color="blue darken-1" text @click="close"
+                  >إلغاء</v-btn
+                >
+                <v-btn variant="outlined" color="blue darken-1" text @click="save"
+                  >حفظ</v-btn
+                >
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -89,7 +119,7 @@
       <template v-slot:item.actions="{ item }">
         <v-icon v-if="loggedIn" larg @click="editItem(item)">mdi-pencil</v-icon>
 
-                <v-icon v-if="loggedIn" larg @click="deleteItem(item)">mdi-delete</v-icon>
+        <v-icon v-if="loggedIn" larg @click="deleteItem(item)">mdi-delete</v-icon>
       </template>
     </v-data-table>
   </v-container>
@@ -99,7 +129,7 @@
 export default {
   data() {
     return {
-        loggedIn : false ,
+      loggedIn: false,
       users: [],
       id: 0,
       user_types: [],
@@ -165,7 +195,6 @@ export default {
     },
   },
   async beforeCreate() {
-    
     const response2 = await axios.get("/api/getAllUsers");
     this.users = response2.data; // users
 
