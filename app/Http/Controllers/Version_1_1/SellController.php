@@ -27,7 +27,12 @@ class SellController extends Controller
 
             $item['user_id'] =  $user ? $user->user_name : 'بدون اسم';
 
-            $item['total'] = ( $item['is_paid'] == 'مدفوعة' || $item['is_paid'] == 'تسعير')  ? 0 : SellDetail::where('sell_id' , $item['id'])->sum('total');
+
+            $total = SellDetail::where('sell_id' , $item['id'])->sum('total');
+
+            $item['total'] = ( $item['is_paid'] == 'مدفوعة' || $item['is_paid'] == 'تسعير')  ? 0 :  $total ;
+            $item['balance'] =   $total  ;
+            
             return $item;
         });
 

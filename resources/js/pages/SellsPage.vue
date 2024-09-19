@@ -119,8 +119,8 @@ export default {
       headers: [
         { title: "التسلسل", key: "id", sortable: false },
         { title: "الأسم", key: "user_id", sortable: false },
-        { title: "الإجمالي", key: "total", sortable: false },
-
+        { title: "الرصيد", key: "total", sortable: false },
+        { title: "الاجمالي", key: "balance", sortable: false },
         { title: "التاريخ", key: "date", sortable: false },
         { title: "حالة الفاتورة", key: "is_paid", sortable: false },
         { title: "الملاحظات", key: "notes", sortable: false },
