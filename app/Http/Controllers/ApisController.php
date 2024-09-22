@@ -131,6 +131,9 @@ class ApisController extends Controller
             $arresteds =  DB::table('arresteds')->where('account_id', $user->account_id)->sum('total'); // مقبوضات 
          $paids =  DB::table('paids')->where('account_id', $user->account_id)->sum('total'); // مدفوعات 
           $userTypeRow = DB::table('usertypes')->where('id', $user->user_type)->first();
+
+          $sells = DB::table('sells')->where('id', $user->id)->where('','')->get(['id']);
+
             $debts = 0;
 
             $total =  $book  +   $invoices;

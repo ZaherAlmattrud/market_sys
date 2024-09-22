@@ -91,7 +91,7 @@ export default {
         // { title: 'الرصيد الإجمالي', key: 'total', sortable: true },
         // { title: 'المقبوض', key: 'arrested', sortable: false },
         // { title: 'المدفوع', key: 'paid', sortable: false },
-        // { title: ' المتبقي ', key: 'debts', sortable: true },
+         { title: ' رصيد الحساب ', key: 'debts', sortable: true },
         { title: "العمليات", key: "actions", sortable: false },
       ],
       items: [],

@@ -6,48 +6,57 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Version_1_1\AccountController;
 
 class UsersController extends Controller
 {
     //
 
+
+    private $accountController ;
+
+    function __construct(AccountController $accountController){
+
+            $this->accountController = $accountController ;
+    }
+
     public function getAll()
     {
 
-        $re = [];
+        
+     
+       
         $data = User::with(['area', 'userType'])->orderBy('id', 'desc')->get();
 
-        $res = $data->map(function ($item)use(& $re) {
+        $res = $data->map(function ($item) {
 
            
+         //   $data = $this->accountController->getAccountSummaryTotal($item->account_id);
+          
+            return [
+                'id' => $item->id,
 
-            // // $dd = [];
-            // // $dd['id'] = $item->id;
-            // // $dd['user_name'] = $item->user_name;
-            // // $dd['user_type'] =  $item->userType ?  $item->userType->type_name : 'غير معرف';
-            // // $dd['area'] =   $item->area ? $item->area->name : 'غير معرف';
-            // // $dd['account'] = $item->account_id;
-            // // $dd['number_in_book'] = $item->number_in_book;
+                'user_name' => $item->user_name,
 
-            // $dd = new \stdClass;
-            //  $dd->id = $item->id;
-            // $dd->user_name = $item->user_name;
-            // $dd->user_type =  $item->userType ?  $item->userType->type_name : 'غير معرف';
-            // $dd->area =   $item->area ? $item->area->name : 'غير معرف';
-            // $dd->account = $item->account_id;
-            // $dd->number_in_book = $item->number_in_book;
+                'user_type' =>   $item->userType ?   $item->userType->type_name : 'غير محدد',
 
+               'area' =>  $item->area  ? $item->area->name : 'غير محدد',
 
+                'account' => $item->id,
 
-            array_push($re, $dd);
+                'number_in_book' => $item->number_in_book,
 
-            return $dd;
+                'mobile' => $item->mobile,
+
+                'balance' =>''  //  $data['total'] ,  
+            ];
+            
         });
 
 
 
 
-        return response()->json($re);
+        return response()->json($res);
     }
 
     public function get($id)
