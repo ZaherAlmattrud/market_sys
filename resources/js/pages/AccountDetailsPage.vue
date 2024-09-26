@@ -183,10 +183,10 @@
 </template>
 
 <script>
-import MoneyFormat from "vue-money-format";
+ 
 export default {
   components: {
-    "money-format": MoneyFormat,
+    
   },
 
   data() {
