@@ -31,7 +31,7 @@ class UsersController extends Controller
         $res = $data->map(function ($item) {
 
            
-         //   $data = $this->accountController->getAccountSummaryTotal($item->account_id);
+         //  $data = $this->accountController->getAccountSummaryTotal($item->account_id);
           
             return [
                 'id' => $item->id,
@@ -48,7 +48,7 @@ class UsersController extends Controller
 
                 'mobile' => $item->mobile,
 
-                'balance' =>''  //  $data['total'] ,  
+                'balance' => NULL// $data['total'] ,  
             ];
             
         });
