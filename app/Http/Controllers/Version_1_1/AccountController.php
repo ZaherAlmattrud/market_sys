@@ -160,18 +160,20 @@ class AccountController extends Controller
             $it['notes'] = $item['notes'] ;
 
 
-            if ( ! ($item['is_paid'] == 'مدفوعة' || $item['is_paid'] == 'تسعير') ){
+            // if ( ! ($item['is_paid'] == 'مدفوعة' || $item['is_paid'] == 'تسعير') ){
 
 
                 $items[] = $it;
                 $id++ ;
                 $sellInvoicesTotal =  $sellInvoicesTotal +  $it['total'] ;
 
-            }
+            // }
+            
 
         
 
         });
+
 
         $purchoiceInvoicesTotal = 0 ;
         $purchoiceInvoices  = Invoice::where('account_id' ,$accountId )->get();
