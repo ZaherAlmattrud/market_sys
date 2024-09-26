@@ -10,11 +10,7 @@
     </v-col>
     </v-row>
 
-    <v-row>
-      <v-col cols="12" md="12">
-        <!-- <v-divider></v-divider> -->
-    </v-col>
-    </v-row>
+     
 
   
    
@@ -38,6 +34,12 @@
     
 
    </v-row>
+
+   <v-row v-if="!isPrintMode">
+      <v-col cols="12" md="12">
+        <v-text-field    variant="outlined" v-model="search" label="البحث" @input="filterItems"></v-text-field>
+      </v-col>
+      </v-row>
      
     <v-data-table
       :headers="headers"
@@ -240,9 +242,10 @@ export default {
     },
     filteredItems() {
       return this.items.filter((item) => {
-        // return item.description.toLowerCase().includes(this.search.toLowerCase());
-
-        return true;
+         
+       
+       
+        return    item.description.includes(this.search.toLowerCase()) ;
       });
     },
   },
