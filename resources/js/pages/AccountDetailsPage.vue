@@ -232,9 +232,9 @@ export default {
       },
       defaultItem: {
         id: 1,
-        total: 0,
+        total: "",
         description: "",
-        quantity: 1,
+        quantity: "",
         price: "",
       },
       products:[],
@@ -305,7 +305,7 @@ const item = this.products.find((i) => i.name === itemName);
 
 if (item) {
   this.editedItem.price = item.sell;
-  this.editedItem.total = item.sell;
+//  this.editedItem.total = item.sell;
 }else{
 
   this.editedItem.price = 0;

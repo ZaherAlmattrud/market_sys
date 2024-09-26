@@ -51,7 +51,7 @@
                         :items="users"
                         item-title="user_name"
                         item-value="id"
-                        label="صاحب الفاتورة"
+                        label="مصدر الفاتورة"
                         placeholder="ابدأ البحث"
                         crearable
                           variant="outlined"
@@ -118,7 +118,7 @@ export default {
 
       headers: [
         { title: "التسلسل", key: "id", sortable: false },
-        { title: "صاحب الفاتورة", key: "account_id", sortable: false },
+        { title: "مصدر الفاتورة", key: "account_id", sortable: false },
         { title: "الرصيد الإجمالي", key: "total", sortable: false },
         { title: "رقم الفاتورة المطبوع", key: "num", sortable: false },
         { title: "التاريخ", key: "date", sortable: false },

@@ -220,7 +220,7 @@ export default {
         id: 0,
         total: 0,
         description: "",
-        quantity: 1,
+        quantity: "",
         price: 0,
       },
 
@@ -229,7 +229,7 @@ export default {
         id: 1,
         total: "",
         description: "",
-        quantity: "1",
+        quantity: "",
         price: "",
       },
     };
@@ -319,7 +319,7 @@ export default {
 
       if (item) {
         this.editedItem.price = item.sell;
-        this.editedItem.total = item.sell;
+    //    this.editedItem.total = item.sell;
       }else{
 
         this.editedItem.price = 0;
