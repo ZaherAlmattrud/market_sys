@@ -140,19 +140,16 @@ class ProductsController extends Controller
         $model = Product::where('id',$data['id'] )->first();
         $res = false ;
 
-
-     
-      
-
         if( $model  ){
 
            $model->name = $model->name ; 
            $model->price =  $data['price']    ; 
            $model->sell =  $data['sell']    ;
            $model->invoice_id =   $data['invoice_id']    ; 
-           $model->code =   $data['code']    ; 
+           $model->code =   $data['code']  ?    $data['code'] : 0 ; 
            $model->category_id =   $data['category_id']    ; 
            $res =  $model->save();         
+
         };
  
        
