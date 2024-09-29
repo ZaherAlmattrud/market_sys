@@ -65,7 +65,8 @@ class ProductsController extends Controller
                 //'img' => $item->img,
                 'invoice_id' =>   $item->invoice_id, //  $suppler ?  $suppler->user_name  : 
                // 'suppler' => $item->invoice_id,
-                'category_id' => $category ?  $category->name : null,
+                'category_id' => $item->category_id,
+                'category_name' => $category ?  $category->name : null,
                 'updatingPrice' => $item->price_in_dollar *   $exchange->value,
             ];
         });
@@ -86,41 +87,81 @@ class ProductsController extends Controller
     {
 
         $data = $request->all();
- 
- 
-        $imageData = null ;
-        if ($request->hasFile('file')) {
-            $image = $request->file('file');
-            $imageData = file_get_contents($image->getRealPath());
-            $imageData = base64_encode($imageData);
 
 
+
+        //Add New Item 
+
+        if ( $data['id'] == 0 ){
+
+
+            Log::info("New");
+
+            $imageData = null ;
+            if ($request->hasFile('file')) {
+                $image = $request->file('file');
+                $imageData = file_get_contents($image->getRealPath());
+                $imageData = base64_encode($imageData);
+    
+    
+                
+            }
+    
+            $exchange =   Exchange::where('name' , 'dollar')->first();
+            $category =   Category::where('id' ,$data['category_id'] )->first();   
+    
+           // $code = array_key_exists('code' , $data) ? $data['code']  : 0 ;
+            $model = new Product();
+            $model->img = $imageData;
+            $model->name =  $data['name'];
+            $model->code=    $data['code'] ?  $data['code'] : 0 ;
+            $model->price    = $data['price'];
+             $model->notes =  null;
+             $model->price_in_dollar = $data['pricr_in_doller'];
+           $model->sell=  $data['sell'];
+         
+              $model->invoice_id =  $data['invoice_id'] ? $data['invoice_id'] : 0;
+              $model->category_id =  $data['category_id'] ? $data['category_id'] : 4 ;
+             $model->date = Carbon::now()->format('Y-m-d H:i:s');
+          
             
+             $model->price_after_descount = $category ? ($data['price']) - ($category->descount *  $data['price']) :  $data['price'];
+              $model->price_in_dollar =   $data['price'] /   $exchange->value;
+        
+            $model->save();
+
+
+
+        }else{
+
+              //Add New Item Update
+
+              
+        $model = Product::where('id',$data['id'] )->first();
+        $res = false ;
+
+
+     
+      
+
+        if( $model  ){
+
+           $model->name = $model->name ; 
+           $model->price =  $data['price']    ; 
+           $model->sell =  $data['sell']    ;
+           $model->invoice_id =   $data['invoice_id']    ; 
+           $model->code =   $data['code']    ; 
+           $model->category_id =   $data['category_id']    ; 
+           $res =  $model->save();         
+        };
+ 
+       
+
+
         }
 
-        $exchange =   Exchange::where('name' , 'dollar')->first();
-        $category =   Category::where('id' ,$data['category_id'] )->first();   
-
-       // $code = array_key_exists('code' , $data) ? $data['code']  : 0 ;
-        $model = new Product();
-        $model->img = $imageData;
-        $model->name =  $data['name'];
-        $model->code=    $data['code'] ?  $data['code'] : 0 ;
-        $model->price    = $data['price'];
-         $model->notes =  null;
-         $model->price_in_dollar = $data['pricr_in_doller'];
-       $model->sell=  $data['sell'];
-     
-          $model->invoice_id =  $data['invoice_id'] ? $data['invoice_id'] : 0;
-          $model->category_id =  $data['category_id'] ? $data['category_id'] : 4 ;
-         $model->date = Carbon::now()->format('Y-m-d H:i:s');
       
-        
-         $model->price_after_descount = $category ? ($data['price']) - ($category->descount *  $data['price']) :  $data['price'];
-          $model->price_in_dollar =   $data['price'] /   $exchange->value;
-    
-        $model->save();
-        return response()->json($data);
+        return response()->json([]);
 
 
         
