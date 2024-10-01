@@ -117,7 +117,7 @@ export default {
         { title: "التسلسل", key: "id", sortable: false },
         { title: "الأسم", key: "user_id", sortable: false },
         // { title: "الرصيد", key: "total", sortable: false },
-        { title: "الاجمالي", key: "balance", sortable: false },
+        { title: "الاجمالي", key: "total", sortable: false },
         { title: "التاريخ", key: "date", sortable: false },
         // { title: "حالة الفاتورة", key: "is_paid", sortable: false },
         { title: "الملاحظات", key: "notes", sortable: false },
@@ -254,8 +254,14 @@ export default {
 
         console.log("create");
         // add to local data array
-        const response = axios.post("/api/createSell", this.editedItem); // add to data base
-        this.items.push(this.editedItem);
+        const response = axios.post("/api/createSell", this.editedItem).then((res)=>{
+
+          console.log(res.data);
+          this.items.unshift(res.data);
+        }); // add to data base
+
+        console.log(response.data);
+       // this.items.push(response.data);
       } else {
         // update current area
 

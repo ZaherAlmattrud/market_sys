@@ -67,7 +67,21 @@ class SellController extends Controller
       //  $model->is_paid = array_key_exists('is_paid' , $data) ? $data['is_paid']  : null;
         $model->notes = array_key_exists('notes' , $data) ? $data['notes']  : null;
         $model->save();
-        return response()->json($model);
+
+        $latest = Sell::orderBy('id','desc')->first();
+
+        // $newSell['id'] =  $latest->id ;
+        // $newSell['total'] =  0 ;
+        $user = User::where('id' ,  $latest->user_id  )->first();
+       // $newSell['user_id'] =  $user ? $user->user_name : 'بدون اسم';
+        $latest->user_id =  $user ? $user->user_name : 'بدون اسم';
+        // $newSell['date'] =   $latest->date;
+        // $newSell['is_paid'] =   $latest->is_paid;
+        // $newSell['notes'] =   $latest->notes;
+
+        Log::info(  $latest);
+    
+        return response()->json($latest);
     }
 
     /**
