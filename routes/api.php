@@ -11,6 +11,7 @@ use App\Http\Controllers\Version_1_1\ProductsController;
 use App\Http\Controllers\Version_1_1\UsersController;
 use App\Http\Controllers\Version_1_1\InvoicesController;
 use App\Http\Controllers\Version_1_1\PaidsController;
+use App\Http\Controllers\Version_1_1\ArrestedsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -53,7 +54,7 @@ Route::delete('/deletePaid/{paidId}', [ApisController::class, 'deletePaid']);
 //===============================================================================
 Route::get('/getAllArresteds', [ApisController::class, 'getAllArresteds']);
 Route::post('/createArrested', [ApisController::class, 'createArrested']);
-Route::put('/updateArrested/{ArrestedId}', [ApisController::class, 'updateArrested']);
+Route::put('/updateArrested/{ArrestedId}', [ArrestedsController::class, 'update']);
 Route::delete('/deleteArrested/{ArrestedId}', [ApisController::class, 'deleteArrested']);
 //===============================================================================
 Route::get('/getAllCategories', [ApisController::class, 'getAllCategories']);
