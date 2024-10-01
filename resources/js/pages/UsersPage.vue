@@ -26,7 +26,7 @@
                 class="mb-2"
                 v-bind="attrs"
                 v-on="on"
-                v-if="loggedIn"
+                
                 @click="dialog = true"
                    variant="outlined"
                 >حساب جديد</v-btn

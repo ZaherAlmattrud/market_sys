@@ -64,10 +64,10 @@ class PaidsController extends Controller
 
         if ($paid) {
 
-            $paid->account_id = $data['account_id'];
+          //  $paid->account_id = $data['account_id'];
             $paid->notes = $data['notes'];
             $paid->total = $data['total'];
-            $paid->date =  $data['date'];
+          //  $paid->date =  $data['date'];
             $paid->save();
 
         }

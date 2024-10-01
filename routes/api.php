@@ -10,6 +10,7 @@ use App\Http\Controllers\Version_1_1\AccountDetailsController;
 use App\Http\Controllers\Version_1_1\ProductsController;
 use App\Http\Controllers\Version_1_1\UsersController;
 use App\Http\Controllers\Version_1_1\InvoicesController;
+use App\Http\Controllers\Version_1_1\PaidsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -47,7 +48,7 @@ Route::get('/getAccountSummary/{accountId}', [ApisController::class, 'getAccount
 //===============================================================================
 Route::get('/getAllPaids', [ApisController::class, 'getAllPaids']);
 Route::post('/createPaid', [ApisController::class, 'createPaid']);
-Route::put('/updatePaid/{paidId}', [ApisController::class, 'updatePaid']);
+Route::put('/updatePaid/{paidId}', [PaidsController::class, 'update']);
 Route::delete('/deletePaid/{paidId}', [ApisController::class, 'deletePaid']);
 //===============================================================================
 Route::get('/getAllArresteds', [ApisController::class, 'getAllArresteds']);
