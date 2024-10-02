@@ -190,7 +190,7 @@ export default {
       editedItem: {
         id: 0,
         name: "",
-        pricr: "",
+        price: "",
         pricr_in_doller: 0,
         invoice_id: "",
         category_id: "",
@@ -203,7 +203,7 @@ export default {
       defaultItem: {
         id: 0,
         name: "",
-        pricr: "",
+        price: "",
         invoice_id: "",
         category_id: "",
         code :0,
@@ -318,9 +318,19 @@ export default {
         // create new area
 
         console.log("create");
+        console.log( this.editedItem );
+
         // add to local data array
-        const response = axios.post("/api/createProduct", this.editedItem); // add to data base
+
+        const response = axios.post("/api/createProduct", this.editedItem, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+
+       
         this.items.push(this.editedItem);
+
       } else {
         // update current area
 

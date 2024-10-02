@@ -88,7 +88,11 @@ class ProductsController extends Controller
 
         $data = $request->all();
 
+        Log::info("payload");
+        Log::info($data);
 
+
+        $model = null ;
 
         //Add New Item 
 
@@ -115,7 +119,7 @@ class ProductsController extends Controller
             $model->img = $imageData;
             $model->name =  $data['name'];
             $model->code=    $data['code'] ?  $data['code'] : 0 ;
-            $model->price    = $data['price'];
+            $model->price    = $data['price'] ? $data['price'] : 0 ;
              $model->notes =  null;
              $model->price_in_dollar = $data['pricr_in_doller'];
            $model->sell=  $data['sell'];
@@ -142,6 +146,17 @@ class ProductsController extends Controller
 
         if( $model  ){
 
+            $imageData = null ;
+            if ($request->hasFile('file')) {
+                $image = $request->file('file');
+                $imageData = file_get_contents($image->getRealPath());
+                $imageData = base64_encode($imageData);
+    
+    
+                
+            }
+
+            $model->img = $imageData;
            $model->name = $model->name ; 
            $model->price =  $data['price']    ; 
            $model->sell =  $data['sell']    ;
@@ -157,8 +172,35 @@ class ProductsController extends Controller
 
         }
 
+        $category =     DB::table('categories')->where('id', $model->category_id)->first();
+        $exchange =     DB::table('exchange')->first();
+        $suppler = null ;
+        $invoice = null ;
+        $invoice =     DB::table('invoices')->where('id', $model->invoice_id)->first();
+        if(   $invoice )
+         $suppler =    DB::table('users')->where('account_id' , $invoice->account_id )->first();
+
+
       
-        return response()->json([]);
+        return response()->json([
+
+              'id'=> $model->id ,
+              'name' => $model->name,
+              'code' => $model->code,
+              'date' => $invoice ? $invoice->date :  $model->date ,
+              'price'     => $model->price,
+              'price_after_descount'     =>  $category ? ($model->price) - ($category->descount * $model->price) : $item->price,
+              'notes' => $model->notes,
+              'sell' => $model->sell,
+              'suppler'=> $suppler ?  $suppler->user_name  : 'غير معروف',
+              'price_in_dollar' => $model->price_in_dollar,
+              'invoice_id' =>   $model->invoice_id,  
+              'category_id' => $model->category_id,
+              'category_name' => $category ?  $category->name : null,
+              'updatingPrice' => $model->price_in_dollar *   $exchange->value,
+
+
+        ]);
 
 
         
@@ -185,13 +227,21 @@ class ProductsController extends Controller
 
         if( $model  ){
 
+            $imageData = null ;
+
+            if ($request->hasFile('file')) {
+
+                $image = $request->file('file');
+                $imageData = file_get_contents($image->getRealPath());
+                $imageData = base64_encode($imageData);
+            }
+
+           $model->img = $imageData;
            $model->name = array_key_exists('name' , $data) ? $data['name']  :  $model->name ; 
            $model->price = array_key_exists('price' , $data) ? $data['price']  :  $model->price ; 
            $model->sell = array_key_exists('sell' , $data) ? $data['sell']  :  $model->sell ;
            $model->invoice_id = array_key_exists('invoice_id' , $data) ? $data['invoice_id']  :  $model->invoice_id ; 
            $model->code = array_key_exists('code' , $data) ? $data['code']  :  $model->code ; 
-         //  $model->category_id = array_key_exists('category_id' , $data) ? $data['category_id']  :  $model->category_id ; 
-         //  $model->price_after_descount = $category ? ($data['price']) - ($category->descount *  $data['price']) :  $data['price'];
            $res =  $model->save();         
         };
 

@@ -203,7 +203,7 @@ export default {
 
         id: 0,
         name: "",
-        pricr: "",
+        price: "",
         pricr_in_doller: 0,
         invoice_id: "",
         category_id: "",
@@ -216,7 +216,7 @@ export default {
       defaultItem: {
         id: 0,
         name: "",
-        pricr: "",
+        price: "",
         invoice_id: "",
         category_id: "",
         code: 0,
@@ -362,8 +362,22 @@ export default {
 
         console.log("create");
         // add to local data array
-        const response = axios.post("/api/createProduct", this.editedItem); // add to data base
-        this.items.push(this.editedItem);
+
+
+        // const response = axios.post("/api/createProduct", this.editedItem); // add to data base
+
+        const response = axios.post("/api/createProduct", this.editedItem, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }).then((response)=>{
+
+          this.items.unshift(response.data);
+
+        });
+
+        
+       // this.items.push(this.editedItem);
       } else {
         // update current area
 
@@ -372,12 +386,13 @@ export default {
         Object.assign(this.items[this.editedIndex], this.editedItem); // update local data
         const response = axios.put(
           "/api/updateProduct/" + this.id,
-          this.editedItem
-          // , {
-          //   headers: {
-          //     "Content-Type": "multipart/form-data",
-          //   },
-          // }
+          this.editedItem ,
+
+           {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
         ); // update in data base
       }
 

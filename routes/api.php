@@ -75,7 +75,7 @@ Route::put('/updateProduct/{ProductId}', [ProductsController::class, 'update']);
 Route::get('/getAllProducts', [ApisController::class, 'getAllProducts']);
 Route::get('/getProductImgLink/{productId}', [ApisController::class, 'getProductImgLink']);
 Route::get('/getAllProductsHealthy', [ApisController::class, 'getAllProductsHealthy']);
-Route::post('/createProduct', [ApisController::class, 'createProduct']);
+Route::post('/createProduct', [ProductsController::class, 'create']);
 
 Route::delete('/deleteProduct/{ProductId}', [ApisController::class, 'deleteProduct']);
 //=============================================================================
