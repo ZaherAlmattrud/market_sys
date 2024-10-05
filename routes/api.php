@@ -39,6 +39,9 @@ Route::get('/getAllAccounts', [ApisController::class, 'getAllAccounts']);
 Route::put('/updateAccount/{id}', [ApisController::class, 'updateAccount']);
 Route::get('/getAccountSummary', [ApisController::class, 'getAccountSummary']);
 Route::delete('/clearAccount/{id}', [AccountController::class, 'clearAccount']);
+Route::get('/getAllAccountsCash', [AccountController::class, 'getAllAccountsCash']);
+
+
 
 //===============================================================================
 Route::get('/getAccountDetails/{accountId}', [ApisController::class, 'getAccountDetails']);

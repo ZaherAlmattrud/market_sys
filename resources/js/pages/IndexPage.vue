@@ -75,6 +75,18 @@
                       ></v-text-field>
                     </v-col>
                   </v-row>
+
+                  <v-row>
+                    <v-col cols="12" sm="12" md="12">
+                      <v-text-field
+                        v-model="editedItem.price_after_descount"
+                        label="الشراء بعد الحسم"
+                        readonly="true"
+                       
+                        variant="outlined"
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
                   <v-row>
                     <v-col cols="12" md="4" sm="12">
                       <label>الفاتورة</label>
@@ -205,6 +217,7 @@ export default {
         name: "",
         price: "",
         pricr_in_doller: 0,
+        price_after_descount : 0 ,
         invoice_id: "",
         category_id: "",
         file: "",
@@ -388,11 +401,11 @@ export default {
           "/api/updateProduct/" + this.id,
           this.editedItem ,
 
-           {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
+        //    {
+        //   headers: {
+        //     "Content-Type": "multipart/form-data",
+        //   },
+        // }
         ); // update in data base
       }
 

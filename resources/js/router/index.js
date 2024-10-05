@@ -28,16 +28,14 @@ import ExchangePage from "@/pages/ExchangePage.vue"
 
  import AccountSummryPage from "@/pages/AccountSummryPage.vue"
 
+ import  AccountsCashPage from "@/pages/AccountsCashPage.vue"
+
  
 
  
- 
- 
- 
- 
-
 const routes = [
   { path: '/', component: ProductPage, name: 'products', meta: { requiresAuth: false }, },
+  { path: '/AccountsCash', component: AccountsCashPage, name: 'accountsCash', meta: { requiresAuth: false }, },
   
   { path: '/AccountSummryPage:accountId', component: AccountSummryPage, name: 'accountSummary', meta: { requiresAuth: false }, },
   { path: '/SellsPage', component: SellsPage, name: 'SellsPage', meta: { requiresAuth: false }, },

@@ -126,6 +126,15 @@
              color="blue"
           ></v-list-item>
         </RouterLink>
+
+        <RouterLink to="/accountsCash">
+          <v-list-item
+            prepend-icon="mdi-briefcase-account-outline"
+            title="الأرصدة"
+            value="accountsCash"
+             color="BROWN"
+          ></v-list-item>
+        </RouterLink>
         <v-list-item
           @click="logout"
           prepend-icon="mdi-account-lock-outline"

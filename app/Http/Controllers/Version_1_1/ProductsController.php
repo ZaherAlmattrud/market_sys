@@ -227,16 +227,17 @@ class ProductsController extends Controller
 
         if( $model  ){
 
-            $imageData = null ;
+            // $imageData = null ;
 
-            if ($request->hasFile('file')) {
+            // if ($request->hasFile('file')) {
 
-                $image = $request->file('file');
-                $imageData = file_get_contents($image->getRealPath());
-                $imageData = base64_encode($imageData);
-            }
+            //     $image = $request->file('file');
+            //     $imageData = file_get_contents($image->getRealPath());
+            //     $imageData = base64_encode($imageData);
+            //     $model->img = $imageData;
+            // }
 
-           $model->img = $imageData;
+        
            $model->name = array_key_exists('name' , $data) ? $data['name']  :  $model->name ; 
            $model->price = array_key_exists('price' , $data) ? $data['price']  :  $model->price ; 
            $model->sell = array_key_exists('sell' , $data) ? $data['sell']  :  $model->sell ;

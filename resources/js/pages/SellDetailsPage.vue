@@ -1,46 +1,34 @@
 <template>
-
-
-
   <v-container>
-     
     <v-row>
       <v-col cols="12" md="12">
-    <img src="/public/logo.png" height="150"  >
-    </v-col>
+        <img src="/public/logo.png" height="150" />
+      </v-col>
     </v-row>
 
-     
-
-  
-   
     <v-row>
-     
-
-      
-
-     
-
-     <v-col cols="8" md="8">
-       <v-text-field   variant="outlined">   الســـــــــــيد  :  {{  userName  }}</v-text-field>
-     </v-col>
-
-     <v-col cols="4" md="4">
-       <v-text-field   variant="outlined">   رقم الفاتورة  :  {{  this.$route.params.sellId  }}</v-text-field>
-     </v-col>
-
-    
-
-    
-
-   </v-row>
-
-   <v-row v-if="!isPrintMode">
-      <v-col cols="12" md="12">
-        <v-text-field    variant="outlined" v-model="search" label="البحث" @input="filterItems"></v-text-field>
+      <v-col cols="8" md="8">
+        <v-text-field variant="outlined"> الســـــــــــيد : {{ userName }}</v-text-field>
       </v-col>
-      </v-row>
-     
+
+      <v-col cols="4" md="4">
+        <v-text-field variant="outlined">
+          رقم الفاتورة : {{ this.$route.params.sellId }}</v-text-field
+        >
+      </v-col>
+    </v-row>
+
+    <v-row v-if="!isPrintMode">
+      <v-col cols="12" md="12">
+        <v-text-field
+          variant="outlined"
+          v-model="search"
+          label="البحث"
+          @input="filterItems"
+        ></v-text-field>
+      </v-col>
+    </v-row>
+
     <v-data-table
       :headers="headers"
       :items="filteredItems"
@@ -63,7 +51,7 @@
                 v-bind="attrs"
                 v-on="on"
                 @click="dialog = true"
-                  variant="outlined"
+                variant="outlined"
               >
                 بيان جديد</v-btn
               >
@@ -108,12 +96,33 @@
                         crearable
                         @update:modelValue="updatePrice"
                         variant="outlined"
-                   
                       >
                       </v-combobox>
                     </v-col>
                   </v-row>
                   <v-row>
+                    <v-col cols="12" sm="12" md="12">
+                      <v-text-field
+                        v-model="editedItem.price_after_descount"
+                        label="الشراء"
+                        readonly="true"
+                       
+                        variant="outlined"
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col cols="12" sm="6" md="6">
+                      <v-text-field
+                        v-model="editedItem.total"
+                        label="الإجمالي"
+                        @change="updateOnePrice"
+                        variant="outlined"
+                      ></v-text-field>
+
+                      <!-- <mony   currency="EUR" locale="fr-FR" decimal="," thousand="," /> -->
+                    </v-col>
+
                     <v-col cols="12" sm="6" md="6">
                       <v-text-field
                         v-model="editedItem.price"
@@ -122,22 +131,17 @@
                         variant="outlined"
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="12" sm="6" md="6">
-                      <v-text-field
-                        v-model="editedItem.total"
-                        label="الإجمالي"
-                        variant="outlined"
-                      ></v-text-field>
-
-                      <!-- <mony   currency="EUR" locale="fr-FR" decimal="," thousand="," /> -->
-                    </v-col>
                   </v-row>
                 </v-container>
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn   variant="outlined" color="blue darken-1" text @click="close">إلغاء</v-btn>
-                <v-btn   variant="outlined" color="blue darken-1" text @click="save">حفظ</v-btn>
+                <v-btn variant="outlined" color="blue darken-1" text @click="close"
+                  >إلغاء</v-btn
+                >
+                <v-btn variant="outlined" color="blue darken-1" text @click="save"
+                  >حفظ</v-btn
+                >
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -153,24 +157,15 @@
     <v-row>
       <v-col cols="12" md="12"></v-col>
     </v-row>
-   
+
     <v-row>
-     
-
-      
-
-     
-
       <v-col cols="6" md="6">
-        <v-text-field   variant="outlined">   الاجمالي :  {{  invoiceTotal }}</v-text-field>
+        <v-text-field variant="outlined"> الاجمالي : {{ invoiceTotal }}</v-text-field>
       </v-col>
 
       <v-col cols="6" md="6">
-        <v-text-field     variant="outlined">{{dateNow}}</v-text-field>
+        <v-text-field variant="outlined">{{ dateNow }}</v-text-field>
       </v-col>
-
-     
-
     </v-row>
   </v-container>
 </template>
@@ -179,15 +174,21 @@
 export default {
   data() {
     return {
+      dateNow:
+        new Date().getFullYear() +
+        "-" +
+        (new Date().getMonth() + 1) +
+        "-" +
+        new Date().getDate() +
+        " | " +
+        new Date().getHours() +
+        " : " +
+        new Date().getMinutes(),
 
-      
-      dateNow :  new Date().getFullYear()+"-"+(new Date().getMonth()+1)+"-"+new Date().getDate() + " | "+ new Date().getHours()+" : "+new Date().getMinutes(),
-     
-
-      sellId : 0 ,
-      isPrintMode : false ,
-      userName : 'صاحب الفاتورة',
-      invoiceTotal : 0 ,
+      sellId: 0,
+      isPrintMode: false,
+      userName: "صاحب الفاتورة",
+      invoiceTotal: 0,
       loggedIn: false,
       book_number: 0,
       account_persion: "",
@@ -203,7 +204,7 @@ export default {
       dialog: false,
       dialogDelete: false,
       headers: [
-        { title: "التسلسل", key: "identity", sortable: false  },
+        { title: "التسلسل", key: "identity", sortable: false },
         { title: " البيــــــــــــان ", key: "description", sortable: false },
         { title: "القيمة الإجمالية", key: "total", sortable: false },
         { title: "السعر الإفرادي", key: "price", sortable: false },
@@ -217,15 +218,14 @@ export default {
       items: [],
       editedIndex: -1,
 
-
       editedItem: {
         id: 0,
         total: 0,
         description: "",
         quantity: "",
         price: 0,
+        price_after_descount: 0,
       },
-
 
       defaultItem: {
         id: 1,
@@ -242,10 +242,7 @@ export default {
     },
     filteredItems() {
       return this.items.filter((item) => {
-         
-       
-       
-        return    item.description.includes(this.search.toLowerCase()) ;
+        return item.description.includes(this.search.toLowerCase());
       });
     },
   },
@@ -261,16 +258,15 @@ export default {
 
   async beforeCreate() {
     const sellId = this.$route.params.sellId;
-    this.sellId= sellId ;
+    this.sellId = sellId;
     const responses = await axios.get("/api/getAllProducts");
     this.products = responses.data; //
 
     const response = await axios.get("/api/getAllSellDetails/" + sellId);
-    this.items = response.data["data"]; // 
+    this.items = response.data["data"]; //
 
-
-    this.invoiceTotal =  response.data["total"];
-    this.userName =  response.data["userName"];
+    this.invoiceTotal = response.data["total"];
+    this.userName = response.data["userName"];
 
     // this.invoices = response.data["invoices"];
     this.total = response.data["total"];
@@ -283,48 +279,40 @@ export default {
   },
 
   mounted() {
+    this.mediaQueryList = window.matchMedia("print");
 
-    this.mediaQueryList = window.matchMedia('print');
-
-    this.mediaQueryList.addEventListener('change',this.updatePrintMode);
+    this.mediaQueryList.addEventListener("change", this.updatePrintMode);
     this.checkLogedIn();
-
-   
   },
 
   beforeUnmount() {
-    this.mediaQueryList.removeEventListener('change',this.updatePrintMode);
+    this.mediaQueryList.removeEventListener("change", this.updatePrintMode);
   },
   methods: {
-
-    updatePrintMode (event){
-
-                   this.isPrintMode = event.matches ;
+    updatePrintMode(event) {
+      this.isPrintMode = event.matches;
     },
 
-   
+    updateOnePrice() {
+      this.editedItem.price = this.editedItem.total / this.editedItem.quantity;
+    },
+
     updatePrice() {
+      var itemName = "";
 
-
-      var itemName = '';
-
-
-        if ( this.editedItem.description && typeof this.editedItem.description == 'object' ){
-         itemName = this.editedItem.description.name;
-               
-        } else{
-
-         itemName = this.editedItem.description
-
-        }
+      if (this.editedItem.description && typeof this.editedItem.description == "object") {
+        itemName = this.editedItem.description.name;
+      } else {
+        itemName = this.editedItem.description;
+      }
 
       const item = this.products.find((i) => i.name === itemName);
 
       if (item) {
         this.editedItem.price = item.sell;
-    //    this.editedItem.total = item.sell;
-      }else{
-
+        this.editedItem.price_after_descount = item.price_after_descount;
+        //    this.editedItem.total = item.sell;
+      } else {
         this.editedItem.price = 0;
         this.editedItem.total = 0;
       }
@@ -388,13 +376,12 @@ export default {
       if (this.id == 0) {
         // create new area
 
-
-
-        if ( this.editedItem.description && typeof this.editedItem.description == 'object' ){
-          this.editedItem.description = this.editedItem.description.name
-               
+        if (
+          this.editedItem.description &&
+          typeof this.editedItem.description == "object"
+        ) {
+          this.editedItem.description = this.editedItem.description.name;
         }
-
 
         console.log(this.editedItem.description);
 
@@ -410,10 +397,7 @@ export default {
 
         console.log("update");
         Object.assign(this.items[this.editedIndex], this.editedItem); // update local data
-        const response = axios.put(
-          "/api/updateSellDetail/" + this.id,
-          this.editedItem
-        ); // update in data base
+        const response = axios.put("/api/updateSellDetail/" + this.id, this.editedItem); // update in data base
       }
 
       this.close();
@@ -422,42 +406,24 @@ export default {
 };
 </script>
 <style scoped>
-
-
 .userName {
-
-font-size: 3rem !important;
+  font-size: 3rem !important;
 }
 
-
 .dataTableTitle {
-
   font-size: 1rem !important;
 }
 
-@media print{
+@media print {
+  .newItemButton {
+    display: none;
+  }
 
+  .hidenAtPrint {
+    display: none;
+  }
 
-.newItemButton {
-  
-  display: none;
+  .operation {
+  }
 }
-
-.hidenAtPrint{
-
-display: none;
-}
-
-
-.operation {
-
- 
-}
-
-}
-
-
-
-
- 
 </style>

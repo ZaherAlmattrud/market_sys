@@ -8,7 +8,7 @@ export default defineConfig({
     
     server:{
 
-       host: "192.168.1.101",
+       host: "127.0.0.1",
        port:5173
     },
     plugins: [

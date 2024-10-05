@@ -2,9 +2,9 @@
 echo Starting Laravel development server 
 
 
-start cmd /k "php artisan serve --host=0.0.0.0"
+@REM start cmd /k "php artisan serve --host=0.0.0.0"
   
-
+start cmd /k "php artisan serve"
 
 echo Starting vue development 
 

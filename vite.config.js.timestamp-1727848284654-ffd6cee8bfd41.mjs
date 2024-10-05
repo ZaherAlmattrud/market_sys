@@ -4,7 +4,7 @@ import laravel from "file:///C:/Users/ASUS/Desktop/market_system/node_modules/la
 import vue from "file:///C:/Users/ASUS/Desktop/market_system/node_modules/@vitejs/plugin-vue/dist/index.mjs";
 var vite_config_default = defineConfig({
   server: {
-    host: "192.168.1.101",
+    host: "127.0.0.1",
     port: 5173
   },
   plugins: [

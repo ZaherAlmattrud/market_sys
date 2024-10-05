@@ -82,6 +82,7 @@ class UsersController extends Controller
         if( $model  ){
             $model->user_name = array_key_exists('user_name' , $data) ? $data['user_name']  :  $model->user_name ; 
             $model->mobile = array_key_exists('mobile' , $data) ? $data['mobile']  :  $model->mobile ; 
+            $model->user_type = array_key_exists('user_type' , $data) ? $data['user_type']  :  $model->user_type ; 
             $model->number_in_book = array_key_exists('number_in_book' , $data) ? $data['number_in_book']  :  $model->number_in_book ; 
             $res =  $model->save();         
         };

@@ -13,6 +13,9 @@ use App\Models\Invoice;
 use App\Models\Arrested;
 use App\Models\Paid;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+
 
 class AccountController extends Controller
 {
@@ -40,6 +43,72 @@ class AccountController extends Controller
         Arrested::where('account_id' ,$accountId )->delete();
 
         Paid::where('account_id' ,$accountId )->delete();
+
+    }
+
+
+    public function getAllAccountsCash(){
+
+
+        $ress = [];
+
+
+         $data = DB::table('accounts')->orderBy('id', 'desc')->get();
+
+        $itemsArray = $data->map(function ($item)use(&$ress) {
+
+            $user =  DB::table('users')->where('id', $item->user_id)->first();
+
+            if ( $user ){
+
+
+
+                Log::info("user :");
+                Log::info($user->id);
+    
+                $book =  DB::table('account_details')->where('account_id', $item->id)->sum('total'); //  الاجمالي
+                $invoices =  DB::table('invoices')->where('account_id', $item->id)->sum('total'); //  الاجمالي
+                $arresteds =  DB::table('arresteds')->where('account_id', $item->id)->sum('total'); // مقبوضات 
+                $paids =  DB::table('paids')->where('account_id', $item->id)->sum('total'); // مدفوعات 
+                $userTypeRow = DB::table('usertypes')->where('id', $user->user_type)->first();
+                $area = DB::table('areas')->where('id', $user->area_id)->first();
+                $debts = 0;
+    
+                $total =  $book  +   $invoices;
+    
+    
+                if ($userTypeRow->type_name != 'تاجر') {
+    
+                    $debts = $total -    $arresteds; // الباقي = رصيده المديون - المقبوضات
+                    $debts =  $debts +   $paids; // الباقي النهائي = المدفوع + الباقي
+    
+                } else {
+    
+                    $debts = $total -   $paids;
+                }
+    
+            $ress[]= [
+                    'id' => $item->id,
+                    'account' => $item->account_num,
+                    'area'=> $area ? $area->name : 'مجهول',
+                    'person_name' => $user->user_name,
+                    'account_user_type'=> null ,
+                    'total' =>  $total,
+                    'invoices' =>   $invoices,
+                    'book' =>   $book,
+                    'paid' =>  $paids,
+                    'arrested' =>  $arresteds,
+                    'debts' =>  $debts
+    
+                ];
+            }
+
+         
+        });
+
+
+    
+        return response()->json( $ress);
 
     }
 
@@ -240,7 +309,7 @@ class AccountController extends Controller
             $incomeTotal =   $arrestedsTotals +   $purchoiceInvoicesTotal  ;
             $outcomeTotal =   $paidsTotals +     $sellInvoicesTotal +  $bookItemsTotal ;
 
-             if (  $userType ->type_name !== "مورد"){
+             if (  $userType ->type_name !== "تاجر"){
 
                 $total =   $outcomeTotal -  $incomeTotal  ;
 

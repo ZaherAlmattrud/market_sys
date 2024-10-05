@@ -282,7 +282,7 @@ export default {
             "Content-Type": "multipart/form-data",
           },
         }); // add to data base
-        this.items.push(this.editedItem);
+        this.items.unshift(this.editedItem);
       } else {
         // update current area
 

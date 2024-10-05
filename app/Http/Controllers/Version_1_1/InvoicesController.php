@@ -110,13 +110,13 @@ class InvoicesController extends Controller
         $res = false ;
         if( $model  ){
             // $model->total = $data['total'];
-            if ($request->hasFile('file')) {
-                $image = $request->file('file');
-                $imageData = file_get_contents($image->getRealPath());
-                $imageData = base64_encode( $imageData );
-                Log::info(     $imageData );
-                $model->img = $imageData;     
-            }
+            // if ($request->hasFile('file')) {
+            //     $image = $request->file('file');
+            //     $imageData = file_get_contents($image->getRealPath());
+            //     $imageData = base64_encode( $imageData );
+            //     Log::info(     $imageData );
+            //     $model->img = $imageData;     
+            // }
 
             $model->total = array_key_exists('total' , $data) ? $data['total']  :  $model->total ; 
             $model->account_id = array_key_exists('account_id' , $data) ? $data['account_id']  :  $model->account_id ; 

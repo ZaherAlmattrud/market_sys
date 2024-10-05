@@ -337,7 +337,11 @@ export default {
         console.log("update");
         console.log("update");
         Object.assign(this.items[this.editedIndex], this.editedItem); // update local data
-        const response = axios.put("/api/updateProduct/" + this.id, this.editedItem
+        const response = axios.put("/api/updateProduct/" + this.id, 
+        
+        this.editedItem
+
+
         // , {
         //   headers: {
         //     "Content-Type": "multipart/form-data",
@@ -345,6 +349,7 @@ export default {
         // }
       
       ); // update in data base
+      
       }
 
       this.close();
