@@ -24,7 +24,7 @@ class ArrestedsController extends Controller
                 'total' => $item->total,
                 'date' =>  $item->date,
                 'notes' =>  $item->notes,
-                'account_id' =>  $item->account->user->user_name,
+                'account_id' =>  $item->account->user ? $item->account->user->user_name:  null,
             ];
         });
 

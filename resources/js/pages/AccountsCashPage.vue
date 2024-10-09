@@ -119,9 +119,9 @@ export default {
       dialogDelete: false,
       headers: [
         { title: "التسلسل", key: "id", sortable: false },
-        { title: "الأسم", key: "person_name", sortable: false },
+        { title: "الأسم", key: "person_name", sortable: true },
         { title: "رصيد الحساب", key: "debts", sortable: true },
-        { title: "البلدة", key: "area", sortable: false },
+        { title: "البلدة", key: "area", sortable: true },
      
       ],
       items: [],

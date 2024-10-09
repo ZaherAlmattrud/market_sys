@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Version_1_1;
 
 use App\Http\Controllers\Controller;
 use App\Models\Account;
+use App\Models\Area;
 use App\Models\User;
 use App\Models\UserType;
 use App\Models\AccountDetail;
@@ -50,130 +51,28 @@ class AccountController extends Controller
     public function getAllAccountsCash(){
 
 
-        $ress = [];
+        
 
+          
+       
+             
 
-         $data = DB::table('accounts')->orderBy('id', 'desc')->get();
-
-        $itemsArray = $data->map(function ($item)use(&$ress) {
-
-            $user =  DB::table('users')->where('id', $item->user_id)->first();
-
-            if ( $user ){
-
-
-
-                Log::info("user :");
-                Log::info($user->id);
-    
-                $book =  DB::table('account_details')->where('account_id', $item->id)->sum('total'); //  الاجمالي
-                $invoices =  DB::table('invoices')->where('account_id', $item->id)->sum('total'); //  الاجمالي
-                $arresteds =  DB::table('arresteds')->where('account_id', $item->id)->sum('total'); // مقبوضات 
-                $paids =  DB::table('paids')->where('account_id', $item->id)->sum('total'); // مدفوعات 
-                $userTypeRow = DB::table('usertypes')->where('id', $user->user_type)->first();
-                $area = DB::table('areas')->where('id', $user->area_id)->first();
-                $debts = 0;
-    
-                $total =  $book  +   $invoices;
-    
-    
-                if ($userTypeRow->type_name != 'تاجر') {
-    
-                    $debts = $total -    $arresteds; // الباقي = رصيده المديون - المقبوضات
-                    $debts =  $debts +   $paids; // الباقي النهائي = المدفوع + الباقي
-    
-                } else {
-    
-                    $debts = $total -   $paids;
-                }
-    
-            $ress[]= [
-                    'id' => $item->id,
-                    'account' => $item->account_num,
-                    'area'=> $area ? $area->name : 'مجهول',
-                    'person_name' => $user->user_name,
-                    'account_user_type'=> null ,
-                    'total' =>  $total,
-                    'invoices' =>   $invoices,
-                    'book' =>   $book,
-                    'paid' =>  $paids,
-                    'arrested' =>  $arresteds,
-                    'debts' =>  $debts
-    
-                ];
-            }
-
-         
-        });
-
-
-    
-        return response()->json( $ress);
-
-    }
-
-    public function getAll()
-    {
-
-        // $data = DB::table('accounts')->orderBy('id', 'desc')->get();
-
-        // $itemsArray = $data->map(function ($item) {
-
-        //     $user =  DB::table('users')->where('id', $item->user_id)->first();
-
-        //     $book =  DB::table('account_details')->where('account_id', $item->id)->sum('total'); //  الاجمالي
-        //     $invoices =  DB::table('invoices')->where('account_id', $item->id)->sum('total'); //  الاجمالي
-        //     $arresteds =  DB::table('arresteds')->where('account_id', $item->id)->sum('total'); // مقبوضات 
-        //     $paids =  DB::table('paids')->where('account_id', $item->id)->sum('total'); // مدفوعات 
-        //     $userTypeRow = DB::table('usertypes')->where('id', $user->user_type)->first();
-        //     $debts = 0;
-
-        //     $total =  $book  +   $invoices;
-
-
-        //     if ($userTypeRow->type_name != 'مورد') {
-
-        //         $debts = $total -    $arresteds; // الباقي = رصيده المديون - المقبوضات
-        //         $debts =  $debts +   $paids; // الباقي النهائي = المدفوع + الباقي
-
-        //     } else {
-
-        //         $debts = $total -   $paids;
-        //     }
-
-        //     return [
-        //         'id' => $item->id,
-        //         'account' => $item->account_num,
-        //         'person_name' => $user->user_name,
-        //         'account_user_type' => $userTypeRow  ? $userTypeRow->type_name  : null,
-        //         'total' =>  $total,
-        //         'invoices' =>   $invoices,
-        //         'book' =>   $book,
-        //         'paid' =>  $paids,
-        //         'arrested' =>  $arresteds,
-        //         'debts' =>  $debts
-
-        //     ];
-        // });
-
-
-
-
-        $res =   Account::with(['user'])->orderBy('id', 'desc')->get();
+        $res =   User::orderBy('id', 'desc')->get();//Account::with(['user'])->orderBy('id', 'desc')->get();
 
         $data =  $res->map(function ($item) {
 
+        $dd = $this->getAccountSummaryTotal($item->account_id);
+
+            $user = $item->user ;
+            $area =  Area::where('id' ,$item->area_id )->first();
+
             return [
                 'id' => $item->id,
-                'account' => $item->account_num,
-                'person_name' =>  $item->user->user_name,
-                'account_user_type' =>    $item->user->userType->type_name,
-                'total' =>  '',
-                'invoices' =>  '',
-                'book' =>  '',
-                'paid' =>  '',
-                'arrested' =>  '',
-                'debts' =>   ''
+                'area' =>  $area  ?  $area->name : null ,
+                'person_name' =>   $item->user_name  ,
+                'account_user_type' =>  $item->userType->type_name ,
+                'total' =>   $dd['total'],
+                'debts' =>  $dd['total']
 
             ];
         });
@@ -197,6 +96,8 @@ class AccountController extends Controller
         $data = [];
         $items = [];
         $user = User::where('account_id' ,$accountId )->first();
+        Log::info("Account ID : ".$accountId);
+        
         $userType = UserType::where('id' ,  $user->user_type)->first();
         $data['user_name'] =   $user->user_name ;
 

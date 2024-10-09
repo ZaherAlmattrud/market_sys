@@ -263,7 +263,7 @@ export default {
         console.log("create");
         // add to local data array
         const response = axios.post("/api/createPaid", this.editedItem); // add to data base
-        this.items.push(this.editedItem);
+        this.items.unshift(this.editedItem);
       } else {
         // update current area
 

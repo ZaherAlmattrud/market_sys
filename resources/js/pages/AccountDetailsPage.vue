@@ -138,6 +138,7 @@
                       <v-text-field
                         v-model="editedItem.total"
                         label="الإجمالي"
+                         @change="updateOnePrice"
                         variant="outlined"
                       ></v-text-field>
 
@@ -285,6 +286,10 @@ export default {
     this.checkLogedIn();
   },
   methods: {
+
+    updateOnePrice() {
+      this.editedItem.price = this.editedItem.total / this.editedItem.quantity;
+    },
 
     updatePrice() {
 
