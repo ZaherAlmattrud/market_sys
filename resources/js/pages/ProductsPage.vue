@@ -179,6 +179,7 @@ export default {
 
         { title: "الصنف", key: "category_id", sortable: false },
         { title: "التاريخ", key: "date", sortable: false },
+        { title: "الملاحظات", key: "notes", sortable: false },
 
         // { title: 'المحدث', key: 'updatingPrice', sortable: false },
         { title: "المبيع", key: "sell", sortable: false },

@@ -120,7 +120,7 @@ class ProductsController extends Controller
             $model->name =  $data['name'];
             $model->code=    $data['code'] ?  $data['code'] : 0 ;
             $model->price    = $data['price'] ? $data['price'] : 0 ;
-             $model->notes =  null;
+             $model->notes =  $data['notes'] ? $data['notes'] : null;
              $model->price_in_dollar = $data['pricr_in_doller'];
            $model->sell=  $data['sell'];
          
@@ -163,6 +163,7 @@ class ProductsController extends Controller
            $model->invoice_id =   $data['invoice_id']    ; 
            $model->code =   $data['code']  ?    $data['code'] : 0 ; 
            $model->category_id =   $data['category_id']    ; 
+           $model->notes =  $data['notes'] ? $data['notes'] : null;
            $res =  $model->save();         
 
         };
@@ -239,6 +240,7 @@ class ProductsController extends Controller
 
         
            $model->name = array_key_exists('name' , $data) ? $data['name']  :  $model->name ; 
+           $model->notes =  array_key_exists('notes' , $data) ? $data['notes']  :  $model->notes ; 
            $model->price = array_key_exists('price' , $data) ? $data['price']  :  $model->price ; 
            $model->sell = array_key_exists('sell' , $data) ? $data['sell']  :  $model->sell ;
            $model->invoice_id = array_key_exists('invoice_id' , $data) ? $data['invoice_id']  :  $model->invoice_id ; 
