@@ -77,7 +77,7 @@
                   </v-row>
 
                   <v-row>
-                    <v-col cols="12" sm="12" md="12">
+                    <!-- <v-col cols="12" sm="12" md="12">
                       <v-text-field
                         v-model="editedItem.price_after_descount"
                         label="الشراء بعد الحسم"
@@ -85,7 +85,7 @@
                        
                         variant="outlined"
                       ></v-text-field>
-                    </v-col>
+                    </v-col> -->
                   </v-row>
                   <v-row>
                     <v-col cols="12" md="4" sm="12">
@@ -130,14 +130,14 @@
                   </v-row>
 
                   <v-row>
-                    <v-col cols="12" md="8" sm="12">
+                    <!-- <v-col cols="12" md="8" sm="12">
                       <v-text-field
                         v-model="editedItem.pricr_in_doller"
                         label="السعر بالعملة الاجنبية"
                         variant="outlined"
                       ></v-text-field>
-                    </v-col>
-                    <v-col cols="12" md="4" sm="12">
+                    </v-col> -->
+                    <v-col cols="12" md="12" sm="12">
                       <v-text-field
                         v-model="editedItem.notes"
                         label="ملاحظات"
