@@ -93,6 +93,7 @@ class ProductsController extends Controller
 
 
         $model = null ;
+        $exchange =   Exchange::where('name' , 'dollar')->first();
 
         //Add New Item 
 
@@ -111,7 +112,7 @@ class ProductsController extends Controller
                 
             }
     
-            $exchange =   Exchange::where('name' , 'dollar')->first();
+        
             $category =   Category::where('id' ,$data['category_id'] )->first();   
     
            // $code = array_key_exists('code' , $data) ? $data['code']  : 0 ;
@@ -159,6 +160,7 @@ class ProductsController extends Controller
             $model->img = $imageData;
            $model->name = $model->name ; 
            $model->price =  $data['price']    ; 
+           $model->price_in_dollar =   $data['price'] /   $exchange->value;
            $model->sell =  $data['sell']    ;
            $model->invoice_id =   $data['invoice_id']    ; 
            $model->code =   $data['code']  ?    $data['code'] : 0 ; 
