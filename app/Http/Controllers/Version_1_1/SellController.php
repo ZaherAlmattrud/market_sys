@@ -28,7 +28,8 @@ class SellController extends Controller
             $item['user_id'] =  $user ? $user->user_name : 'بدون اسم';
 
 
-            $total = SellDetail::where('sell_id' , $item['id'])->sum('total');
+            $total = SellDetail::where('sell_id' , $item['id'])->where('pr' ,'!=' , 0)->sum('total');
+            $item['pr'] =  $total - SellDetail::where('sell_id' , $item['id'])->sum('pr')  ;
 
             $item['total'] =  $total ;
             $item['balance'] =   $total  ;

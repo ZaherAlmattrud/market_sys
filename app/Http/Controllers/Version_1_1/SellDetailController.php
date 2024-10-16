@@ -65,13 +65,19 @@ class SellDetailController extends Controller
      */
     public function store(Request $request , $sellId)
     {
+
+     
+
         $data = $request->all();
+      //  $i = $data['price_after_descount'] ? $data['price_after_descount'] *  $data['quantity'] : 0 ;
+
         $model = new SellDetail();
         $model->sell_id =  $sellId ;
         $model->total =  $data['total'] ;
         $model->description =  $data['description'];
         $model->quantity =  $data['quantity'] ;
         $model->price =  $data['price'] ;
+        $model->pr =  $data['price_after_descount'] > 0 ? $data['price_after_descount'] *  $data['quantity'] : 0 ;//$i < 0 ? 0 : $data['total'] -  $i  ;
         $model->date =  Carbon::now()->format('Y-m-d H:i:s'); ; 
         $model->save();
         return response()->json($model);

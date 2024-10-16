@@ -105,7 +105,7 @@
                       <v-text-field
                         v-model="editedItem.price_after_descount"
                         label="الشراء"
-                        readonly="true"
+                         
                        
                         variant="outlined"
                       ></v-text-field>
@@ -224,6 +224,7 @@ export default {
         description: "",
         quantity: "",
         price: 0,
+        pr: 0,
         price_after_descount: 0,
       },
 
@@ -233,6 +234,7 @@ export default {
         description: "",
         quantity: "",
         price: "",
+        pr: "",
       },
     };
   },

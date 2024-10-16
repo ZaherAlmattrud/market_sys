@@ -121,6 +121,7 @@ export default {
         { title: "التاريخ", key: "date", sortable: false },
         // { title: "حالة الفاتورة", key: "is_paid", sortable: false },
         { title: "الملاحظات", key: "notes", sortable: false },
+        { title: "الرقم التسلسلي", key: "pr", sortable: false },
 
         { title: "العمليات", key: "actions", sortable: false },
       ],
