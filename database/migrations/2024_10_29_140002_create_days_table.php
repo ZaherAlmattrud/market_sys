@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sells', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('user_id')->nullable();
-            $table->double('total')->default(0);
-            $table->date('date')->nullable();
-            $table->timestamps();
+        Schema::create('days', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->date('day');
+            $table->double('arresteds');
+            $table->double('paids');
+            $table->double('box');
+            $table->double('difference');
         });
     }
 
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sells');
+        Schema::dropIfExists('days');
     }
 };

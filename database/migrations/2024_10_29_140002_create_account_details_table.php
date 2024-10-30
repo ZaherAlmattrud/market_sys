@@ -15,10 +15,11 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('account_id')->nullable();
             $table->double('total');
-            $table->string('description')->nullable();
+            $table->string('description')->nullable()->default('رصيد');
             $table->string('quantity')->nullable();
             $table->double('price')->nullable();
             $table->date('date')->nullable();
+            $table->string('notes')->nullable();
         });
     }
 

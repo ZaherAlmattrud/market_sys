@@ -21,7 +21,9 @@ return new class extends Migration
             $table->string('file_path')->nullable();
             $table->string('file_url')->nullable();
             $table->date('date')->nullable();
-            $table->string('num')->nullable();
+            $table->string('num')->nullable()->default('بدون رقم');
+            $table->binary('img')->nullable();
+            $table->boolean('is_paid')->nullable()->default(false);
         });
     }
 

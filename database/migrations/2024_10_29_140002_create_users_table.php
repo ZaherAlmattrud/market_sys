@@ -18,8 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('area_id')->nullable();
             $table->unsignedBigInteger('account_id')->nullable();
             $table->string('number_in_book')->nullable()->default('0');
-            $table->string('phone')->nullable();
-            $table->string('password')->nullable();
+            $table->string('mobile', 10)->nullable();
         });
     }
 

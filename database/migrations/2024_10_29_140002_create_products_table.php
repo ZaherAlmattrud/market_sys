@@ -14,15 +14,19 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
+            $table->string('code')->nullable()->default('\'\'0\'\'');
             $table->double('price');
             $table->string('notes', 25)->nullable();
             $table->double('sell');
-            $table->string('img')->nullable();
-            $table->unsignedBigInteger('invoice_id');
-            $table->unsignedBigInteger('category_id');
+            $table->binary('img')->nullable();
+            $table->unsignedBigInteger('invoice_id')->nullable();
+            $table->unsignedBigInteger('category_id')->nullable();
             $table->string('file_url')->nullable();
             $table->string('file_name')->nullable();
             $table->string('file_path')->nullable();
+            $table->date('date')->nullable();
+            $table->decimal('price_in_dollar', 10)->nullable();
+            $table->double('price_after_descount')->nullable();
         });
     }
 

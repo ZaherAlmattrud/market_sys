@@ -15,7 +15,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->double('total');
             $table->date('date');
-            $table->unsignedBigInteger('account_id');
+            $table->unsignedBigInteger('account_id')->nullable();
             $table->string('notes')->nullable();
         });
     }

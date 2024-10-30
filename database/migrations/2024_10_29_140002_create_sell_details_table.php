@@ -12,12 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('sell_details', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
             $table->unsignedBigInteger('sell_id')->nullable();
-            $table->double('total');
+            $table->double('total')->nullable();
             $table->string('description')->nullable();
             $table->string('quantity')->nullable();
             $table->double('price')->nullable();
+            $table->double('pr')->nullable();
+            $table->date('date')->nullable();
             $table->timestamps();
         });
     }

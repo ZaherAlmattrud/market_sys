@@ -11,14 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('days', function (Blueprint $table) {
-            $table->id();
-            $table->date('day');
-            $table->double('arresteds');
-            $table->double('paids');
-            $table->double('box');
-            $table->double('difference')->nullable();
-            $table->timestamps();
+        Schema::create('exchange', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->float('value');
+            $table->date('date');
+            $table->string('name')->nullable();
         });
     }
 
@@ -27,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('days');
+        Schema::dropIfExists('exchange');
     }
 };
