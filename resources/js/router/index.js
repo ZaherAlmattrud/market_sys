@@ -1,11 +1,11 @@
 import { createMemoryHistory, createRouter } from 'vue-router'
 import ProductPage from "@/pages/IndexPage.vue"
 
-// import ProductPage from "@/pages/ProductsPage.vue"
 import CustomerPage from "@/pages/CustomerPage.vue"
 import HealthyPage from "@/pages/HealthyPage.vue"
-import AccountsPage from "@/pages/AccountsPage.vue"
+
 import UsersPage from "@/pages/UsersPage.vue"
+import UserTypesPage from "@/pages/UserTypes.vue"
 import InvoicesPage from "@/pages/InvoicesPage.vue"
 import AreasPage from "@/pages/AreasPage.vue"
 import CategoryPage from "@/pages/CategoryPage.vue"
@@ -19,31 +19,32 @@ import ProductImgPage from "@/pages/ProductImgPage.vue"
 import DayPage from "@/pages/DayPage.vue"
 import ReportsPage from "@/pages/ReportsPage.vue"
 import ExchangePage from "@/pages/ExchangePage.vue"
- import TotalCatalog from "@/pages/TotalCatalog.vue"
- import LibraCatalog from "@/pages/LibraCatalog.vue"
- import LibraRatingCatalog from "@/pages/LibraRatingCatalog.vue"
+import TotalCatalog from "@/pages/TotalCatalog.vue"
+import LibraCatalog from "@/pages/LibraCatalog.vue"
+import LibraRatingCatalog from "@/pages/LibraRatingCatalog.vue"
 
- import SellDetailsPage from "@/pages/SellDetailsPage.vue"
- import SellsPage from "@/pages/SellsPage.vue"
+import SellDetailsPage from "@/pages/SellDetailsPage.vue"
+import SellsPage from "@/pages/SellsPage.vue"
 
- import AccountSummryPage from "@/pages/AccountSummryPage.vue"
+import AccountSummryPage from "@/pages/AccountSummryPage.vue"
 
- import  AccountsCashPage from "@/pages/AccountsCashPage.vue"
+import AccountsCashPage from "@/pages/AccountsCashPage.vue"
 
- 
 
- 
+
+
 const routes = [
   { path: '/', component: ProductPage, name: 'products', meta: { requiresAuth: false }, },
   { path: '/AccountsCash', component: AccountsCashPage, name: 'accountsCash', meta: { requiresAuth: false }, },
-  
+
   { path: '/AccountSummryPage:accountId', component: AccountSummryPage, name: 'accountSummary', meta: { requiresAuth: false }, },
   { path: '/SellsPage', component: SellsPage, name: 'SellsPage', meta: { requiresAuth: false }, },
   { path: '/SellDetailsPage:sellId', component: SellDetailsPage, name: 'sellDetails', meta: { requiresAuth: false }, },
   { path: '/customers', component: CustomerPage, meta: { requiresAuth: false }, },
   { path: '/healthy', component: HealthyPage, meta: { requiresAuth: false }, },
-  { path: '/accounts', component: AccountsPage, meta: { requiresAuth: true }, },
+
   { path: '/users', component: UsersPage, meta: { requiresAuth: false }, },
+  { path: '/usersTypes', component: UserTypesPage, meta: { requiresAuth: false }, },
   { path: '/invoices', component: InvoicesPage, meta: { requiresAuth: false }, },
   { path: '/areas', component: AreasPage, meta: { requiresAuth: false }, },
   { path: '/category', component: CategoryPage, meta: { requiresAuth: false }, },
@@ -58,13 +59,13 @@ const routes = [
   { path: '/days', component: DayPage, meta: { requiresAuth: false }, },
   { path: '/exchange', component: ExchangePage, meta: { requiresAuth: false }, },
 
- { path: '/totalCatalog', component: TotalCatalog , name: 'TotalCatalog' ,   meta: { requiresAuth: false }, },
- { path: '/libraCatalog', component: LibraCatalog , name: 'LibraCatalog' ,   meta: { requiresAuth: false }, },
- { path: '/LibraRatingCatalog', component: LibraRatingCatalog , name: 'LibraRatingCatalog' ,   meta: { requiresAuth: false }, },
+  { path: '/totalCatalog', component: TotalCatalog, name: 'TotalCatalog', meta: { requiresAuth: false }, },
+  { path: '/libraCatalog', component: LibraCatalog, name: 'LibraCatalog', meta: { requiresAuth: false }, },
+  { path: '/LibraRatingCatalog', component: LibraRatingCatalog, name: 'LibraRatingCatalog', meta: { requiresAuth: false }, },
 
- 
 
-  
+
+
 
 
 

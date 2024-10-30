@@ -80,7 +80,7 @@
                     <v-col cols="12" sm="6" md="6">
                       <v-text-field
                         v-model="editedItem.num"
-                        label="رقم الفاتورة المطبوع"
+                        label="رقم الفاتورة المرفق"
                           variant="outlined"
                       ></v-text-field>
                     </v-col>

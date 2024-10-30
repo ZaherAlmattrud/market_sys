@@ -91,6 +91,15 @@
           ></v-list-item
         ></RouterLink>
 
+           <RouterLink to="/usersTypes">
+          <v-list-item
+            prepend-icon="mdi-account-tag-outline"
+            title="أنواع الحسابات"
+            value="usersTypes"
+             color="blue"
+          ></v-list-item
+        ></RouterLink>
+
         <RouterLink to="/days">
           <v-list-item
             prepend-icon="mdi-alarm-panel-outline"
@@ -129,7 +138,7 @@
 
         <RouterLink to="/accountsCash">
           <v-list-item
-            prepend-icon="mdi-briefcase-account-outline"
+            prepend-icon="mdi-account-details-outline"
             title="الأرصدة"
             value="accountsCash"
              color="BROWN"

@@ -2,15 +2,10 @@
   <v-container>
     <v-row>
       <v-col cols="12" md="10">
-        <v-text-field
-          v-model="search"
-          label="صاحب الحساب"
-          @input="filterItems"
-        ></v-text-field>
+        <v-text-field    variant="outlined" v-model="search" label="البحث" @input="filterItems"></v-text-field>
       </v-col>
-
       <v-col cols="12" md="2">
-        <v-text-field>{{ filteredItems.length }}</v-text-field>
+        <v-text-field    variant="outlined">{{ filteredItems.length }}</v-text-field>
       </v-col>
     </v-row>
     <v-data-table
@@ -21,7 +16,7 @@
     >
       <template v-slot:top>
         <v-toolbar flat>
-          <v-toolbar-title>الحسابات</v-toolbar-title>
+          <v-toolbar-title>أنواع الحسابات</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-dialog v-model="dialog" max-width="500px">
             <template v-slot:activator="{ on, attrs }">
@@ -31,10 +26,10 @@
                 class="mb-2"
                 v-bind="attrs"
                 v-on="on"
-                @click="dialog = false"
+                
+                @click="dialog = true"
                    variant="outlined"
-              >
-                حساب جديد</v-btn
+                >نوع حساب جديد</v-btn
               >
             </template>
             <v-card>
@@ -44,15 +39,16 @@
               <v-card-text>
                 <v-container>
                   <v-row>
-                    <v-col cols="12" sm="12" md="12">
+                    <v-col cols="12" sm="6" md="12">
                       <v-text-field
-                        v-model="editedItem.account"
-                        label="رقم الحساب"
+                        v-model="editedItem.user_name"
+                        label="الأسم"
                           variant="outlined"
-                          
                       ></v-text-field>
                     </v-col>
                   </v-row>
+                   
+                    
                 </v-container>
               </v-card-text>
               <v-card-actions>
@@ -65,9 +61,11 @@
         </v-toolbar>
       </template>
       <template v-slot:item.actions="{ item }">
-        <!-- <v-icon larg @click="editItem(item)">mdi-pencil</v-icon>
-        <v-icon larg @click="moveToAccountDetails(item)">mdi-account-eye-outline</v-icon> -->
-        <v-icon larg @click="moveToAccountDetails(item)">mdi-account-eye-outline</v-icon>
+        <v-icon v-if="loggedIn" larg @click="deleteItem(item)">mdi-delete</v-icon>
+        <v-icon  v-if="loggedIn" larg @click="clearAccount(item)">mdi-notebook-remove-outline</v-icon>
+        <v-icon  v-if="loggedIn" larg @click="editItem(item)">mdi-pencil</v-icon>
+        <v-icon larg @click="moveToAccountDetails(item)">mdi-book-open-page-variant-outline</v-icon>
+        <v-icon larg @click="moveToAccountSummary(item)">mdi-account-eye-outline</v-icon>
       </template>
     </v-data-table>
   </v-container>
@@ -79,50 +77,55 @@ export default {
     return {
       loggedIn: false,
       id: 0,
+      user_types: [],
+      areas: [],
+      itemsArray: [],
       search: "",
       dialog: false,
       dialogDelete: false,
       headers: [
-        //   { title: 'رقم الحساب', key: 'account', sortable: true },
-        { title: "صاحب الحساب", key: "person_name", sortable: false },
-        { title: "نوع الحساب", key: "account_user_type", sortable: false },
-        // { title: 'دفتر الديون', key: 'book', sortable: true },
-        // { title: ' الفواتير', key: 'invoices', sortable: true },
-        // { title: 'الرصيد الإجمالي', key: 'total', sortable: true },
-        // { title: 'المقبوض', key: 'arrested', sortable: false },
-        // { title: 'المدفوع', key: 'paid', sortable: false },
-         { title: ' رصيد الحساب ', key: 'debts', sortable: true },
+        { title: "التسلسل", key: "id", sortable: false },
+        { title: "الأسم", key: "user_name", sortable: false },
+        { title: "رصيد الحساب", key: "balance", sortable: true },
+        { title: "رقمه بالدفتر", key: "number_in_book", sortable: false },
+        { title: "نوع المستخدم", key: "user_type", sortable: false },
+        { title: "البلدة", key: "area", sortable: false },
+        { title: "الحساب", key: "account", sortable: false },
+        { title: "موبايل", key: "mobile", sortable: false },
         { title: "العمليات", key: "actions", sortable: false },
       ],
       items: [],
+      allUsers: 0,
       editedIndex: -1,
       editedItem: {
-        id: "",
+        id: 0,
+        user_name: "",
+        user_type: "",
+        number_in_book: "",
+        area: "",
         account: 0,
-        person_name: "",
-        account_user_type: "",
-        total: "",
-        paid: 0,
-        debts: "",
+        mobile: "",
       },
       defaultItem: {
-        id: 1,
-        account: 2500000,
-        person_name: "Zaher",
-        account_user_type: "",
-        total: "حزرما",
-        paid: 1000,
-        debts: "",
+        id: 0,
+        user_name: "",
+        user_type: "",
+        area: "",
+        account: 0,
       },
     };
   },
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? "حساب جديد" : "تحديث معلومات حساب";
+      return this.editedIndex === -1 ? "نوع حساب جديد" : "تحديث نوع حساب";
     },
     filteredItems() {
       return this.items.filter((item) => {
-        return item.person_name.toLowerCase().includes(this.search.toLowerCase());
+        const it =
+          item.user_name.includes(this.search.toLowerCase()) ||
+          item.area.includes(this.search.toLowerCase()) ||    item.user_type.includes(this.search.toLowerCase()) ;
+
+        return it;
       });
     },
   },
@@ -135,17 +138,22 @@ export default {
       val || this.closeDelete();
     },
   },
-
   async beforeCreate() {
-  
-    const response = await axios.get("/api/getAllAccounts");
+    const response = await axios.get("/api/getAllUsers");
     this.items = response.data; // users
+
+    this.allUsers = this.items.length;
+
+    const response_1 = await axios.get("/api/getAllAreas");
+    this.areas = response_1.data;
+
+    const response_2 = await axios.get("/api/getAllUserTypes");
+    this.user_types = response_2.data;
   },
 
   mounted() {
     this.checkLogedIn();
   },
-
   methods: {
     checkLogedIn() {
       const loggedIn = localStorage.getItem("user");
@@ -155,32 +163,47 @@ export default {
         this.loggedIn = false;
       }
     },
-
     moveToAccountDetails(item) {
       console.log("=======================");
 
       console.log(item.id);
 
-      this.$router.push({ name: "accountDetails", params: { accountId: item.id } });
+      this.$router.push({ name: "accountDetails", params: { accountId: item.account } });
     },
+
+    moveToAccountSummary(item){
+
+      console.log("=======================");
+
+      console.log(item.id);
+
+      this.$router.push({ name: "accountSummary", params: { accountId: item.account } });
+
+
+    },
+
     filterItems() {
       // This will automatically filter items as search input changes
     },
     editItem(item) {
-      // this.editedIndex = this.items.indexOf(item);
-      // this.editedItem = Object.assign({}, item);
-      // this.dialog = true;
-
       this.id = item.id;
       this.editedIndex = this.items.indexOf(item);
       this.editedItem = Object.assign({}, item);
 
       this.dialog = true;
+
+      // this.editedIndex = this.items.indexOf(item);
+      // this.editedItem = Object.assign({}, item);
+      // this.dialog = true;
     },
-    deleteItem(item) {
+    async deleteItem(item) {
+      // const index = this.items.indexOf(item);
+      // confirm('Are you sure you want to delete this item?') && this.items.splice(index, 1);
+      console.log("delete api");
+      console.log(item);
       const index = this.items.indexOf(item);
-      confirm("Are you sure you want to delete this item?") &&
-        this.items.splice(index, 1);
+      this.items.splice(index, 1);
+      await axios.delete(`/api/deleteUser/${item.id}`);
     },
     close() {
       this.dialog = false;
@@ -189,6 +212,17 @@ export default {
         this.editedIndex = -1;
       });
     },
+
+    async clearAccount(account){
+
+
+console.log("account clear");
+
+console.log(account);
+
+await axios.delete(`/api/clearAccount/${account.id}`);
+
+},
     save() {
       // this.dialog = true;
       // if (this.editedIndex > -1) {
@@ -204,19 +238,21 @@ export default {
         // create new area
 
         console.log("create");
-        // // add to local data array
-        // const response = axios.post('/api/createUser', this.editedItem); // add to data base
-        // this.items.push(this.editedItem);
+        // add to local data array
+        const response = axios.post("/api/createUser", this.editedItem); // add to data base
+        this.items.push(this.editedItem);
       } else {
         // update current area
 
         console.log("update");
         Object.assign(this.items[this.editedIndex], this.editedItem); // update local data
-        const response = axios.put("/api/updateAccount/" + this.id, this.editedItem); // update in data base
+        const response = axios.put("/api/updateUser/" + this.id, this.editedItem); // update in data base
       }
 
       this.close();
     },
   },
+
+  
 };
 </script>
