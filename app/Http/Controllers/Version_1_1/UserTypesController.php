@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Version_1_1;
 
 use App\Http\Controllers\Controller;
+use App\Models\UserType;
 use Illuminate\Http\Request;
 
 class UserTypesController extends Controller
@@ -11,7 +12,7 @@ class UserTypesController extends Controller
 
     public function getAll()
     {
-        $data = [];
+        $data = UserType::all();
         return response()->json($data);
     }
 
@@ -38,8 +39,7 @@ class UserTypesController extends Controller
 
     public function delete($id)
     {
-
-        $data = [];
-        return response()->json($data);
+        $res = UserType::where('id' , $id)->delete();
+        return response()->json( $res);
     }
 }

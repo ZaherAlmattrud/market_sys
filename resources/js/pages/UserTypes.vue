@@ -39,9 +39,9 @@
               <v-card-text>
                 <v-container>
                   <v-row>
-                    <v-col cols="12" sm="6" md="12">
+                    <v-col cols="12" sm="12" md="12">
                       <v-text-field
-                        v-model="editedItem.user_name"
+                        v-model="editedItem.name"
                         label="الأسم"
                           variant="outlined"
                       ></v-text-field>
@@ -62,10 +62,8 @@
       </template>
       <template v-slot:item.actions="{ item }">
         <v-icon v-if="loggedIn" larg @click="deleteItem(item)">mdi-delete</v-icon>
-        <v-icon  v-if="loggedIn" larg @click="clearAccount(item)">mdi-notebook-remove-outline</v-icon>
         <v-icon  v-if="loggedIn" larg @click="editItem(item)">mdi-pencil</v-icon>
-        <v-icon larg @click="moveToAccountDetails(item)">mdi-book-open-page-variant-outline</v-icon>
-        <v-icon larg @click="moveToAccountSummary(item)">mdi-account-eye-outline</v-icon>
+    
       </template>
     </v-data-table>
   </v-container>
@@ -85,13 +83,7 @@ export default {
       dialogDelete: false,
       headers: [
         { title: "التسلسل", key: "id", sortable: false },
-        { title: "الأسم", key: "user_name", sortable: false },
-        { title: "رصيد الحساب", key: "balance", sortable: true },
-        { title: "رقمه بالدفتر", key: "number_in_book", sortable: false },
-        { title: "نوع المستخدم", key: "user_type", sortable: false },
-        { title: "البلدة", key: "area", sortable: false },
-        { title: "الحساب", key: "account", sortable: false },
-        { title: "موبايل", key: "mobile", sortable: false },
+        { title: "الأسم", key: "name", sortable: false },
         { title: "العمليات", key: "actions", sortable: false },
       ],
       items: [],
@@ -99,19 +91,12 @@ export default {
       editedIndex: -1,
       editedItem: {
         id: 0,
-        user_name: "",
-        user_type: "",
-        number_in_book: "",
-        area: "",
-        account: 0,
-        mobile: "",
+        name: "",
+       
       },
       defaultItem: {
         id: 0,
-        user_name: "",
-        user_type: "",
-        area: "",
-        account: 0,
+        name : "",
       },
     };
   },
@@ -121,11 +106,9 @@ export default {
     },
     filteredItems() {
       return this.items.filter((item) => {
-        const it =
-          item.user_name.includes(this.search.toLowerCase()) ||
-          item.area.includes(this.search.toLowerCase()) ||    item.user_type.includes(this.search.toLowerCase()) ;
-
-        return it;
+      
+          return item.name.includes(this.search.toLowerCase()) ;
+       
       });
     },
   },
@@ -139,16 +122,10 @@ export default {
     },
   },
   async beforeCreate() {
-    const response = await axios.get("/api/getAllUsers");
+    const response = await axios.get("/api/getAllUserTypes");
     this.items = response.data; // users
 
-    this.allUsers = this.items.length;
-
-    const response_1 = await axios.get("/api/getAllAreas");
-    this.areas = response_1.data;
-
-    const response_2 = await axios.get("/api/getAllUserTypes");
-    this.user_types = response_2.data;
+    
   },
 
   mounted() {
@@ -203,7 +180,7 @@ export default {
       console.log(item);
       const index = this.items.indexOf(item);
       this.items.splice(index, 1);
-      await axios.delete(`/api/deleteUser/${item.id}`);
+      await axios.delete(`/api/deleteUserType/${item.id}`);
     },
     close() {
       this.dialog = false;
