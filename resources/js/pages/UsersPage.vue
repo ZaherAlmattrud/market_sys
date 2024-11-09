@@ -73,15 +73,20 @@
 
                   <v-row>
                     <v-col cols="12" sm="6" md="6">
-                      <v-select
+
+                     <v-autocomplete
                         v-model="editedItem.user_type"
                         :items="user_types"
-                        item-title="name"
+                        item-title="type_name"
                         item-value="id"
-                        label="نوع المستخدم"
-                        persistent-hint
-                        single-line  variant="outlined"
-                      ></v-select>
+                        label="نوع الحساب"
+                        placeholder="نوع الحساب"
+                          variant="outlined"
+                        crearable
+                      >
+                      </v-autocomplete>
+
+                  
 
                       <!-- <v-select v-model="editedItem.area" :items="areas" item-title="name"
     item-value="id" label="المنطقة" persistent-hint single-line></v-select> -->
