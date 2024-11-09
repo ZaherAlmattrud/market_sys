@@ -2,35 +2,21 @@
   <v-container>
     <v-row>
       <v-col cols="12" md="10">
-        <v-text-field    variant="outlined" v-model="search" label="البحث" @input="filterItems"></v-text-field>
+        <v-text-field variant="outlined" v-model="search" label="البحث" @input="filterItems"></v-text-field>
       </v-col>
       <v-col cols="12" md="2">
-        <v-text-field    variant="outlined">{{ filteredItems.length }}</v-text-field>
+        <v-text-field variant="outlined">{{ filteredItems.length }}</v-text-field>
       </v-col>
     </v-row>
-    <v-data-table
-      :headers="headers"
-      :items="filteredItems"
-      item-key="id"
-      class="elevation-1"
-    >
+    <v-data-table :headers="headers" :items="filteredItems" item-key="id" class="elevation-1">
       <template v-slot:top>
         <v-toolbar flat>
           <v-toolbar-title>أنواع الحسابات</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-dialog v-model="dialog" max-width="500px">
             <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                color="primary"
-                dark
-                class="mb-2"
-                v-bind="attrs"
-                v-on="on"
-                
-                @click="dialog = true"
-                   variant="outlined"
-                >نوع حساب جديد</v-btn
-              >
+              <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on" @click="dialog = true"
+                variant="outlined">نوع حساب جديد</v-btn>
             </template>
             <v-card>
               <v-card-title>
@@ -40,21 +26,17 @@
                 <v-container>
                   <v-row>
                     <v-col cols="12" sm="12" md="12">
-                      <v-text-field
-                        v-model="editedItem.type_name"
-                        label="الأسم"
-                          variant="outlined"
-                      ></v-text-field>
+                      <v-text-field v-model="editedItem.type_name" label="الأسم" variant="outlined"></v-text-field>
                     </v-col>
                   </v-row>
-                   
-                    
+
+
                 </v-container>
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn   variant="outlined" color="blue darken-1" text @click="close">إلغاء</v-btn>
-                <v-btn   variant="outlined" color="blue darken-1" text @click="save">حفظ</v-btn>
+                <v-btn variant="outlined" color="blue darken-1" text @click="close">إلغاء</v-btn>
+                <v-btn variant="outlined" color="blue darken-1" text @click="save">حفظ</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -62,8 +44,8 @@
       </template>
       <template v-slot:item.actions="{ item }">
         <v-icon v-if="loggedIn" larg @click="deleteItem(item)">mdi-delete</v-icon>
-        <v-icon  v-if="loggedIn" larg @click="editItem(item)">mdi-pencil</v-icon>
-    
+        <v-icon v-if="loggedIn" larg @click="editItem(item)">mdi-pencil</v-icon>
+
       </template>
     </v-data-table>
   </v-container>
@@ -92,11 +74,11 @@ export default {
       editedItem: {
         id: 0,
         type_name: "",
-       
+
       },
       defaultItem: {
         id: 0,
-        type_name : "",
+        type_name: "",
       },
     };
   },
@@ -106,9 +88,9 @@ export default {
     },
     filteredItems() {
       return this.items.filter((item) => {
-      
-          return item.type_name.includes(this.search.toLowerCase()) ;
-       
+
+        return item.type_name.includes(this.search.toLowerCase());
+
       });
     },
   },
@@ -125,7 +107,7 @@ export default {
     const response = await axios.get("/api/getAllUserTypes");
     this.items = response.data; // users
 
-    
+
   },
 
   mounted() {
@@ -148,7 +130,7 @@ export default {
       this.$router.push({ name: "accountDetails", params: { accountId: item.account } });
     },
 
-    moveToAccountSummary(item){
+    moveToAccountSummary(item) {
 
       console.log("=======================");
 
@@ -190,16 +172,16 @@ export default {
       });
     },
 
-    async clearAccount(account){
+    async clearAccount(account) {
 
 
-console.log("account clear");
+      console.log("account clear");
 
-console.log(account);
+      console.log(account);
 
-await axios.delete(`/api/clearAccount/${account.id}`);
+      await axios.delete(`/api/clearAccount/${account.id}`);
 
-},
+    },
     save() {
       // this.dialog = true;
       // if (this.editedIndex > -1) {
@@ -216,10 +198,17 @@ await axios.delete(`/api/clearAccount/${account.id}`);
 
         console.log("create");
         // add to local data array
-        const response = axios.post("/api/createUserType", this.editedItem); // add to data base
-        this.items.push(this.editedItem);
+        const response = axios.post("/api/createUserType", this.editedItem).then(response => {
 
-      
+          this.items.push(response.data);
+
+        })
+          .catch(err => {
+            err.message;
+          });
+       
+
+
       } else {
         // update current area
 
@@ -232,6 +221,6 @@ await axios.delete(`/api/clearAccount/${account.id}`);
     },
   },
 
-  
+
 };
 </script>

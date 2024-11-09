@@ -9,11 +9,16 @@ use Illuminate\Http\Request;
 class UserTypesController extends Controller
 {
     //
-
     public function getAll()
     {
         $data = UserType::all();
         return response()->json($data);
+    }
+
+    public function getById($id){
+
+        $item = UserType::find($id);
+        return $item;
     }
 
     public function get($id)
@@ -23,14 +28,22 @@ class UserTypesController extends Controller
         return response()->json($data);
     }
 
+
+    public function getLatest(){
+
+        $item = UserType::orderBy('id', 'desc')->first();
+        return $item;
+    }
+
     public function create(Request $request)
     {
 
         $data = $request->all();
         $model = new UserType();
         $model->type_name =  array_key_exists('type_name' , $data) ? $data['type_name']  : null ;
-        $res =  $model->save();
-        return response()->json($res);
+        $model->save();
+        $latest = $this->getLatest();
+        return response()->json($latest);
     }
 
     public function update(Request $request, $id)
