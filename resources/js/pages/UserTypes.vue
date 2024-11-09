@@ -218,6 +218,8 @@ await axios.delete(`/api/clearAccount/${account.id}`);
         // add to local data array
         const response = axios.post("/api/createUserType", this.editedItem); // add to data base
         this.items.push(this.editedItem);
+
+      
       } else {
         // update current area
 

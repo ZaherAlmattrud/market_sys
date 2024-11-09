@@ -26,8 +26,11 @@ class UserTypesController extends Controller
     public function create(Request $request)
     {
 
-        $data = [];
-        return response()->json($data);
+        $data = $request->all();
+        $model = new UserType();
+        $model->type_name =  array_key_exists('type_name' , $data) ? $data['type_name']  : null ;
+        $res =  $model->save();
+        return response()->json($res);
     }
 
     public function update(Request $request, $id)
