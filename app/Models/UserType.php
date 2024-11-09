@@ -9,6 +9,8 @@ class UserType extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     protected $table = 'usertypes';
     protected $fillable = [
         'type_name',

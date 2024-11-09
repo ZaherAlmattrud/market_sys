@@ -41,7 +41,7 @@
                   <v-row>
                     <v-col cols="12" sm="12" md="12">
                       <v-text-field
-                        v-model="editedItem.name"
+                        v-model="editedItem.type_name"
                         label="الأسم"
                           variant="outlined"
                       ></v-text-field>
@@ -83,7 +83,7 @@ export default {
       dialogDelete: false,
       headers: [
         { title: "التسلسل", key: "id", sortable: false },
-        { title: "الأسم", key: "name", sortable: false },
+        { title: "الأسم", key: "type_name", sortable: false },
         { title: "العمليات", key: "actions", sortable: false },
       ],
       items: [],
@@ -91,12 +91,12 @@ export default {
       editedIndex: -1,
       editedItem: {
         id: 0,
-        name: "",
+        type_name: "",
        
       },
       defaultItem: {
         id: 0,
-        name : "",
+        type_name : "",
       },
     };
   },
@@ -107,7 +107,7 @@ export default {
     filteredItems() {
       return this.items.filter((item) => {
       
-          return item.name.includes(this.search.toLowerCase()) ;
+          return item.type_name.includes(this.search.toLowerCase()) ;
        
       });
     },
@@ -216,14 +216,14 @@ await axios.delete(`/api/clearAccount/${account.id}`);
 
         console.log("create");
         // add to local data array
-        const response = axios.post("/api/createUser", this.editedItem); // add to data base
+        const response = axios.post("/api/createUserType", this.editedItem); // add to data base
         this.items.push(this.editedItem);
       } else {
         // update current area
 
         console.log("update");
         Object.assign(this.items[this.editedIndex], this.editedItem); // update local data
-        const response = axios.put("/api/updateUser/" + this.id, this.editedItem); // update in data base
+        const response = axios.put("/api/updateUserType/" + this.id, this.editedItem); // update in data base
       }
 
       this.close();
