@@ -7,6 +7,7 @@ use App\Http\Controllers\Version_1_1\SellController;
 use App\Http\Controllers\Version_1_1\SellDetailController;
 use App\Http\Controllers\Version_1_1\AccountController;
 use App\Http\Controllers\Version_1_1\AccountDetailsController;
+use App\Http\Controllers\Version_1_1\AreasController;
 use App\Http\Controllers\Version_1_1\ProductsController;
 use App\Http\Controllers\Version_1_1\UsersController;
 use App\Http\Controllers\Version_1_1\InvoicesController;
@@ -24,10 +25,10 @@ use Illuminate\Support\Facades\Route;
 
 
 //================================================================================//
-Route::get('/getAllAreas', [ApisController::class, 'getAllAreas']);
-Route::post('/createArea', [ApisController::class, 'createArea']);
-Route::put('/updateArea/{id}', [ApisController::class, 'updateArea']);
-Route::delete('/deleteArea/{id}', [ApisController::class, 'deleteArea']);
+Route::get('/getAllAreas', [AreasController::class, 'getAll']);
+Route::post('/createArea', [AreasController::class, 'create']);
+Route::put('/updateArea/{id}', [AreasController::class, 'update']);
+Route::delete('/deleteArea/{id}', [AreasController::class, 'delete']);
 //================================================================================//
 Route::get('/getAllUserTypes', [UserTypesController::class, 'getAll']);
 Route::post('/createUserType', [UserTypesController::class, 'create']);
