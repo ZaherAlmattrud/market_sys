@@ -14,6 +14,8 @@ class Account extends Model
      *
      * @var array<int, string>
      */
+
+    public $timestamps = false;
     protected $fillable = [
 
         'account_num',

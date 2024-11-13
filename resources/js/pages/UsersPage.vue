@@ -2,35 +2,21 @@
   <v-container>
     <v-row>
       <v-col cols="12" md="10">
-        <v-text-field    variant="outlined" v-model="search" label="البحث" @input="filterItems"></v-text-field>
+        <v-text-field variant="outlined" v-model="search" label="البحث" @input="filterItems"></v-text-field>
       </v-col>
       <v-col cols="12" md="2">
-        <v-text-field    variant="outlined">{{ filteredItems.length }}</v-text-field>
+        <v-text-field variant="outlined">{{ filteredItems.length }}</v-text-field>
       </v-col>
     </v-row>
-    <v-data-table
-      :headers="headers"
-      :items="filteredItems"
-      item-key="id"
-      class="elevation-1"
-    >
+    <v-data-table :headers="headers" :items="filteredItems" item-key="id" class="elevation-1">
       <template v-slot:top>
         <v-toolbar flat>
           <v-toolbar-title>الحسابات</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-dialog v-model="dialog" max-width="500px">
             <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                color="primary"
-                dark
-                class="mb-2"
-                v-bind="attrs"
-                v-on="on"
-                
-                @click="dialog = true"
-                   variant="outlined"
-                >حساب جديد</v-btn
-              >
+              <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on" @click="dialog = true"
+                variant="outlined">حساب جديد</v-btn>
             </template>
             <v-card>
               <v-card-title>
@@ -39,73 +25,46 @@
               <v-card-text>
                 <v-container>
                   <v-row>
-                    <v-col cols="12" sm="6" md="12">
-                      <v-text-field
-                        v-model="editedItem.user_name"
-                        label="الأسم"
-                          variant="outlined"
-                      ></v-text-field>
+                    <v-col cols="12" sm="12" md="12">
+                      <v-text-field v-model="editedItem.user_name" label="الأسم" variant="outlined"></v-text-field>
                     </v-col>
                   </v-row>
                   <v-row>
                     <v-col cols="12" sm="6" md="6">
-                      <v-autocomplete
-                        v-model="editedItem.area"
-                        :items="areas"
-                        item-title="name"
-                        item-value="id"
-                        label="المنطقة"
-                        placeholder="المنطقة"
-                          variant="outlined"
-                        crearable
-                      >
+                      <v-autocomplete v-model="editedItem.area_id" :items="areas" item-title="name" item-value="id"
+                        label="المنطقة" placeholder="المنطقة" variant="outlined" crearable>
                       </v-autocomplete>
                     </v-col>
 
                     <v-col cols="12" sm="6" md="6">
-                      <v-text-field
-                        v-model="editedItem.number_in_book"
-                        label="رقمه بالدفتر"
-                          variant="outlined"
-                      ></v-text-field>
+                      <v-text-field v-model="editedItem.number_in_book" label="رقمه بالدفتر"
+                        variant="outlined"></v-text-field>
                     </v-col>
                   </v-row>
 
                   <v-row>
                     <v-col cols="12" sm="6" md="6">
 
-                     <v-autocomplete
-                        v-model="editedItem.user_type"
-                        :items="user_types"
-                        item-title="type_name"
-                        item-value="id"
-                        label="نوع الحساب"
-                        placeholder="نوع الحساب"
-                          variant="outlined"
-                        crearable
-                      >
+                      <v-autocomplete v-model="editedItem.user_type" :items="user_types" item-title="type_name"
+                        item-value="id" label="نوع الحساب" placeholder="نوع الحساب" variant="outlined" crearable>
                       </v-autocomplete>
 
-                  
+
 
                       <!-- <v-select v-model="editedItem.area" :items="areas" item-title="name"
     item-value="id" label="المنطقة" persistent-hint single-line></v-select> -->
                     </v-col>
 
                     <v-col cols="12" sm="6" md="6">
-                      <v-text-field
-                        v-model="editedItem.mobile"
-                        label="موبايل"
-                          variant="outlined"
-                      ></v-text-field>
+                      <v-text-field v-model="editedItem.mobile" label="موبايل" variant="outlined"></v-text-field>
                     </v-col>
                   </v-row>
                 </v-container>
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn   variant="outlined" color="blue darken-1" text @click="close">إلغاء</v-btn>
-                <v-btn   variant="outlined" color="blue darken-1" text @click="save">حفظ</v-btn>
+                <v-btn variant="outlined" color="blue darken-1" text @click="close">إلغاء</v-btn>
+                <v-btn variant="outlined" color="blue darken-1" text @click="save">حفظ</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -113,8 +72,8 @@
       </template>
       <template v-slot:item.actions="{ item }">
         <v-icon v-if="loggedIn" larg @click="deleteItem(item)">mdi-delete</v-icon>
-        <v-icon  v-if="loggedIn" larg @click="clearAccount(item)">mdi-notebook-remove-outline</v-icon>
-        <v-icon  v-if="loggedIn" larg @click="editItem(item)">mdi-pencil</v-icon>
+        <v-icon v-if="loggedIn" larg @click="clearAccount(item)">mdi-notebook-remove-outline</v-icon>
+        <v-icon v-if="loggedIn" larg @click="editItem(item)">mdi-pencil</v-icon>
         <v-icon larg @click="moveToAccountDetails(item)">mdi-book-open-page-variant-outline</v-icon>
         <v-icon larg @click="moveToAccountSummary(item)">mdi-account-eye-outline</v-icon>
       </template>
@@ -137,11 +96,11 @@ export default {
       headers: [
         { title: "التسلسل", key: "id", sortable: false },
         { title: "الأسم", key: "user_name", sortable: false },
-       
+
         { title: "رقمه بالدفتر", key: "number_in_book", sortable: false },
-        { title: "نوع المستخدم", key: "user_type", sortable: false },
-        { title: "البلدة", key: "area", sortable: false },
-        { title: "الحساب", key: "account", sortable: false },
+        { title: "نوع المستخدم", key: "user_type_name", sortable: false },
+        { title: "البلدة", key: "area_name", sortable: false },
+        { title: "رقم الحساب", key: "account_id", sortable: false },
         { title: "موبايل", key: "mobile", sortable: false },
         { title: "العمليات", key: "actions", sortable: false },
       ],
@@ -152,8 +111,10 @@ export default {
         id: 0,
         user_name: "",
         user_type: "",
+        user_type_name: "",
         number_in_book: "",
-        area: "",
+        area_id: "",
+        area_name: "",
         account: 0,
         mobile: "",
       },
@@ -163,6 +124,8 @@ export default {
         user_type: "",
         area: "",
         account: 0,
+        user_type_name: "",
+        area_name: "",
       },
     };
   },
@@ -172,9 +135,9 @@ export default {
     },
     filteredItems() {
       return this.items.filter((item) => {
-        const it =
-          item.user_name.includes(this.search.toLowerCase()) ||
-          item.area.includes(this.search.toLowerCase()) ||    item.user_type.includes(this.search.toLowerCase()) ;
+        const it = true ;
+          // item.user_name.includes(this.search.toLowerCase()) ||
+          // item.area.includes(this.search.toLowerCase()) || item.user_type.includes(this.search.toLowerCase());
 
         return it;
       });
@@ -219,16 +182,16 @@ export default {
 
       console.log(item.id);
 
-      this.$router.push({ name: "accountDetails", params: { accountId: item.account } });
+      this.$router.push({ name: "accountDetails", params: { accountId: item.account_id } });
     },
 
-    moveToAccountSummary(item){
+    moveToAccountSummary(item) {
 
       console.log("=======================");
 
       console.log(item.id);
 
-      this.$router.push({ name: "accountSummary", params: { accountId: item.account } });
+      this.$router.push({ name: "accountSummary", params: { accountId: item.account_id } });
 
 
     },
@@ -264,16 +227,16 @@ export default {
       });
     },
 
-    async clearAccount(account){
+    async clearAccount(account) {
 
 
-console.log("account clear");
+      console.log("account clear");
 
-console.log(account);
+      console.log(account);
 
-await axios.delete(`/api/clearAccount/${account.id}`);
+      await axios.delete(`/api/clearAccount/${account.id}`);
 
-},
+    },
     save() {
       // this.dialog = true;
       // if (this.editedIndex > -1) {
@@ -290,20 +253,61 @@ await axios.delete(`/api/clearAccount/${account.id}`);
 
         console.log("create");
         // add to local data array
-        const response = axios.post("/api/createUser", this.editedItem); // add to data base
-        this.items.push(this.editedItem);
+        const response = axios.post("/api/createUser", this.editedItem).then(response => {
+
+          this.items.push(response.data);
+
+        })
+          .catch(err => {
+            err.message;
+          }); // add to data base
+
       } else {
         // update current area
 
         console.log("update");
-        Object.assign(this.items[this.editedIndex], this.editedItem); // update local data
-        const response = axios.put("/api/updateUser/" + this.id, this.editedItem); // update in data base
+
+        const response = axios.put("/api/updateUser/" + this.id, this.editedItem).then(response => {
+
+          let area_name = response.data.area_name;
+          let user_type_name = response.data.user_type_name;
+          this.editedItem.area_name = area_name;
+          this.editedItem.user_type_name = user_type_name;
+
+
+          console.log("area_name : ");
+          console.log(this.editedItem.area_name);
+          console.log("user_type_name :");
+          console.log(this.editedItem.user_type_name);
+
+         // Object.assign(this.items[this.editedIndex], this.editedItem);
+
+         this.items.splice(this.editedIndex,1);
+         this.items.push(response.data);
+           
+         
+        //  ,{...this.items[this.editedIndex,this.editedItem]})
+
+
+        })
+          .catch(err => {
+            err.message;
+          }); // add to dat; // update in data base
       }
+
+
+      console.log(this.editedItem);
+
+      
+
+
+
+
 
       this.close();
     },
   },
 
-  
+
 };
 </script>

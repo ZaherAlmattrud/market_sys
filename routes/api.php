@@ -37,9 +37,9 @@ Route::delete('/deleteUserType/{id}', [UserTypesController::class, 'delete']);
 //================================================================================//
 
 Route::get('/getAllUsers', [UsersController::class, 'getAll']);
-Route::post('/createUser', [ApisController::class, 'createUser']);
+Route::post('/createUser', [UsersController::class, 'create']);
 Route::put('/updateUser/{id}', [UsersController::class, 'update']);
-Route::delete('/deleteUser/{id}', [ApisController::class, 'deleteUser']);
+Route::delete('/deleteUser/{id}', [UsersController::class, 'delete']);
 //===============================================================================
 Route::get('/getAllAccounts', [ApisController::class, 'getAllAccounts']);
 Route::put('/updateAccount/{id}', [ApisController::class, 'updateAccount']);
