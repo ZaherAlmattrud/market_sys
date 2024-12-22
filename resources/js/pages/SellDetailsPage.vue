@@ -206,11 +206,13 @@ export default {
       headers: [
         { title: "التسلسل", key: "identity", sortable: false },
         { title: " البيــــــــــــان ", key: "description", sortable: false },
-        { title: "القيمة الإجمالية", key: "total", sortable: false },
+     
         { title: "السعر الإفرادي", key: "price", sortable: false },
 
         { title: "الكمية", key: "quantity", sortable: false },
         // { title: "التاريخ", key: "date", sortable: false },
+
+        { title: "القيمة الإجمالية", key: "total", sortable: false },
 
         { title: "العمليات", key: "actions", sortable: false },
       ],

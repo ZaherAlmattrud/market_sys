@@ -132,11 +132,11 @@ export default {
       headers: [
         { title: "التسلسل", key: "id", sortable: false },
         { title: "الأسم", key: "user_name", sortable: false },
-        { title: "رصيد الحساب", key: "balance", sortable: true },
+ 
         { title: "رقمه بالدفتر", key: "number_in_book", sortable: false },
         { title: "نوع المستخدم", key: "user_type", sortable: false },
         { title: "البلدة", key: "area", sortable: false },
-        { title: "الحساب", key: "account", sortable: false },
+      
         { title: "موبايل", key: "mobile", sortable: false },
         { title: "العمليات", key: "actions", sortable: false },
       ],

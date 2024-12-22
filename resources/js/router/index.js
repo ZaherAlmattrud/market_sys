@@ -4,7 +4,7 @@ import ProductPage from "@/pages/IndexPage.vue"
 // import ProductPage from "@/pages/ProductsPage.vue"
 import CustomerPage from "@/pages/CustomerPage.vue"
 import HealthyPage from "@/pages/HealthyPage.vue"
-import AccountsPage from "@/pages/AccountsPage.vue"
+
 import UsersPage from "@/pages/UsersPage.vue"
 import InvoicesPage from "@/pages/InvoicesPage.vue"
 import AreasPage from "@/pages/AreasPage.vue"
@@ -42,7 +42,7 @@ const routes = [
   { path: '/SellDetailsPage:sellId', component: SellDetailsPage, name: 'sellDetails', meta: { requiresAuth: false }, },
   { path: '/customers', component: CustomerPage, meta: { requiresAuth: false }, },
   { path: '/healthy', component: HealthyPage, meta: { requiresAuth: false }, },
-  { path: '/accounts', component: AccountsPage, meta: { requiresAuth: true }, },
+  
   { path: '/users', component: UsersPage, meta: { requiresAuth: false }, },
   { path: '/invoices', component: InvoicesPage, meta: { requiresAuth: false }, },
   { path: '/areas', component: AreasPage, meta: { requiresAuth: false }, },

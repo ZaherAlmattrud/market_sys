@@ -119,8 +119,9 @@ class AccountController extends Controller
 
         $bookItems->map(function ( $item) use ( &$items , &$id , &$bookItemsTotal ){
 
+            $qua = $item['quantity'] > 1 ? '  عدد '.$item['quantity'] : null ;
             $it['identity'] = $id ;
-            $it['description'] = $item['description']. ' في دفتر الديون';
+            $it['description'] = $item['description']. $qua ;
             $it['total'] = $item['total'] ;
             $it['date'] = $item['date'] ;
             $it['notes'] = $item['notes'] ;
