@@ -152,7 +152,7 @@ export default {
     filteredItems() {
       return this.items.filter((item) => {
         
-         return item.person_name.includes(this.search.toLowerCase())  ;
+         return item.area.includes(this.search.toLowerCase())  ;
 
    
       });
