@@ -130,12 +130,12 @@ export default {
       dialog: false,
       dialogDelete: false,
       headers: [
-        { title: "التسلسل", key: "id", sortable: false },
-        { title: "الأسم", key: "user_name", sortable: false },
+        { title: "التسلسل", key: "id", sortable: true },
+        { title: "الأسم", key: "user_name", sortable: true },
  
         { title: "رقمه بالدفتر", key: "number_in_book", sortable: false },
-        { title: "نوع المستخدم", key: "user_type", sortable: false },
-        { title: "البلدة", key: "area", sortable: false },
+        { title: "نوع المستخدم", key: "user_type", sortable: true },
+        { title: "البلدة", key: "area", sortable: true },
       
         { title: "موبايل", key: "mobile", sortable: false },
         { title: "العمليات", key: "actions", sortable: false },

@@ -139,7 +139,7 @@
                 <v-btn variant="outlined" color="blue darken-1" text @click="close"
                   >إلغاء</v-btn
                 >
-                <v-btn variant="outlined" color="blue darken-1" text @click="save"
+                <v-btn @keyup.enter="enterClickEvent" variant="outlined" color="blue darken-1" text @click="save"
                   >حفظ</v-btn
                 >
               </v-card-actions>
@@ -293,6 +293,13 @@ export default {
     this.mediaQueryList.removeEventListener("change", this.updatePrintMode);
   },
   methods: {
+
+    enterClickEvent(){
+
+      this.save();
+
+    },
+
     updatePrintMode(event) {
       this.isPrintMode = event.matches;
     },
