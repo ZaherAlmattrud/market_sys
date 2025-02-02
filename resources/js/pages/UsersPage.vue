@@ -169,7 +169,8 @@ export default {
       return this.items.filter((item) => {
         const it =
           item.user_name.includes(this.search.toLowerCase()) ||
-          item.area.includes(this.search.toLowerCase()) ||    item.user_type.includes(this.search.toLowerCase()) ;
+          item.area.includes(this.search.toLowerCase()) ||    item.user_type.includes(this.search.toLowerCase()) 
+          || item.id ==  this.search ;
 
         return it;
       });
