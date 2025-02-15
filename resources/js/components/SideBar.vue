@@ -14,7 +14,7 @@
       <v-divider></v-divider>
 
       <v-list density="compact" nav>
-        <RouterLink   to="/">
+        <RouterLink   to="/products">
           <v-list-item
             prepend-icon="mdi-list-box-outline"
             title="المنتجات"

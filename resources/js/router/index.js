@@ -34,7 +34,7 @@ import ExchangePage from "@/pages/ExchangePage.vue"
 
  
 const routes = [
-  { path: '/', component: ProductPage, name: 'products', meta: { requiresAuth: false }, },
+  { path: '/products', component: ProductPage, name: 'products', meta: { requiresAuth: false }, },
   { path: '/AccountsCash', component: AccountsCashPage, name: 'accountsCash', meta: { requiresAuth: false }, },
   
   { path: '/AccountSummryPage:accountId', component: AccountSummryPage, name: 'accountSummary', meta: { requiresAuth: false }, },
@@ -48,7 +48,7 @@ const routes = [
   { path: '/areas', component: AreasPage, meta: { requiresAuth: false }, },
   { path: '/category', component: CategoryPage, meta: { requiresAuth: false }, },
   { path: '/accountDetails:accountId', component: AccountDetailsPage, props: true, name: 'accountDetails', meta: { requiresAuth: false }, },
-  { path: '/login', component: LoginPage, name: 'login' },
+  { path: '/', component: LoginPage, name: 'login' },
   { path: '/arresteds', component: ArrestedsPage, meta: { requiresAuth: false }, },
   { path: '/paids', component: PaidsPage, meta: { requiresAuth: false }, },
 
