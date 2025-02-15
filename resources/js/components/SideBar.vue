@@ -121,7 +121,7 @@
         <RouterLink to="/exchange">
           <v-list-item
             prepend-icon="mdi-currency-usd"
-            title="الصرف"
+            title="العملات"
             value="exchange"
              color="blue"
           ></v-list-item>
