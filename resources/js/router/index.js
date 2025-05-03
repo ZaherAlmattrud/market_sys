@@ -30,6 +30,9 @@ import ExchangePage from "@/pages/ExchangePage.vue"
 
  import  AccountsCashPage from "@/pages/AccountsCashPage.vue"
 
+ import  ProductDetails from "@/pages/ProductDetails.vue"
+
+ 
  
 
  
@@ -52,6 +55,9 @@ const routes = [
   { path: '/arresteds', component: ArrestedsPage, meta: { requiresAuth: false }, },
   { path: '/paids', component: PaidsPage, meta: { requiresAuth: false }, },
 
+  
+  { path: '/productDetails:id', component: ProductDetails, name: 'productDetails', props: true, meta: { requiresAuth: false }, },
+  
   { path: '/invoiceImg:id', component: InvoiceImgPage, name: 'invoiceImg', props: true, meta: { requiresAuth: false }, },
   { path: '/productImg:url', component: ProductImgPage, name: 'ProductImage', props: true, meta: { requiresAuth: false }, },
   { path: '/reports', component: ReportsPage, meta: { requiresAuth: false }, },

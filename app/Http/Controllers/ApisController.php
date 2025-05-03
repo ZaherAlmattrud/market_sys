@@ -191,7 +191,7 @@ class ApisController extends Controller
                 'user_type' => $data['user_type'] ? $data['user_type'] : null,
                 'area_id' => $data['area'] ? $data['area']  : null,
                 'number_in_book' => $data['number_in_book'],
-                'mobile' => $data['mobile'],
+                'mobile' => array_key_exists('mobile' , $data)&& $data['mobile'] ? $data['mobile'] : null ,
             ]
         );
 

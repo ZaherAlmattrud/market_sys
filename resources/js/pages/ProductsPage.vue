@@ -49,7 +49,7 @@
                     <v-col cols="12" md="4" sm="12">
                       <v-text-field
                         v-model="editedItem.price"
-                        label="الشراء"
+                        label="الشراء بالليرة"
                           variant="outlined"
                       ></v-text-field>
                     </v-col>
@@ -173,15 +173,15 @@ export default {
         { title: "الكود", key: "code", sortable: false },
         { title: "الشراء", key: "price", sortable: false },
         { title: "الشراء بالعملة الثانوية", key: "price_in_dollar", sortable: false },
-        { title: "الشراء بعد الحسم", key: "price_after_descount", sortable: false },
-        { title: "الفاتورة", key: "invoice_id", sortable: false },
+      { title: "الشراء بعد الحسم", key: "price_after_descount", sortable: false },
+        /*  { title: "الفاتورة", key: "invoice_id", sortable: false },
         { title: "صاحب الفاتورة", key: "suppler", sortable: false },
 
         { title: "الصنف", key: "category_id", sortable: false },
         { title: "التاريخ", key: "date", sortable: false },
         { title: "الملاحظات", key: "notes", sortable: false },
 
-        // { title: 'المحدث', key: 'updatingPrice', sortable: false },
+        // { title: 'المحدث', key: 'updatingPrice', sortable: false },*/
         { title: "المبيع", key: "sell", sortable: false },
         { title: "العمليات", key: "actions", sortable: false },
       ],

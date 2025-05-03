@@ -291,6 +291,8 @@ await axios.delete(`/api/clearAccount/${account.id}`);
       } else {
         // update current area
 
+        console.log();
+
         console.log("update");
         Object.assign(this.items[this.editedIndex], this.editedItem); // update local data
         const response = axios.put("/api/updateUser/" + this.id, this.editedItem); // update in data base

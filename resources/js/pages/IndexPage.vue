@@ -130,20 +130,20 @@
                   </v-row>
 
                   <v-row>
-                    <!-- <v-col cols="12" md="8" sm="12">
+                    <v-col cols="12" md="8" sm="12">
                       <v-text-field
                         v-model="editedItem.pricr_in_doller"
                         label="السعر بالعملة الاجنبية"
                         variant="outlined"
                       ></v-text-field>
-                    </v-col> -->
-                    <v-col cols="12" md="12" sm="12">
+                    </v-col>
+                    <!-- <v-col cols="12" md="12" sm="12">
                       <v-text-field
                         v-model="editedItem.notes"
                         label="ملاحظات"
                         variant="outlined"
                       ></v-text-field>
-                    </v-col>
+                    </v-col> -->
                   </v-row>
 
                   <v-row>
@@ -175,7 +175,7 @@
 
         <v-icon v-if="loggedIn" larg @click="deleteItem(item)">mdi-delete</v-icon>
 
-        <v-icon larg @click="moveToProductImg(item)">mdi-account-eye-outline</v-icon>
+        <v-icon larg @click="productDetails(item)">mdi-account-eye-outline</v-icon>
       </template>
     </v-data-table>
   </v-container>
@@ -195,18 +195,19 @@ export default {
         //  { title: "التسلسل", key: "id", sortable: false },
         { title: "الاسم", key: "name", sortable: true, class: "blue" },
         { title: "الكود", key: "code", sortable: false },
-        { title: "الشراء", key: "price", sortable: false },
-        { title: "الشراء بالعملة الثانوية", key: "price_in_dollar", sortable: false },
-        { title: "الشراء بعد الحسم", key: "price_after_descount", sortable: false },
-        { title: "الفاتورة", key: "invoice_id", sortable: false },
-        { title: "صاحب الفاتورة", key: "suppler", sortable: false },
+        // { title: "الشراء بالليرة", key: "price", sortable: false },
+        // { title: "الشراء بالدولار", key: "price_in_dollar", sortable: false },
+        // { title: "الشراء بعد الحسم", key: "price_after_descount", sortable: false },
+        // { title: "الفاتورة", key: "invoice_id", sortable: false },
+       // { title: "صاحب الفاتورة", key: "suppler", sortable: false },
 
-        { title: "الصنف", key: "category_name", sortable: false },
-        { title: "التاريخ", key: "date", sortable: false },
-        { title: "الملاحظات", key: "notes", sortable: false },
+      //  { title: "الصنف", key: "category_name", sortable: false },
+        // { title: "التاريخ", key: "date", sortable: false },
+      //  { title: "الملاحظات", key: "notes", sortable: false },
 
         // { title: 'المحدث', key: 'updatingPrice', sortable: false },
-        { title: "المبيع", key: "sell", sortable: false },
+        // { title: "البيع بالليرة", key: "sell", sortable: false },
+        // { title: "البيع بالدولار", key: "sell", sortable: false },
         { title: "العمليات", key: "actions", sortable: false },
       ],
       items: [],
@@ -217,7 +218,7 @@ export default {
         id: 0,
         name: "",
         price: "",
-        pricr_in_doller: 0,
+        pricr_in_doller: "",
         price_after_descount : 0 ,
         invoice_id: "",
         category_id: "",
@@ -335,6 +336,15 @@ export default {
     filterItems() {
       // This will automatically filter items as search input changes
     },
+
+    productDetails(item)
+    {
+
+
+      console.log(item.id );
+      this.$router.push({ name: "productDetails", params: { url: item.id } });
+
+    },
     editItem(item) {
       // this.editedIndex = this.items.indexOf(item);
       // this.editedItem = Object.assign({}, item);
@@ -371,7 +381,12 @@ export default {
 
       this.dialog = true;
 
-      if (this.id == 0) {
+
+      console.log("=======================================================");
+      console.log(this.id );
+      console.log("=======================================================");
+
+      if (this.id == 0 ) {
         // create new area
 
         console.log("create");
@@ -395,7 +410,8 @@ export default {
       } else {
         // update current area
 
-        console.log("update");
+
+      
         console.log("update");
         Object.assign(this.items[this.editedIndex], this.editedItem); // update local data
         const response = axios.put(
