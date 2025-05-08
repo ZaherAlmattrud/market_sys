@@ -22,7 +22,7 @@
     >
       <template v-slot:top>
         <v-toolbar flat>
-          <v-toolbar-title>المنتجات</v-toolbar-title>
+          <v-toolbar-title>البضائع</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-dialog v-model="dialog" max-width="550px">
             <template v-slot:activator="{ on, attrs }">
@@ -195,19 +195,19 @@ export default {
         //  { title: "التسلسل", key: "id", sortable: false },
         { title: "الاسم", key: "name", sortable: true, class: "blue" },
         { title: "الكود", key: "code", sortable: false },
-        // { title: "الشراء بالليرة", key: "price", sortable: false },
-        // { title: "الشراء بالدولار", key: "price_in_dollar", sortable: false },
+        { title: "الشراء بالليرة", key: "price", sortable: false },
+        { title: "الشراء بالدولار", key: "price_in_dollar", sortable: false },
         // { title: "الشراء بعد الحسم", key: "price_after_descount", sortable: false },
         // { title: "الفاتورة", key: "invoice_id", sortable: false },
        // { title: "صاحب الفاتورة", key: "suppler", sortable: false },
 
       //  { title: "الصنف", key: "category_name", sortable: false },
-        // { title: "التاريخ", key: "date", sortable: false },
+        { title: "التاريخ", key: "date", sortable: false },
       //  { title: "الملاحظات", key: "notes", sortable: false },
 
         // { title: 'المحدث', key: 'updatingPrice', sortable: false },
-        // { title: "البيع بالليرة", key: "sell", sortable: false },
-        // { title: "البيع بالدولار", key: "sell", sortable: false },
+        { title: "البيع بالليرة", key: "sell", sortable: false },
+        { title: "البيع بالدولار", key: "sell", sortable: false },
         { title: "العمليات", key: "actions", sortable: false },
       ],
       items: [],
@@ -341,8 +341,8 @@ export default {
     {
 
 
-      console.log(item.id );
-      this.$router.push({ name: "productDetails", params: { url: item.id } });
+       
+      this.$router.push({ name: "productDetails", params: { id: item.id } });
 
     },
     editItem(item) {
