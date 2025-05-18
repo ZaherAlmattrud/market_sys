@@ -1,8 +1,8 @@
 <template>
   <v-app app>
-    <SideBar v-if="!isPrintMode" class="navbar" app />
+    <SideBar v-if="!isPrintMode && !isLoginPage"   class="navbar" app />
 
-    <NavbarComponent  v-if="!isPrintMode" class="sidebar"   app  />
+    <NavbarComponent  v-if="!isPrintMode && !isLoginPage " class="sidebar"   app  />
 
     
     <v-main  >
@@ -10,8 +10,12 @@
         <router-view />
       </v-container>
     </v-main>
-    <FooterComponent v-if="!isPrintMode" app />
+    <FooterComponent v-if="!isPrintMode && !isLoginPage" app />
   </v-app>
+
+  <!-- <div id="app">
+    <router-view></router-view>
+  </div> -->
    
 
 </template>
@@ -31,6 +35,13 @@ export default {
     loggedIn: false,
     drawer: true,
   }),
+
+  computed: {
+    // التحقق مما إذا كانت الصفحة الحالية هي صفحة login
+    isLoginPage() {
+      return this.$route.path === '/';
+    }
+  },
   components: {
     SideBar,
     LoginPage,

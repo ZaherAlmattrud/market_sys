@@ -14,7 +14,7 @@
       <v-divider></v-divider>
 
       <v-list density="compact" nav>
-        <RouterLink   to="/">
+        <RouterLink   to="/products">
           <v-list-item
             prepend-icon="mdi-list-box-outline"
             title="المنتجات"
@@ -91,15 +91,6 @@
           ></v-list-item
         ></RouterLink>
 
-           <RouterLink to="/usersTypes">
-          <v-list-item
-            prepend-icon="mdi-account-tag-outline"
-            title="أنواع الحسابات"
-            value="usersTypes"
-             color="blue"
-          ></v-list-item
-        ></RouterLink>
-
         <RouterLink to="/days">
           <v-list-item
             prepend-icon="mdi-alarm-panel-outline"
@@ -130,7 +121,7 @@
         <RouterLink to="/exchange">
           <v-list-item
             prepend-icon="mdi-currency-usd"
-            title="الصرف"
+            title="العملات"
             value="exchange"
              color="blue"
           ></v-list-item>
@@ -138,7 +129,7 @@
 
         <RouterLink to="/accountsCash">
           <v-list-item
-            prepend-icon="mdi-account-details-outline"
+            prepend-icon="mdi-briefcase-account-outline"
             title="الأرصدة"
             value="accountsCash"
              color="BROWN"

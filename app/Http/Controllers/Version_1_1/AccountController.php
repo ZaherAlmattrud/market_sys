@@ -59,26 +59,39 @@ class AccountController extends Controller
 
         $res =   User::orderBy('id', 'desc')->get();//Account::with(['user'])->orderBy('id', 'desc')->get();
 
-        $data =  $res->map(function ($item) {
+        $response = [] ;
+        $data =  $res->map(function ($item)use(&$response) {
 
         $dd = $this->getAccountSummaryTotal($item->account_id);
 
             $user = $item->user ;
             $area =  Area::where('id' ,$item->area_id )->first();
 
-            return [
-                'id' => $item->id,
-                'area' =>  $area  ?  $area->name : null ,
-                'person_name' =>   $item->user_name  ,
-                'account_user_type' =>  $item->userType->type_name ,
-                'total' =>   $dd['total'],
-                'debts' =>  $dd['total']
+            if ( $dd['total'] > 0 ){
 
-            ];
+                if ( $item->user_type != 2 ){
+
+                    $response[] = [
+                        'id' => $item->id,
+                        'area' =>  $area  ?  $area->name : 'دمشق' ,
+                        'person_name' =>   $item->user_name  ,
+                        'account_user_type' =>  $item->userType->type_name ,
+                        'total' =>   $dd['total'],
+                        'debts' =>  $dd['total']
+        
+                    ];
+
+                }
+
+              
+
+
+            }
+         
         });
 
 
-        return response()->json($data);
+        return response()->json($response);
     }
 
     public function get($id)
@@ -106,8 +119,9 @@ class AccountController extends Controller
 
         $bookItems->map(function ( $item) use ( &$items , &$id , &$bookItemsTotal ){
 
+            $qua = $item['quantity'] > 1 ? '  عدد '.$item['quantity'] : null ;
             $it['identity'] = $id ;
-            $it['description'] = $item['description']. ' في دفتر الديون';
+            $it['description'] = $item['description']. $qua ;
             $it['total'] = $item['total'] ;
             $it['date'] = $item['date'] ;
             $it['notes'] = $item['notes'] ;

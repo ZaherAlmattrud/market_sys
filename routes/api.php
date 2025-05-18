@@ -12,7 +12,6 @@ use App\Http\Controllers\Version_1_1\UsersController;
 use App\Http\Controllers\Version_1_1\InvoicesController;
 use App\Http\Controllers\Version_1_1\PaidsController;
 use App\Http\Controllers\Version_1_1\ArrestedsController;
-use App\Http\Controllers\Version_1_1\UserTypesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -29,12 +28,8 @@ Route::post('/createArea', [ApisController::class, 'createArea']);
 Route::put('/updateArea/{id}', [ApisController::class, 'updateArea']);
 Route::delete('/deleteArea/{id}', [ApisController::class, 'deleteArea']);
 //================================================================================//
-Route::get('/getAllUserTypes', [UserTypesController::class, 'getAll']);
-Route::post('/createUserType', [UserTypesController::class, 'create']);
-Route::put('/updateUserType/{id}', [UserTypesController::class, 'update']);
-Route::delete('/deleteUserType/{id}', [UserTypesController::class, 'delete']);
+Route::get('/getAllUserTypes', [ApisController::class, 'getAllUserTypes']);
 //================================================================================//
-
 Route::get('/getAllUsers', [UsersController::class, 'getAll']);
 Route::post('/createUser', [ApisController::class, 'createUser']);
 Route::put('/updateUser/{id}', [UsersController::class, 'update']);

@@ -9,4 +9,17 @@ Route::get('/', function () {
 
 Route::get('fix',function(){
 
+
+    $res =   Account::with(['user'])->orderBy('id', 'desc')->get();
+
+    $data =  $res->map(function ($item) {
+
+
+        
+
+
+    });
+
+
+
 });

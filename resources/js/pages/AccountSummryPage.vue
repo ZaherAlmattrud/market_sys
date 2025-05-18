@@ -86,9 +86,9 @@ export default {
       dialogDelete: false,
 
       headers: [
-        { title: "التسلسل", key: "identity", sortable: false },
+        { title: "التسلسل", key: "identity", sortable: true },
         { title: "البيان", key: "description", sortable: false },
-        { title: "المبلغ", key: "total", sortable: false },
+        { title: "المبلغ", key: "total", sortable: true },
         { title: "التاريخ", key: "date", sortable: false },
         { title: "الملاحظات", key: "notes", sortable: false },
       ],

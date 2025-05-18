@@ -1,10 +1,18 @@
 <template>
   <div class="container">
-    <!-- البحث -->
-    <input v-model="search" @input="fetchProducts()" placeholder="🔎 ابحث..." />
-
-    <!-- زر إضافة -->
-    <button @click="openForm()">إضافة منتج جديد</button>
+    <!-- البحث + زر الإضافة -->
+    <div class="search-row">
+      <input
+        v-model="search"
+        @input="fetchProducts()"
+        placeholder="🔎 ابحث..."
+        class="search-input"
+      />
+      <button @click="openForm" class="add-button">
+        <v-icon small class="mr-1">mdi-plus</v-icon>
+        إضافة منتج جديد
+      </button>
+    </div>
 
     <!-- مودال الفورم -->
     <v-dialog v-model="dialog" max-width="500px" persistent>
@@ -18,8 +26,14 @@
         </v-card-title>
 
         <v-card-text>
-          <BaseForm v-model="form" :fields="fields" :submit-label="form.id ? 'تحديث' : 'إضافة'" :show-cancel="true"
-            @submit="submitProduct" @cancel="closeForm" />
+          <BaseForm
+            v-model="form"
+            :fields="fields"
+            :submit-label="form.id ? 'تحديث' : 'إضافة'"
+            :show-cancel="true"
+            @submit="submitProduct"
+            @cancel="closeForm"
+          />
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -40,17 +54,9 @@
           <td>{{ product.name }}</td>
           <td>{{ product.price }}</td>
           <td>
-          
-
-            <v-icon small class="mr-2" color="primary" @click="edit(product)">
-              mdi-pencil
-            </v-icon>
-            <v-icon small class="mr-2" color="red" @click="destroy(product.id)">
-              mdi-delete
-            </v-icon>
-            <v-icon small color="info" @click="viewDetails(product.id)">
-              mdi-information
-            </v-icon>
+            <v-icon small class="mr-2" color="primary" @click="edit(product)">mdi-pencil</v-icon>
+            <v-icon small class="mr-2" color="red" @click="destroy(product.id)">mdi-delete</v-icon>
+            <v-icon small color="info" @click="viewDetails(product.id)">mdi-information</v-icon>
           </td>
         </tr>
       </tbody>
@@ -58,14 +64,19 @@
 
     <!-- أزرار التصفح -->
     <div v-if="products.links && products.links.length" class="pagination">
-      <button v-for="(link, index) in products.links" :key="index" v-html="link.label" :disabled="!link.url"
-        :class="{ active: link.active }" @click="goToPage(link.url)"></button>
+      <button
+        v-for="(link, index) in products.links"
+        :key="index"
+        v-html="link.label"
+        :disabled="!link.url"
+        :class="{ active: link.active }"
+        @click="goToPage(link.url)"
+      ></button>
     </div>
   </div>
 </template>
 
 <script>
-
 import BaseForm from "@/components/FormComponent.vue";
 
 export default {
@@ -156,16 +167,24 @@ export default {
   },
 };
 </script>
+
 <style scoped>
 .container {
   max-width: 900px;
   margin: 50px auto;
   font-family: 'Roboto', sans-serif;
   padding: 0 15px;
+  direction: rtl;
 }
 
-input {
-  margin: 5px 0 15px 0;
+.search-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.search-input {
+  flex: 3;
   padding: 10px 12px;
   font-size: 14px;
   border: 1px solid #c0c0c0;
@@ -174,35 +193,29 @@ input {
   transition: border-color 0.3s ease;
 }
 
-input:focus {
-  border-color: #1976d2; /* لون أزرق زي Vuetify */
+.search-input:focus {
+  border-color: #1976d2;
   box-shadow: 0 0 5px rgba(25, 118, 210, 0.5);
 }
 
-button {
-  margin: 0 5px 0 0;
-  padding: 8px 16px;
+.add-button {
+  flex: 1;
+  padding: 10px 14px;
   font-size: 14px;
+  white-space: nowrap;
   cursor: pointer;
   border: none;
   border-radius: 4px;
   background-color: #1976d2;
   color: white;
   transition: background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-button:hover:not(:disabled) {
+.add-button:hover {
   background-color: #115293;
-}
-
-button:disabled {
-  cursor: not-allowed;
-  opacity: 0.6;
-}
-
-button.active {
-  background-color: #115293;
-  font-weight: 600;
 }
 
 table {
@@ -228,7 +241,7 @@ table td {
 }
 
 tbody tr:hover {
-  background-color: #e3f2fd; /* لون خلفية أزرق فاتح عند المرور */
+  background-color: #e3f2fd;
   cursor: pointer;
 }
 

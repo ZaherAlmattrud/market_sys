@@ -118,7 +118,7 @@ export default {
       dialog: false,
       dialogDelete: false,
       headers: [
-        { title: "التسلسل", key: "id", sortable: false },
+        { title: "التسلسل", key: "id", sortable: true },
         { title: "الأسم", key: "person_name", sortable: true },
         { title: "رصيد الحساب", key: "debts", sortable: true },
         { title: "البلدة", key: "area", sortable: true },
@@ -152,7 +152,7 @@ export default {
     filteredItems() {
       return this.items.filter((item) => {
         
-         return item.person_name.includes(this.search.toLowerCase())  ;
+         return item.area.includes(this.search.toLowerCase())  ;
 
    
       });
