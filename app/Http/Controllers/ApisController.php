@@ -19,7 +19,7 @@ use App\Models\Area;
 
 class ApisController extends Controller
 {
-    //
+    //getAllProducts
 
     private $accountDetailController;
     private $accountController;
@@ -771,10 +771,10 @@ class ApisController extends Controller
         return response()->json($res);
     }
 
-    public function getAllProducts()
+    public function getAllProducts(Request $request)
     {
 
-        return $this->productsController->getAll();
+        return $this->productsController->getAll($request);
 
         // $data = DB::table('products')->orderBy('id', 'desc')->get();
 

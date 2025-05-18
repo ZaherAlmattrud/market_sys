@@ -1,5 +1,6 @@
 import { createMemoryHistory, createRouter } from 'vue-router'
-import ProductPage from "@/pages/IndexPage.vue"
+// import ProductPage from "@/pages/IndexPage.vue"
+import ProductPage from "@/pages/MainPage.vue"
 
 // import ProductPage from "@/pages/ProductsPage.vue"
 import CustomerPage from "@/pages/CustomerPage.vue"
