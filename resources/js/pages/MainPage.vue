@@ -2,12 +2,7 @@
   <div class="container">
     <!-- البحث + زر الإضافة -->
     <div class="search-row">
-      <input
-        v-model="search"
-        @input="fetchProducts()"
-        placeholder="🔎 ابحث..."
-        class="search-input"
-      />
+      <input v-model="search" @input="fetchProducts()" placeholder="🔎 ابحث..." class="search-input" />
       <button @click="openForm" class="add-button">
         <v-icon small class="mr-1">mdi-plus</v-icon>
         إضافة منتج جديد
@@ -26,14 +21,8 @@
         </v-card-title>
 
         <v-card-text>
-          <BaseForm
-            v-model="form"
-            :fields="fields"
-            :submit-label="form.id ? 'تحديث' : 'إضافة'"
-            :show-cancel="true"
-            @submit="submitProduct"
-            @cancel="closeForm"
-          />
+          <BaseForm v-model="form" :fields="fields" :submit-label="form.id ? 'تحديث' : 'إضافة'" :show-cancel="true"
+            :gridCols="3" @submit="submitProduct" @cancel="closeForm" />
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -42,17 +31,28 @@
     <table>
       <thead>
         <tr>
-          <th>التسلسل</th>
-          <th>الاسم</th>
-          <th>السعر</th>
+
+          <th>المنتج</th>
+          <th>الشراء بالدولار</th>
+          <th> ثابت الشراء بالليرة</th>
+          <th> متغير الشراء بالليرة</th>
+          <th> متغير المبيع </th>
+
+
+
+
           <th>العمليات</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="product in products.data" :key="product.id">
-          <td>{{ product.id }}</td>
           <td>{{ product.name }}</td>
-          <td>{{ product.price }}</td>
+          <td>{{ product.fix_price_in_dollar }}</td>
+          <td>{{ product.fix_price_in_sp }}</td>
+          <td>{{ product.dynamic_price_in_sp }}</td>
+          <td>{{ product.dynamic_sell }}</td>
+
+
           <td>
             <v-icon small class="mr-2" color="primary" @click="edit(product)">mdi-pencil</v-icon>
             <v-icon small class="mr-2" color="red" @click="destroy(product.id)">mdi-delete</v-icon>
@@ -64,14 +64,8 @@
 
     <!-- أزرار التصفح -->
     <div v-if="products.links && products.links.length" class="pagination">
-      <button
-        v-for="(link, index) in products.links"
-        :key="index"
-        v-html="link.label"
-        :disabled="!link.url"
-        :class="{ active: link.active }"
-        @click="goToPage(link.url)"
-      ></button>
+      <button v-for="(link, index) in products.links" :key="index" v-html="link.label" :disabled="!link.url"
+        :class="{ active: link.active }" @click="goToPage(link.url)"></button>
     </div>
   </div>
 </template>
@@ -84,46 +78,134 @@ export default {
   components: { BaseForm },
   data() {
     return {
+      categories: [],
+      invoices: [],
       products: { data: [], links: [], current_page: 1, last_page: 1 },
-      form: { id: null, name: "", price: "" },
+      form: { id: null, name: "", price: "" , photo: null},
       search: "",
       dialog: false,
       fields: [
         {
           name: "name",
           label: "اسم المنتج",
+          fullWidth: true,
           component: "VTextField",
           type: "text",
           required: true,
           rules: [(v) => !!v || "هذا الحقل مطلوب"],
         },
         {
-          name: "price",
-          label: "السعر",
+          name: "code",
+          label: " الكود",
+          component: "VTextField",
+          type: "text",
+          required: true,
+
+        },
+        {
+          name: "price_in_sp",
+          label: "الشراء بالليرة",
           component: "VTextField",
           type: "number",
-          required: true,
+
           rules: [
-            (v) => !!v || "هذا الحقل مطلوب",
-            (v) => v > 0 || "السعر يجب أن يكون أكبر من صفر",
+
+
           ],
         },
+        {
+          name: "price_in_dollar",
+          label: "الشراء بالدولار",
+          component: "VTextField",
+          type: "number",
+
+
+        },
+
+        {
+          name: "category_id",
+          label: "الصنف",
+          component: "VSelect",
+          items: [],
+          itemTitle: "name",
+          itemValue: "id",
+          required: true,
+
+        },
+
+        {
+
+          name: "invoice_id",
+          label: "الفاتورة",
+          component: "VSelect",
+          items: [],
+          itemTitle: "id",
+          itemValue: "id",
+          required: true,
+          rules: [(v) => !!v || "هذا الحقل مطلوب"],
+        },
+        {
+          name: "sell_in_sp",
+          label: " المبيع بالليرة",
+
+          component: "VTextField",
+          type: "text",
+          required: true,
+          rules: [(v) => !!v || "هذا الحقل مطلوب"],
+        },
+        {
+          name: "photo",
+          label: "صورة (رفع أو التقاط)",
+          component: "cameraOrFile",
+          fullWidth: true,
+          required: true,
+
+        }
       ],
     };
   },
-  mounted() {
+  async mounted() {
+
+    await this.loadCategories();
+    await this.loadInvoices();
     this.fetchProducts();
   },
   methods: {
+
+    async loadCategories() {
+      try {
+        const res = await axios.get('/api/getAllCategoriesForList');
+        this.categories = res.data;
+        // تحديث items في الحقل
+        const catField = this.fields.find(f => f.name === 'category_id');
+        if (catField) catField.items = this.categories;
+      } catch (error) {
+        console.error('فشل تحميل الأصناف', error);
+      }
+    },
+    async loadInvoices() {
+      try {
+        const res = await axios.get('/api/getAllInvoicesForList');
+        this.invoices = res.data;
+        // تحديث items في الحقل
+        const invField = this.fields.find(f => f.name === 'invoice_id');
+        if (invField) invField.items = this.invoices;
+      } catch (error) {
+        console.error('فشل تحميل الفواتير', error);
+      }
+    },
     fetchProducts(page = 1) {
       axios
-        .get(`/api/getAllProducts?page=${page}&search=${this.search}`)
+        .get(`/api/products?page=${page}&search=${this.search}`)
         .then((res) => {
           this.products = res.data;
         });
     },
     openForm() {
       this.resetForm();
+      if (this.invoices.length > 0) {
+        this.form.invoice_id = this.invoices[0].id;
+      }
       this.dialog = true;
     },
     closeForm() {
@@ -131,12 +213,21 @@ export default {
       this.resetForm();
     },
     submitProduct() {
-      const method = this.form.id ? "put" : "post";
+      const formData = new FormData();
+      for (const key in this.form) {
+        formData.append(key, this.form[key]);
+      }
+
+      const method = this.form.id ? "post" : "post"; // لتعديل استخدم method spoofing
       const url = this.form.id
-        ? `/api/products/${this.form.id}`
+        ? `/api/products/${this.form.id}?_method=PATCH`
         : `/api/products`;
 
-      axios[method](url, this.form).then(() => {
+      axios.post(url, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }).then(() => {
         this.dialog = false;
         this.resetForm();
         this.fetchProducts(this.products.current_page);
@@ -157,7 +248,7 @@ export default {
       }
     },
     resetForm() {
-      this.form = { id: null, name: "", price: "" };
+      this.form = { id: null, name: "", price: "" , photo: null,};
     },
     goToPage(url) {
       if (!url) return;

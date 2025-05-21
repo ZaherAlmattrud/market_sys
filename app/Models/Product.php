@@ -10,18 +10,21 @@ class Product extends Model
     use HasFactory;
 
     public $timestamps = false;
-    
+
     protected $fillable = [
         'name',
-        'price',
         'notes',
-        'sell',
-        'img',
         'invoice_id',
         'category_id',
-        'file_url',
-        'file_name',
-        'file_path',
+        'price_in_sp',
+        'price_in_dollar',
+        'sell_in_sp',
+        'sell_in_dollar',
+        'code',
+        'profit',
+        'date',
+        'photo'
+
 
     ];
 
@@ -34,7 +37,5 @@ class Product extends Model
 
     }
 
-    public function category()
-    {
-    }
+    public function category() {}
 }

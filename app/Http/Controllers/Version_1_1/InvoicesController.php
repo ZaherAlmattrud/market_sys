@@ -14,7 +14,18 @@ use Response;
 
 class InvoicesController extends Controller
 {
+
+
+ 
     //
+
+     public function getAllInvoicesForList(){
+
+
+        $invoices = Invoice::orderBy('id','desc')->get(['id']);
+        return response()->json($invoices);
+
+    }
 
 
     public function getInvoiceImg($id){

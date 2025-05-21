@@ -12,6 +12,8 @@ use App\Http\Controllers\Version_1_1\UsersController;
 use App\Http\Controllers\Version_1_1\InvoicesController;
 use App\Http\Controllers\Version_1_1\PaidsController;
 use App\Http\Controllers\Version_1_1\ArrestedsController;
+use App\Http\Controllers\Version_1_1\CategoriesController;
+use App\Models\Invoice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -60,6 +62,7 @@ Route::post('/createArrested', [ApisController::class, 'createArrested']);
 Route::put('/updateArrested/{ArrestedId}', [ArrestedsController::class, 'update']);
 Route::delete('/deleteArrested/{ArrestedId}', [ApisController::class, 'deleteArrested']);
 //===============================================================================
+Route::get('/getAllCategoriesForList', [CategoriesController::class, 'getAllCategoriesForList']);
 Route::get('/getAllCategories', [ApisController::class, 'getAllCategories']);
 Route::post('/createCategory', [ApisController::class, 'createCategory']);
 Route::put('/updateCategory/{CategoryId}', [ApisController::class, 'updateCategory']);
@@ -71,16 +74,20 @@ Route::post('/createInvoice', [ApisController::class, 'createInvoice']);
 Route::put('/updateInvoice/{InvoiceId}', [InvoicesController::class, 'update']);
 Route::delete('/deleteInvoice/{InvoiceId}', [ApisController::class, 'deleteInvoice']);
 
+Route::get('/getAllInvoicesForList', [InvoicesController::class, 'getAllInvoicesForList']);
+
 
 //=============================================================================
 
 Route::put('/updateProduct/{ProductId}', [ProductsController::class, 'update']);
-Route::get('/getAllProducts', [ApisController::class, 'getAllProducts']);
+Route::get('/products', [ApisController::class, 'getAllProducts']);
 Route::get('/getProductImgLink/{productId}', [ApisController::class, 'getProductImgLink']);
 Route::get('/getAllProductsHealthy', [ApisController::class, 'getAllProductsHealthy']);
 Route::post('/createProduct', [ProductsController::class, 'create']);
 
 Route::delete('/deleteProduct/{ProductId}', [ApisController::class, 'deleteProduct']);
+Route::post('/products', [ProductsController::class, 'save']);
+Route::delete('/products/{id}', [ProductsController::class, 'delete']);
 //=============================================================================
 Route::get('/report', [ApisController::class, 'getReport']);
 //=============================================================================
