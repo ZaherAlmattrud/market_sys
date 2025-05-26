@@ -80,14 +80,19 @@ Route::get('/getAllInvoicesForList', [InvoicesController::class, 'getAllInvoices
 //=============================================================================
 
 Route::put('/updateProduct/{ProductId}', [ProductsController::class, 'update']);
-Route::get('/products', [ApisController::class, 'getAllProducts']);
+
 Route::get('/getProductImgLink/{productId}', [ApisController::class, 'getProductImgLink']);
 Route::get('/getAllProductsHealthy', [ApisController::class, 'getAllProductsHealthy']);
 Route::post('/createProduct', [ProductsController::class, 'create']);
 
 Route::delete('/deleteProduct/{ProductId}', [ApisController::class, 'deleteProduct']);
+
+
+Route::get('/products', [ApisController::class, 'getAllProducts']);
+Route::get('/products/{id}', [ProductsController::class, 'show']);
 Route::post('/products', [ProductsController::class, 'save']);
 Route::delete('/products/{id}', [ProductsController::class, 'delete']);
+
 //=============================================================================
 Route::get('/report', [ApisController::class, 'getReport']);
 //=============================================================================

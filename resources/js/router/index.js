@@ -57,7 +57,7 @@ const routes = [
   { path: '/paids', component: PaidsPage, meta: { requiresAuth: false }, },
 
   
-  { path: '/productDetails:id', component: ProductDetails, name: 'productDetails', props: true, meta: { requiresAuth: false }, },
+  { path: '/productDetails/:id', component: ProductDetails, name: 'productDetails', props: true, meta: { requiresAuth: false }, },
   
   { path: '/invoiceImg:id', component: InvoiceImgPage, name: 'invoiceImg', props: true, meta: { requiresAuth: false }, },
   { path: '/productImg:url', component: ProductImgPage, name: 'ProductImage', props: true, meta: { requiresAuth: false }, },

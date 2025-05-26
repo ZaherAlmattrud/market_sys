@@ -8,6 +8,7 @@ use App\Models\Exchange;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Invoice;
+use App\Models\User;
 use App\Models\Users;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
@@ -56,9 +57,9 @@ class ProductsController extends Controller
 
 
 
-            $price_in_dollar = $product->price_in_dollar - ($product->price_in_dollar *    $descount);
+            $price_in_dollar = $product->price_in_dollar + ($product->price_in_dollar *    $descount);
 
-            $price_in_Sp = $product->price_in_sp - ($product->price_in_sp *  $descount);
+            $price_in_Sp = $product->price_in_sp + ($product->price_in_sp *  $descount);
 
             $dynamic_sell_sp = $product->sell_in_dollar * $dollar_now;
             $dynamic_sell_dollar =   $product->sell_in_dollar;
@@ -69,7 +70,7 @@ class ProductsController extends Controller
                 'name' => $product->name,
                 'fix_price_in_dollar' =>  $price_in_dollar, // after descount
                 'fix_price_in_sp' => $price_in_Sp, // after descount
-                'dynamic_price_in_sp' => $product->price_in_dollar * $dollar_now,
+                'dynamic_price_in_sp' =>  $price_in_dollar * $dollar_now,
                 'dynamic_sell' =>  ceil((float)$dynamic_sell_sp) . "  ل.س / " .    number_format((float)$dynamic_sell_dollar, 2) . " دولار",
 
             ];
@@ -77,6 +78,58 @@ class ProductsController extends Controller
 
         return response()->json($products);
     }
+
+    public function show($id)
+    {
+        $product = Product::find($id);
+
+        if (!$product) {
+            return response()->json(['message' => 'المنتج غير موجود'], 404);
+        }
+
+        $dollar_now = Exchange::where('name', 'dollar')->first()->value;
+
+        $category = Category::where('id', $product->category_id)->first();
+        $descount = $category && $category->descount ? $category->descount : 0;
+
+        $price_in_dollar = $product->price_in_dollar + ($product->price_in_dollar * $descount);
+        $price_in_Sp = $product->price_in_sp + ($product->price_in_sp * $descount);
+
+        $dynamic_sell_sp = $product->sell_in_dollar * $dollar_now;
+        $dynamic_sell_dollar = $product->sell_in_dollar;
+
+        $invoice = $product->invoice_id ? Invoice::where('id', $product->invoice_id)->first() : null;
+
+        $user =  $invoice ? User::where('account_id', $invoice->account_id)->first() : null;
+
+        $suppler =  $user ?  $user->user_name : null;
+
+        $dynamic_price_in_sp =  $product->price_in_dollar * $dollar_now;
+
+        $result = [
+
+            'id' => $product->id,
+            'name' => $product->name,
+            'price_in_dollar' => $product->price_in_dollar,
+            'price_in_sp'   => $product->price_in_sp,
+            'price_in_dollar_after_descount' => $price_in_dollar, // بعد نسبة النشرة
+            'price_in_sp_after_descount' => $price_in_Sp, // بعد نسبة النشرة
+            'dynamic_price_in_sp' => $dynamic_price_in_sp,
+            'dynamic_price_in_sp_after_descount' =>   $price_in_dollar * $dollar_now,  /* after descount */
+            'dynamic_sell_in_sp' => $product->sell_in_dollar *  $dollar_now,
+            'photo' => $product->photo,
+            'profit' => $product->profit,
+            'invoice' => $product->invoice_id,
+            'suppler' => $suppler,
+            'category' => $category ? $category->name . '  /  ' . $category->descount : null,
+            'sell_in_dollar' => $product->sell_in_dollar,
+            'date' => $product->date,
+            'exchange' =>   $dollar_now,
+        ];
+
+        return response()->json($result);
+    }
+
 
 
     public function getAll(Request $request)
@@ -172,7 +225,12 @@ class ProductsController extends Controller
         $newRecord['category_id'] = array_key_exists('category_id', $data) && !empty($data['category_id']) ? $data['category_id'] : null;
         $newRecord['sell_in_sp'] = array_key_exists('sell_in_sp', $data) && !empty($data['sell_in_sp']) ? $data['sell_in_sp'] : null;
         $newRecord['sell_in_dollar'] =  $newRecord['sell_in_sp'] /  $exchangeRate;
-        $newRecord['profit'] =  $newRecord['sell_in_dollar'] - $newRecord['price_in_dollar'];
+
+
+        $descount =  $newRecord['category_id'] ? Category::where('id',  $newRecord['category_id'])->first()->descount : 0;
+
+        $newRecord['profit'] =  $newRecord['sell_in_dollar'] - ($newRecord['price_in_dollar'] + ($newRecord['price_in_dollar']) * $descount);
+
         $invoice =  Invoice::where('id',  $newRecord['invoice_id'])->first();
         $newRecord['date'] =  $invoice ?  $invoice->date : null;
         $newRecord['category_id'] = array_key_exists('category_id', $data) && !empty($data['category_id']) ? $data['category_id'] : null;

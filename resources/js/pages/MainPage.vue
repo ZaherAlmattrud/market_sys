@@ -10,22 +10,31 @@
     </div>
 
     <!-- مودال الفورم -->
-    <v-dialog v-model="dialog" max-width="500px" persistent>
-      <v-card>
-        <v-card-title>
-          {{ form.id ? "تعديل المنتج" : "إضافة منتج جديد" }}
-          <v-spacer></v-spacer>
-          <v-btn icon @click="closeForm">
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
-        </v-card-title>
+ <v-dialog v-model="dialog" max-width="600px" persistent>
+  <v-card>
+    <v-card-title>
+      {{ form.id ? "تعديل المنتج" : "إضافة منتج جديد" }}
+      <v-spacer></v-spacer>
+      <v-btn icon @click="closeForm">
+        <v-icon>mdi-close</v-icon>
+      </v-btn>
+    </v-card-title>
 
-        <v-card-text>
-          <BaseForm v-model="form" :fields="fields" :submit-label="form.id ? 'تحديث' : 'إضافة'" :show-cancel="true"
-            :gridCols="3" @submit="submitProduct" @cancel="closeForm" />
-        </v-card-text>
-      </v-card>
-    </v-dialog>
+    <!-- هاي الحاوية مقيدة ارتفاعها وبتعمل سكروول فقط للداخل -->
+    <v-card-text style="max-height: 400px; overflow-y: auto;">
+      <BaseForm
+        v-model="form"
+        :fields="fields"
+        :submit-label="form.id ? 'تحديث' : 'إضافة'"
+        :show-cancel="true"
+        :gridCols="3"
+        @submit="submitProduct"
+        @cancel="closeForm"
+      />
+    </v-card-text>
+  </v-card>
+</v-dialog>
+
 
     <!-- جدول المنتجات -->
     <table>
@@ -81,7 +90,7 @@ export default {
       categories: [],
       invoices: [],
       products: { data: [], links: [], current_page: 1, last_page: 1 },
-      form: { id: null, name: "", price: "" , photo: null},
+      form: { id: null, name: "", price: "", photo: null },
       search: "",
       dialog: false,
       fields: [
@@ -150,9 +159,19 @@ export default {
 
           component: "VTextField",
           type: "text",
-          required: true,
-          rules: [(v) => !!v || "هذا الحقل مطلوب"],
+          required: true
         },
+
+        {
+          name: "sell_in_dollar",
+          label: " المبيع بالدولار",
+          fullWidth: true,
+          component: "VTextField",
+          type: "text",
+          required: true,
+
+        },
+
         {
           name: "photo",
           label: "صورة (رفع أو التقاط)",
@@ -248,7 +267,7 @@ export default {
       }
     },
     resetForm() {
-      this.form = { id: null, name: "", price: "" , photo: null,};
+      this.form = { id: null, name: "", price: "", photo: null, };
     },
     goToPage(url) {
       if (!url) return;
