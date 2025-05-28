@@ -37,6 +37,8 @@ class ProductsController extends Controller
 
     public function index(Request $request)
     {
+
+
         $search = $request->query('search');
 
         $query = Product::query();
@@ -66,15 +68,30 @@ class ProductsController extends Controller
 
 
             return [
+
                 'id' => $product->id,
                 'name' => $product->name,
+                'code' => $product->code,
+                'price_in_sp' => $product->price_in_sp,
+                'price_in_dollar' => $product->price_in_dollar,
+                'sell_in_sp' => $product->sell_in_sp,
+                'sell_in_dollar' => $product->sell_in_dollar,
+                'invoice_id' => $product->invoice_id,
+                'category_id' => $product->category_id,
+
+
+
+
                 'fix_price_in_dollar' =>  $price_in_dollar, // after descount
                 'fix_price_in_sp' => $price_in_Sp, // after descount
                 'dynamic_price_in_sp' =>  $price_in_dollar * $dollar_now,
                 'dynamic_sell' =>  ceil((float)$dynamic_sell_sp) . "  ل.س / " .    number_format((float)$dynamic_sell_dollar, 2) . " دولار",
 
+
             ];
         });
+
+
 
         return response()->json($products);
     }
@@ -124,6 +141,7 @@ class ProductsController extends Controller
             'category' => $category ? $category->name . '  /  ' . $category->descount : null,
             'sell_in_dollar' => $product->sell_in_dollar,
             'date' => $product->date,
+            'code' => $product->code,
             'exchange' =>   $dollar_now,
         ];
 
@@ -223,13 +241,13 @@ class ProductsController extends Controller
         $newRecord['code'] = array_key_exists('code', $data) && !empty($data['code']) ? $data['code'] : null;
         $newRecord['invoice_id'] = array_key_exists('invoice_id', $data) && !empty($data['invoice_id']) ? $data['invoice_id'] : null;
         $newRecord['category_id'] = array_key_exists('category_id', $data) && !empty($data['category_id']) ? $data['category_id'] : null;
-        $newRecord['sell_in_sp'] = array_key_exists('sell_in_sp', $data) && !empty($data['sell_in_sp']) ? $data['sell_in_sp'] : null;
-        $newRecord['sell_in_dollar'] =  $newRecord['sell_in_sp'] /  $exchangeRate;
+        $newRecord['sell_in_sp'] = array_key_exists('sell_in_sp', $data) && !empty($data['sell_in_sp']) ? $data['sell_in_sp'] :  $data['sell_in_dollar'] * $exchangeRate;
+        $newRecord['sell_in_dollar'] = array_key_exists('sell_in_dollar', $data) && !empty($data['sell_in_dollar']) ? $data['sell_in_dollar'] :  $newRecord['sell_in_sp'] /  $exchangeRate;
 
 
         $descount =  $newRecord['category_id'] ? Category::where('id',  $newRecord['category_id'])->first()->descount : 0;
 
-        $newRecord['profit'] =  $newRecord['sell_in_dollar'] - ($newRecord['price_in_dollar'] + ($newRecord['price_in_dollar']) * $descount);
+        $newRecord['profit'] =  $newRecord['sell_in_dollar'] - ($newRecord['price_in_dollar'] + (($newRecord['price_in_dollar']) * $descount));
 
         $invoice =  Invoice::where('id',  $newRecord['invoice_id'])->first();
         $newRecord['date'] =  $invoice ?  $invoice->date : null;
@@ -379,6 +397,81 @@ class ProductsController extends Controller
 
 
 
+        Log::info("updateeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee !!! ");
+
+        $product = Product::find($id);
+
+        if (!$product) {
+            return response()->json(['message' => 'المنتج غير موجود'], 404);
+        }
+
+
+        $exchangeRate   = Exchange::where('name', 'dollar')->first()->value; // ثابت مؤقت، يفضل قراءته من config أو DB
+        Log::info($exchangeRate);
+        $data = $request->all();
+
+        Log::info($data);
+
+
+        if ($request->filled('price_in_dollar') && !$request->filled('price_in_sp')) {
+            Log::info('حُسب السعر بالليرة من الدولار');
+
+            $newRecord['price_in_dollar'] = $request->price_in_dollar;
+            $newRecord['price_in_sp'] = $request->price_in_dollar * $exchangeRate;
+        } elseif ($request->filled('price_in_sp') && !$request->filled('price_in_dollar')) {
+            Log::info('حُسب السعر بالدولار من الليرة');
+
+            $newRecord['price_in_sp'] = $request->price_in_sp;
+            $newRecord['price_in_dollar'] = $request->price_in_sp / $exchangeRate;
+        } else {
+
+            Log::info('كلا السعرين موجودين، لا يتم الحساب');
+            $newRecord['price_in_sp'] = $request->price_in_sp;
+            $newRecord['price_in_dollar'] = $request->price_in_dollar;
+        }
+
+        $newRecord['name'] = array_key_exists('name', $data) && !empty($data['name']) ? $data['name'] : null;
+        $newRecord['code'] = array_key_exists('code', $data) && !empty($data['code']) ? $data['code'] : null;
+        $newRecord['invoice_id'] = array_key_exists('invoice_id', $data) && !empty($data['invoice_id']) ? $data['invoice_id'] : null;
+        $newRecord['category_id'] = array_key_exists('category_id', $data) && !empty($data['category_id']) ? $data['category_id'] : null;
+
+        // $newRecord['sell_in_sp'] = array_key_exists('sell_in_sp', $data) && !empty($data['sell_in_sp']) ? $data['sell_in_sp'] : null;
+        // $newRecord['sell_in_dollar'] =  $newRecord['sell_in_sp'] /  $exchangeRate;
+        $newRecord['sell_in_sp'] = array_key_exists('sell_in_sp', $data) && !empty($data['sell_in_sp']) ? $data['sell_in_sp'] :  $data['sell_in_dollar'] * $exchangeRate;
+        $newRecord['sell_in_dollar'] = array_key_exists('sell_in_dollar', $data) && !empty($data['sell_in_dollar']) ? $data['sell_in_dollar'] :  $newRecord['sell_in_sp'] /  $exchangeRate;
+
+
+
+        $descount =  $newRecord['category_id'] ? Category::where('id',  $newRecord['category_id'])->first()->descount : 0;
+
+        $newRecord['profit'] =  $newRecord['sell_in_dollar'] - ($newRecord['price_in_dollar'] + (($newRecord['price_in_dollar']) * $descount));
+
+        $invoice =  Invoice::where('id',  $newRecord['invoice_id'])->first();
+        $newRecord['date'] =  $invoice ?  $invoice->date : null;
+        $newRecord['category_id'] = array_key_exists('category_id', $data) && !empty($data['category_id']) ? $data['category_id'] : null;
+
+
+
+        // ✅ التعامل مع رفع الصورة
+        if ($request->hasFile('photo') && $request->file('photo')->isValid()) {
+
+            Log::info('accept Photo');
+            $photo = $request->file('photo');
+            $fileName = time() . '_' . uniqid() . '.' . $photo->getClientOriginalExtension();
+            $photo->move(public_path('uploads/products'), $fileName);
+            $newRecord['photo'] = 'uploads/products/' . $fileName;
+        }
+
+        Log::info($newRecord);
+
+        // متابعة عملية الحفظ
+        $product = $product->update($newRecord);
+
+        return response()->json($product);
+
+
+        /*
+
         Log::info("update");
 
 
@@ -415,7 +508,7 @@ class ProductsController extends Controller
             $res =  $model->save();
         };
 
-        return response()->json($res);
+        return response()->json($res); */
     }
 
     public function delete($id)

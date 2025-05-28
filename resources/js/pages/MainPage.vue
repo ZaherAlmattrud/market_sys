@@ -2,6 +2,11 @@
   <div class="container">
     <!-- البحث + زر الإضافة -->
     <div class="search-row">
+      <div>
+        <span>الصرف : </span>
+        <span>{{ exchange }} </span>
+
+      </div>
       <input v-model="search" @input="fetchProducts()" placeholder="🔎 ابحث..." class="search-input" />
       <button @click="openForm" class="add-button">
         <v-icon small class="mr-1">mdi-plus</v-icon>
@@ -10,30 +15,23 @@
     </div>
 
     <!-- مودال الفورم -->
- <v-dialog v-model="dialog" max-width="600px" persistent>
-  <v-card>
-    <v-card-title>
-      {{ form.id ? "تعديل المنتج" : "إضافة منتج جديد" }}
-      <v-spacer></v-spacer>
-      <v-btn icon @click="closeForm">
-        <v-icon>mdi-close</v-icon>
-      </v-btn>
-    </v-card-title>
+    <v-dialog v-model="dialog" max-width="600px" persistent>
+      <v-card>
+        <v-card-title>
+          {{ form.id ? "تعديل المنتج" : "إضافة منتج جديد" }}
+          <v-spacer></v-spacer>
+          <v-btn icon @click="closeForm">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </v-card-title>
 
-    <!-- هاي الحاوية مقيدة ارتفاعها وبتعمل سكروول فقط للداخل -->
-    <v-card-text style="max-height: 400px; overflow-y: auto;">
-      <BaseForm
-        v-model="form"
-        :fields="fields"
-        :submit-label="form.id ? 'تحديث' : 'إضافة'"
-        :show-cancel="true"
-        :gridCols="3"
-        @submit="submitProduct"
-        @cancel="closeForm"
-      />
-    </v-card-text>
-  </v-card>
-</v-dialog>
+        <!-- هاي الحاوية مقيدة ارتفاعها وبتعمل سكروول فقط للداخل -->
+        <v-card-text style="max-height: 400px; overflow-y: auto;">
+          <BaseForm v-model="form" :fields="fields" :submit-label="form.id ? 'تحديث' : 'إضافة'" :show-cancel="true"
+            :gridCols="3" @submit="submitProduct" @cancel="closeForm" />
+        </v-card-text>
+      </v-card>
+    </v-dialog>
 
 
     <!-- جدول المنتجات -->
@@ -87,10 +85,17 @@ export default {
   components: { BaseForm },
   data() {
     return {
+      exchange: null,
       categories: [],
       invoices: [],
       products: { data: [], links: [], current_page: 1, last_page: 1 },
-      form: { id: null, name: "", price: "", photo: null },
+      form: {
+
+        id: null,
+        name: "",
+        code: ""
+
+      },
       search: "",
       dialog: false,
       fields: [
@@ -188,6 +193,7 @@ export default {
     await this.loadCategories();
     await this.loadInvoices();
     this.fetchProducts();
+     this.fetchExchange();
   },
   methods: {
 
@@ -213,11 +219,22 @@ export default {
         console.error('فشل تحميل الفواتير', error);
       }
     },
+
+    fetchExchange(){
+
+         axios
+        .get(`/api/exchange`)
+        .then((res) => {
+         this.exchange = res.data;
+        });
+
+    },
     fetchProducts(page = 1) {
       axios
         .get(`/api/products?page=${page}&search=${this.search}`)
         .then((res) => {
           this.products = res.data;
+       
         });
     },
     openForm() {

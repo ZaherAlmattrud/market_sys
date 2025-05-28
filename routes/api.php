@@ -91,6 +91,7 @@ Route::delete('/deleteProduct/{ProductId}', [ApisController::class, 'deleteProdu
 Route::get('/products', [ApisController::class, 'getAllProducts']);
 Route::get('/products/{id}', [ProductsController::class, 'show']);
 Route::post('/products', [ProductsController::class, 'save']);
+Route::patch('/products/{id}', [ProductsController::class, 'update']);
 Route::delete('/products/{id}', [ProductsController::class, 'delete']);
 
 //=============================================================================
@@ -119,4 +120,6 @@ Route::post('/createSellDetail/{sellId}', [SellDetailController::class, 'store']
 Route::put('/updateSellDetail/{Id}', [SellDetailController::class, 'update']);
 Route::delete('/deleteSellDetail/{Id}', [SellDetailController::class, 'destroy']);
 //=============================================================================
+
+Route::get('/exchange', [ExchangeController::class, 'getExchange']);
 

@@ -27,6 +27,11 @@
                   <td>{{ product.name }}</td>
                 </tr>
 
+                  <tr>
+                  <td>الكود</td>
+                  <td>{{ product.code }}</td>
+                </tr>
+
                 <tr>
                   <td>ثابت الشراء بالليرة</td>
                   <td>{{ product.price_in_sp }}</td>
@@ -37,7 +42,7 @@
                 </tr>
                 <tr>
                   <td> ثابت الشراء بعد الحسم بالليرة</td>
-                  <td>{{ product.price_in_sp_after_descount }}</td>
+                  <td style="color:coral;">{{ product.price_in_sp_after_descount }}</td>
                 </tr>
                 <tr>
                   <td>سعر الشراء بعد الحسم بالدولار</td>
@@ -148,6 +153,7 @@ export default {
 
             id: data.id || '',
             name: data.name || '',
+            code: data.code || '',
             category: data.category || '',
             invoice: data.invoice || '',
             price_in_sp: data.price_in_sp || '',

@@ -11,6 +11,13 @@ class ExchangeController extends Controller
 {
     //
 
+    public function getExchange()
+    {
+
+        $dollar_now = Exchange::where('name', 'dollar')->first()->value;
+        return response()->json($dollar_now);
+    }
+
     public function getAll()
     {
 
