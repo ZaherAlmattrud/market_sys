@@ -4,69 +4,56 @@ namespace App\Http\Controllers\Version_1_1;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\User ;
-use App\Models\UserType ;
-use App\Models\Invoice ;
+use App\Models\User;
+use App\Models\UserType;
+use App\Models\Invoice;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Response;
- 
+
 
 class InvoicesController extends Controller
 {
 
 
- 
+
+    public function  getPhoto($id)
+    {
+
+
+
+        $invoice = Invoice::where('id', $id)->first();
+
+        return response()->json($invoice);
+    }
+
     //
 
-     public function getAllInvoicesForList(){
+    public function getAllInvoicesForList()
+    {
 
 
-        $invoices = Invoice::orderBy('id','desc')->get(['id']);
+        $invoices = Invoice::orderBy('id', 'desc')->get(['id']);
         return response()->json($invoices);
-
     }
 
 
-    public function getInvoiceImg($id){
+    public function getInvoiceImg($id)
+    {
 
-        $imageContent = Invoice::where('id',$id)->first()->img;
-        $imageContent = base64_decode( $imageContent);
- 
+        $imageContent = Invoice::where('id', $id)->first()->img;
+        $imageContent = base64_decode($imageContent);
+
         $finfo = new \finfo(FILEINFO_MIME_TYPE);
         $mimeType = $finfo->buffer($imageContent);
         // $mimeType = 'image/jpeg'; // Adjust this based on your actual image type
         return Response::make($imageContent, 200, ['Content-Type' => $mimeType]);
-    
     }
     public function getAll()
     {
-        $data = [];
 
-        $data = Invoice::orderBy('id', 'desc')->get();
-
-
-        $itemsArray = $data->map(function ($item) {
-
-            $user =     User::where('account_id', $item->account_id)->first();
-
-            return [
-
-                'id' => $item->id,
-                'file_url' =>  $item->file_url ?   $item->file_url  : null,
-                'num' => $item->num ? $item->num : 'لا يوجد',
-                'invoice_type' => $item->invoice_type,
-                'account_id' =>  $user ? $user->user_name : null,
-                'total' => $item->total,
-                'date' => $item->date,
-                'file' => $item->file,
-
-
-            ];
-        });
-
-        return response()->json($itemsArray);
- 
+        $data = Invoice::paginate(6);
+        return response()->json($data);
     }
 
     public function get($id)
@@ -79,6 +66,37 @@ class InvoicesController extends Controller
     public function create(Request $request)
     {
 
+        $data = $request->all();
+
+        Log::info($data);
+
+        $newRecord['total'] = array_key_exists('total', $data) && !empty($data['total']) ? $data['total'] : null;
+        $newRecord['date'] = array_key_exists('date', $data) && !empty($data['date']) ? $data['date'] : null;
+
+
+        if (array_key_exists('account_id', $data) && !empty($data['account_id'])) {
+
+            $user = User::where('id', $data['account_id'])->first();
+            $account_id =  $user ?  $user->account_id : null;
+            $newRecord['account_id'] =   $account_id;
+        }
+
+
+        // ✅ التعامل مع رفع الصورة
+        if ($request->hasFile('photo') && $request->file('photo')->isValid()) {
+
+            Log::info('accept Photo');
+            $photo = $request->file('photo');
+            $fileName = time() . '_' . uniqid() . '.' . $photo->getClientOriginalExtension();
+            $photo->move(public_path('uploads/purcheses'), $fileName);
+            $newRecord['photo'] = 'uploads/purcheses/' . $fileName;
+        }
+
+        $invoice = Invoice::create($newRecord);
+
+        return response()->json($invoice);
+
+        /*
         $data =  $request->all();
         $user = User::where('id' ,$data['account_id'] )->first();
         $userTypeId = $user ? $user->user_type : null;
@@ -107,40 +125,58 @@ class InvoicesController extends Controller
         $model->num = $data['num'];
         $model->date =  Carbon::now()->format('Y-m-d H:i:s');
         $model->save();
-        return response()->json($data);
+        return response()->json($data); */
     }
 
     public function update(Request $request, $id)
     {
 
-        Log::info("updateeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
-        $data =  $request->all();
-        Log::info(    $data );
-        $model = Invoice::find($id);
-      
-        $res = false ;
-        if( $model  ){
-            // $model->total = $data['total'];
-            // if ($request->hasFile('file')) {
-            //     $image = $request->file('file');
-            //     $imageData = file_get_contents($image->getRealPath());
-            //     $imageData = base64_encode( $imageData );
-            //     Log::info(     $imageData );
-            //     $model->img = $imageData;     
-            // }
+        $data = $request->all();
 
-            $model->total = array_key_exists('total' , $data) ? $data['total']  :  $model->total ; 
-            $model->account_id = array_key_exists('account_id' , $data) ? $data['account_id']  :  $model->account_id ; 
-            $res =  $model->save();         
+        $invoice = Invoice::where('id',  $id)->first();
+
+        Log::info($data);
+
+        $newRecord['total'] = array_key_exists('total', $data) && !empty($data['total']) ? $data['total'] : null;
+        $newRecord['date'] = array_key_exists('date', $data) && !empty($data['date']) ? $data['date'] : null;
+
+
+        if (array_key_exists('account_id', $data) && !empty($data['account_id'])) {
+
+            $user = User::where('id', $data['account_id'])->first();
+            $account_id =  $user ?  $user->account_id : null;
+            $newRecord['account_id'] =   $account_id;
         }
 
-        return response()->json($res);
+
+        // ✅ التعامل مع رفع الصورة
+        if ($request->hasFile('photo') && $request->file('photo')->isValid()) {
+
+            Log::info('accept Photo');
+            $photo = $request->file('photo');
+            $fileName = time() . '_' . uniqid() . '.' . $photo->getClientOriginalExtension();
+            $photo->move(public_path('uploads/purcheses'), $fileName);
+            $newRecord['photo'] = 'uploads/purcheses/' . $fileName;
+        }
+
+        $invoice = $invoice->update($newRecord);
+
+        return response()->json($invoice);
     }
+
+
 
     public function delete($id)
     {
 
-        $data = [];
-        return response()->json($data);
+        $invoice = Invoice::find($id);
+
+        if (!$invoice) {
+            return response()->json(['message' => 'الفاتورة غير موجود'], 404);
+        }
+
+        $invoice->delete();
+
+        return response()->json(['message' => 'تم حذف الفاتورة بنجاح'], 200);
     }
 }

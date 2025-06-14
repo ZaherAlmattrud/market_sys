@@ -71,10 +71,11 @@ Route::delete('/deleteCategory/{CategoryId}', [ApisController::class, 'deleteCat
 Route::get('/getAllInvoices', [ApisController::class, 'getAllInvoices']);
 Route::get('/getInvoiceImgLink/{invoiceId}', [ApisController::class, 'getInvoiceImgLink']);
 Route::post('/createInvoice', [ApisController::class, 'createInvoice']);
-Route::put('/updateInvoice/{InvoiceId}', [InvoicesController::class, 'update']);
-Route::delete('/deleteInvoice/{InvoiceId}', [ApisController::class, 'deleteInvoice']);
+Route::post('/updateInvoice/{InvoiceId}', [InvoicesController::class, 'update']);
+Route::delete('/deleteInvoice/{InvoiceId}', [InvoicesController::class, 'delete']);
 
 Route::get('/getAllInvoicesForList', [InvoicesController::class, 'getAllInvoicesForList']);
+Route::get('/invoice/photo/{id}', [InvoicesController::class, 'getPhoto']);
 
 
 //=============================================================================

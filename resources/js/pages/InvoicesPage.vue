@@ -1,305 +1,211 @@
 <template>
-  <v-container>
-    <v-row>
-      <v-col cols="12" md="12">
-        <v-text-field
-           variant="outlined"
-          v-model="search"
-          label="صاحب الفاتورة"
-          @input="filterItems"
-        ></v-text-field>
-      </v-col>
-    </v-row>
-    <v-data-table
-      :headers="headers"
-      :items="filteredItems"
-      item-key="id"
-      class="elevation-1"
-    >
-      <template v-slot:top>
-        <v-toolbar flat>
-          <v-toolbar-title>فواتير المشتريات</v-toolbar-title>
-          <v-spacer></v-spacer>
-          <v-dialog v-model="dialog" max-width="500px">
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                color="primary"
-                dark
-                class="mb-2"
-                v-bind="attrs"
-                v-on="on"
-                @click="dialog = true"
-                   variant="outlined"
-              >
-                فاتورة جديدة</v-btn
-              >
-            </template>
-            <v-card>
-              <v-card-title>
-                <span class="headline">{{ formTitle }}</span>
+  <v-app>
+    <v-main>
+      <v-container>
+        <!-- مربع البحث وزر الإضافة -->
+        <v-row>
+
+            <v-col cols="2" class="d-flex align-center">
+            <v-btn color="primary" class="text-white" block style="height: 55px;" @click="openAddDialog">
+              جديد
+            </v-btn>
+          </v-col>
+
+          <v-col cols="10">
+            <v-text-field variant="outlined" v-model="search" label="صاحب الفاتورة" @input="onSearchInput" clearable
+              dense style="height: 40px;" 
+              />
+          </v-col>
+        
+        </v-row>
+
+
+        <!-- عرض الفواتير -->
+        <v-row>
+          <v-col cols="12" md="4" v-for="item in items" :key="item.id">
+            <v-card class="transparent-card" elevation="0">
+              <v-card-title class="text-h6">
+                فاتورة مشتريات رقم #{{ item.id }}
               </v-card-title>
               <v-card-text>
-                <v-container>
-                  <v-row>
-                    <v-col cols="12" sm="6" md="6">
-                      <!-- <v-select v-model="editedItem.account_id" :items="users"
-                                                item-title="user_name" item-value="id" label="صاحب الفاتورة"
-                                                persistent-hint single-line></v-select> -->
-
-                      <v-autocomplete
-                        v-model="editedItem.account_id"
-                        :items="users"
-                        item-title="user_name"
-                        item-value="id"
-                        label="مصدر الفاتورة"
-                        placeholder="ابدأ البحث"
-                        crearable
-                          variant="outlined"
-                      >
-                      </v-autocomplete>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="6">
-                      <v-text-field
-                        v-model="editedItem.total"
-                        label="الرصيد الإجمالي"
-                          variant="outlined"
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col cols="12" sm="6" md="6">
-                      <v-file-input
-                        v-model="editedItem.file"
-                        label="الملف"
-                        outlined
-                        dense
-                          variant="outlined"
-                      ></v-file-input>
-                    </v-col>
-
-                    <v-col cols="12" sm="6" md="6">
-                      <v-text-field
-                        v-model="editedItem.num"
-                        label="رقم الفاتورة المطبوع"
-                          variant="outlined"
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
-                </v-container>
+                <div><strong>القيمة الإجمالية:</strong> {{ item.total }}</div>
+                <div><strong>مصدر الفاتورة:</strong> {{ getUserName(item.account_id) }}</div>
+                <div><strong>التاريخ:</strong> {{ item.date }}</div>
               </v-card-text>
               <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn   variant="outlined" color="blue darken-1" text @click="close">إلغاء</v-btn>
-                <v-btn   variant="outlined"  color="blue darken-1" text @click="save">حفظ</v-btn>
+                <v-btn icon @click="editItem(item)">
+                  <v-icon>mdi-pencil</v-icon>
+                </v-btn>
+                <v-btn icon @click="deleteItem(item)">
+                  <v-icon>mdi-delete</v-icon>
+                </v-btn>
+                <v-btn icon @click="moveToInvoiceImg(item)">
+                  <v-icon>mdi-invoice-text-outline</v-icon>
+                </v-btn>
               </v-card-actions>
             </v-card>
-          </v-dialog>
-        </v-toolbar>
-      </template>
-      <template v-slot:item.actions="{ item }">
-        <v-icon v-if="loggedIn" larg @click="editItem(item)">mdi-pencil</v-icon>
-        <v-icon v-if="loggedIn" larg @click="deleteItem(item)">mdi-delete</v-icon>
-        <v-icon larg @click="moveToInvoiceImg(item)">mdi-invoice-text-outline</v-icon>
-      </template>
-    </v-data-table>
-  </v-container>
-</template>
+          </v-col>
+        </v-row>
 
+        <!-- روابط الصفحات -->
+        <v-row>
+          <v-col cols="12" class="text-center">
+            <v-btn v-for="link in links" :key="link.label" :disabled="!link.url" @click="goToPage(link)" text
+              v-html="link.label" />
+          </v-col>
+        </v-row>
+
+        <!-- نموذج الإضافة/التعديل باستخدام BaseForm -->
+        <v-dialog v-model="dialog" max-width="600">
+          <v-card class="pa-4 rounded-lg" elevation="2">
+            <v-card-title class="text-h5 pb-4">
+              {{ editedItem.id ? "تعديل فاتورة مشتريات" : "إضافة فاتورة مشتريات" }}
+            </v-card-title>
+            <BaseForm v-model="editedItem" :fields="invoiceFields" :grid-cols="1" submit-label="حفظ"
+              cancel-label="إلغاء" :show-cancel="true" @submit="save" @cancel="close" />
+          </v-card>
+        </v-dialog>
+
+      </v-container>
+    </v-main>
+  </v-app>
+</template>
 <script>
+import BaseForm from "@/components/FormComponent.vue";
+
 export default {
+  components: { BaseForm },
   data() {
     return {
-      loggedIn: false,
-      users: [],
-      areas: [],
-      search: '',
-      dialog: false,
-      dialogDelete: false,
-
-      headers: [
-        { title: "التسلسل", key: "id", sortable: false },
-        { title: "مصدر الفاتورة", key: "account_id", sortable: false },
-        { title: "الرصيد الإجمالي", key: "total", sortable: false },
-        { title: "رقم الفاتورة المطبوع", key: "num", sortable: false },
-        { title: "التاريخ", key: "date", sortable: false },
-        // { title: 'الملف', key: 'file', sortable: false },
-        { title: "العمليات", key: "actions", sortable: false },
-      ],
       items: [],
-
-      id: 0,
+      users: [],
+      search: "",
+      meta: {},
+      links: [],
+      currentPage: 1,
+      dialog: false,
       editedIndex: -1,
       editedItem: {
-        id: 0,
-        invoice_type: "",
-        date: "",
-        num: "",
         account_id: "",
         total: "",
-        file: "",
-        file_url: null,
+        date: new Date().toISOString().slice(0, 10),
+        photo: null,
       },
-      defaultItem: {
-        id: 0,
-        invoice_type: "",
-        date: "",
-        num: "",
-        account_id: "",
-        file_url: "",
-        total: "",
-        file: "",
-      },
+      invoiceFields: [
+
+        {
+          name: "account_id",
+          label: "مصدر الفاتورة",
+          component: "VSelect",
+          items: [],
+          itemTitle: "user_name",
+          itemValue: "id",
+          required: true,
+        },
+        { name: "total", label: "القيمة", type: "number", required: true },
+        { name: "date", label: "التاريخ", type: "date", required: true },
+
+        { name: "photo", label: "ملف الفاتورة", component: "cameraOrFile" },  // هنا التعديل
+      ],
     };
   },
-  computed: {
-    formTitle() {
-      return this.editedIndex === -1 ? "فاتورة جديدة" : "تحديث معلومات فاتورة";
-    },
-    filteredItems() {
-      return this.items.filter((item) => {
-        if (this.search != '') {
-          return (
-            //   item.account_id == this.search
-
-            item.account_id.includes(this.search.toLowerCase())
-            //||    item.id == this.search
-          );
-        } else {
-          return true;
-        }
-
-        // return (
-
-        //     // item.account_id.includes(this.search.toLowerCase())
-
-        //     true
-
-        // );
-      });
-    },
-  },
-
-  watch: {
-    dialog(val) {
-      val || this.close();
-    },
-    dialogDelete(val) {
-      val || this.closeDelete();
-    },
-  },
-
-  async beforeCreate() {
-  
-    const response = await axios.get("/api/getAllInvoices");
-    console.log("Data Reponse");
-
-    this.items = response.data;
-
-    const response2 = await axios.get("/api/getAllUsers");
-
-    console.log("Rrrrrrrrr");
-    console.log(response2);
-    this.users = response2.data;
-  },
-
-  mounted() {
-    this.checkLogedIn();
-  },
   methods: {
-    checkLogedIn() {
-      const loggedIn = localStorage.getItem("user");
-      if (loggedIn) {
-        this.loggedIn = true;
-      } else {
-        this.loggedIn = false;
+    async fetchInvoices(page = 1) {
+      try {
+        const response = await axios.get("/api/getAllInvoices", {
+          params: { page, search: this.search },
+        });
+        this.items = response.data.data;
+        this.meta = response.data.meta;
+        this.links = response.data.links;
+        this.currentPage = page;
+      } catch (error) {
+        console.error("Failed to fetch invoices:", error);
       }
     },
-    moveToAccountDetails(item) {
-      // this.$router.push({ name: 'accountDetails', params: { accountId: 1 } });
+    async fetchUsers() {
+      try {
+        const response = await axios.get("/api/getAllUsers");
+        this.users = response.data;
+        // تحديث الخيارات داخل الحقول
+        const userField = this.invoiceFields.find(f => f.name === "account_id");
+        if (userField) userField.items = this.users;
+      } catch (error) {
+        console.error("Failed to fetch users:", error);
+      }
     },
-    filterItems() {
-      // This will automatically filter items as search input changes
+    getUserName(id) {
+      const user = this.users.find((u) => u.id === id);
+      return user ? user.user_name : "---";
+    },
+    goToPage(link) {
+      if (link.url) {
+        const url = new URL(link.url);
+        const page = url.searchParams.get("page");
+        this.fetchInvoices(page);
+      }
+    },
+    onSearchInput() {
+      this.fetchInvoices(1);
+    },
+    openAddDialog() {
+      this.editedItem = {
+        
+        account_id: "",
+        total: "",
+        date: new Date().toISOString().slice(0, 10),
+        photo: null,
+      };
+      this.dialog = true;
     },
     editItem(item) {
-      // this.editedIndex = this.items.indexOf(item);
-      // this.editedItem = Object.assign({}, item);
-      // this.dialog = true;
-
-      this.id = item.id;
-      this.editedIndex = this.items.indexOf(item);
-      this.editedItem = Object.assign({}, item);
-
+      this.editedItem = { ...item };
       this.dialog = true;
     },
     async deleteItem(item) {
-      // const index = this.items.indexOf(item); 5613
-      // confirm('Are you sure you want to delete this item?') && this.items.splice(index, 1);
-
-      console.log("delete api");
-      console.log(item);
-      const index = this.items.indexOf(item);
-      this.items.splice(index, 1);
-      await axios.delete(`/api/deleteInvoice/${item.id}`);
-    },
-
-    moveToInvoiceImg(item) {
-      if (item.id > 82) {
-        window.open(
-           window.location.origin+`/api/getInvoiceImgLink/${item.id}`,
-          "_blank",
-          "noopener,noreferrer"
-        );
-      } else {
-        this.$router.push({ name: "invoiceImg", params: { id: item.id } });
+      if (!confirm("هل أنت متأكد من حذف الفاتورة؟")) return;
+      try {
+        await axios.delete(`/api/deleteInvoice/${item.id}`);
+        this.fetchInvoices(this.currentPage);
+      } catch (error) {
+        console.error("Delete failed:", error);
       }
+    },
+    moveToInvoiceImg(item) {
+ 
+        this.$router.push({ name: "invoiceImg", params: { id: item.id } });
+      
     },
     close() {
       this.dialog = false;
-      this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      });
     },
-    save() {
-      // this.dialog = true;
-      // if (this.editedIndex > -1) {
-      //     Object.assign(this.items[this.editedIndex], this.editedItem);
-      // } else {
-      //     this.items.push(this.editedItem);
-      // }
-      // this.close();
+    async save(formData) {
+      try {
+        const payload = new FormData();
+        for (const key in formData) {
+          payload.append(key, formData[key]);
+        }
 
-      this.dialog = true;
+        if (!formData.id) {
+          await axios.post("/api/createInvoice", payload, {
+            headers: { "Content-Type": "multipart/form-data" },
+          });
+        } else {
+          await axios.post(`/api/updateInvoice/${formData.id}`, payload, {
+            headers: { "Content-Type": "multipart/form-data" },
+          });
+        }
 
-      if (this.id == 0) {
-        // create new area
-
-        console.log("create");
-        // add to local data array
-
-        const response = axios.post("/api/createInvoice", this.editedItem, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }); // add to data base
-        this.items.unshift(this.editedItem);
-      } else {
-        // update current area
-
-        console.log("update");
-        Object.assign(this.items[this.editedIndex], this.editedItem); // update local data
-        const response = axios.put("/api/updateInvoice/" + this.id, this.editedItem
-        // ,{
-        //   headers: {
-        //     "Content-Type": "multipart/form-data",
-        //   },
-        // }
-        
-        ); // update in data base
+        this.fetchInvoices(this.currentPage);
+        this.close();
+      } catch (error) {
+        console.error("Save failed:", error);
       }
-
-      this.close();
     },
+  },
+  mounted() {
+    this.fetchUsers();
+    this.fetchInvoices();
   },
 };
 </script>

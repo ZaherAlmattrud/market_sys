@@ -8,20 +8,19 @@ use Illuminate\Database\Eloquent\Model;
 class Invoice extends Model
 {
     use HasFactory;
+
+
+    public $table = 'purchases';
     
     public $timestamps = false;
 
     protected $fillable = [
-        'invoice_type',
+
         'account_id',
-        'img',
         'total',
-        'file',
-        'file_name',
-        'file_path',
-        'file_url',
         'date',
-        'num',
+        'photo'
+         
     ];
 
 

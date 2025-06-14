@@ -12,6 +12,7 @@ class PaidsController extends Controller
 {
     //
 
+
     public function getAll()
     {
 
