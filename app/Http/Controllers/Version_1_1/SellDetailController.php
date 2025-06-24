@@ -74,9 +74,9 @@ class SellDetailController extends Controller
         $model = new SellDetail();
         $model->sell_id =  $sellId ;
         $model->total =  $data['total'] ;
-        $model->description =  $data['description'];
+        $model->name =  $data['name'];
         $model->quantity =  $data['quantity'] ;
-        $model->price =  $data['price'] ;
+        $model->sell =  $data['sell'] ;
      //   $model->pr =  $data['price_after_descount'] > 0 ? $data['price_after_descount'] *  $data['quantity'] : 0 ;//$i < 0 ? 0 : $data['total'] -  $i  ;
         $model->date =  Carbon::now()->format('Y-m-d H:i:s'); ; 
         $model->save();

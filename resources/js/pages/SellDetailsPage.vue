@@ -13,30 +13,18 @@
 
       <v-col cols="4" md="4">
         <v-text-field variant="outlined">
-          رقم الفاتورة : {{ this.$route.params.sellId }}</v-text-field
-        >
+          رقم الفاتورة : {{ this.$route.params.sellId }}</v-text-field>
       </v-col>
     </v-row>
 
     <v-row v-if="!isPrintMode">
       <v-col cols="12" md="12">
-        <v-text-field
-          variant="outlined"
-          v-model="search"
-          label="البحث"
-          @input="filterItems"
-        ></v-text-field>
+        <v-text-field variant="outlined" v-model="search" label="البحث" @input="filterItems"></v-text-field>
       </v-col>
     </v-row>
 
-    <v-data-table
-      :headers="headers"
-      :items="filteredItems"
-      :items-per-page="5000"
-      item-key="id"
-      class="elevation-1"
-      hide-default-footer
-    >
+    <v-data-table :headers="headers" :items="filteredItems" :items-per-page="5000" item-key="id" class="elevation-1"
+      hide-default-footer>
       <template v-slot:top>
         <v-toolbar flat>
           <v-toolbar-title class="dataTableTitle"> تفاصيل الفاتورة</v-toolbar-title>
@@ -44,17 +32,9 @@
           <v-spacer></v-spacer>
           <v-dialog v-model="dialog" max-width="600px">
             <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                color="primary"
-                dark
-                class="newItemButton mb-2 hidenAtPrint"
-                v-bind="attrs"
-                v-on="on"
-                @click="dialog = true"
-                variant="outlined"
-              >
-                بيان جديد</v-btn
-              >
+              <v-btn color="primary" dark class="newItemButton mb-2 hidenAtPrint" v-bind="attrs" v-on="on"
+                @click="dialog = true" variant="outlined">
+                بيان جديد</v-btn>
             </template>
             <v-card>
               <v-card-title>
@@ -64,12 +44,8 @@
                 <v-container>
                   <v-row>
                     <v-col cols="12" sm="6" md="6">
-                      <v-text-field
-                        v-model="editedItem.quantity"
-                        label="الكمية"
-                        @change="updateTotal"
-                        variant="outlined"
-                      ></v-text-field>
+                      <v-text-field v-model="editedItem.quantity" label="الكمية" @change="updateTotal"
+                        variant="outlined"></v-text-field>
                     </v-col>
 
                     <v-col cols="12" sm="6" md="6">
@@ -86,63 +62,53 @@
                       >
                       </v-autocomplete> -->
 
-                      <v-combobox
-                        v-model="editedItem.description"
-                        :items="products"
-                        item-title="name"
-                        item-value="name"
-                        label="المنتج"
-                        placeholder="المنتج"
-                        crearable
-                        @update:modelValue="updatePrice"
-                        variant="outlined"
-                      >
-                      </v-combobox>
+                      <v-combobox   v-model="editedItem.name"
+ :items="products.map(p => p.name)"
+  item-title="name"
+  item-value="id"
+  label="المنتج"
+  placeholder="اختر المنتج"
+  clearable
+  @update:modelValue="onProductSelected"
+  variant="outlined" />
                     </v-col>
                   </v-row>
                   <v-row>
-                    <v-col cols="12" sm="12" md="12">
-                      <v-text-field
-                        v-model="editedItem.price_after_descount"
-                        label="الشراء"
-                         
-                       
-                        variant="outlined"
-                      ></v-text-field>
+                    <v-col cols="6" sm="6" md="6">
+                      <v-text-field v-model="editedItem.price_after_descount" label="الشراء" disabled
+                        variant="outlined"></v-text-field>
+                    </v-col>
+
+                    <v-col cols="6" sm="6" md="6">
+                      <v-text-field v-model="editedItem.sell" label="المبيع" disabled
+                        variant="outlined"></v-text-field>
                     </v-col>
                   </v-row>
                   <v-row>
                     <v-col cols="12" sm="6" md="6">
-                      <v-text-field
-                        v-model="editedItem.total"
-                        label="الإجمالي"
-                        @change="updateOnePrice"
-                        variant="outlined"
-                      ></v-text-field>
+                      <v-text-field v-model="editedItem.total" label="الإجمالي" @change="updateOnePrice"
+                        variant="outlined"></v-text-field>
 
                       <!-- <mony   currency="EUR" locale="fr-FR" decimal="," thousand="," /> -->
                     </v-col>
 
                     <v-col cols="12" sm="6" md="6">
-                      <v-text-field
-                        v-model="editedItem.price"
-                        label="الإفرادي"
-                        @change="updateTotal"
-                        variant="outlined"
-                      ></v-text-field>
+                      <v-text-field v-model="editedItem.sell" label="الإفرادي" @change="updateTotal"
+                        variant="outlined"></v-text-field>
                     </v-col>
                   </v-row>
                 </v-container>
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn variant="outlined" color="blue darken-1" text @click="close"
-                  >إلغاء</v-btn
-                >
-                <v-btn @keyup.enter="enterClickEvent" variant="outlined" color="blue darken-1" text @click="save"
-                  >حفظ</v-btn
-                >
+
+                <v-btn @keyup.enter="enterClickEvent" variant="outlined" color="blue darken-1" text
+                  @click="save">حفظ</v-btn>
+                <v-btn variant="outlined" color="blue darken-1" text @click="close">إلغاء</v-btn>
               </v-card-actions>
+
+
+
             </v-card>
           </v-dialog>
         </v-toolbar>
@@ -205,9 +171,9 @@ export default {
       dialogDelete: false,
       headers: [
         { title: "التسلسل", key: "identity", sortable: false },
-        { title: " البيــــــــــــان ", key: "description", sortable: false },
-     
-        { title: "السعر الإفرادي", key: "price", sortable: false },
+        { title: " البيــــــــــــان ", key: "name", sortable: false },
+
+        { title: "السعر الإفرادي", key: "sell", sortable: false },
 
         { title: "الكمية", key: "quantity", sortable: false },
         // { title: "التاريخ", key: "date", sortable: false },
@@ -224,9 +190,11 @@ export default {
         id: 0,
         total: 0,
         description: "",
+        name: "",
         quantity: "",
         price: 0,
         pr: 0,
+        sell: 0,
         price_after_descount: 0,
       },
 
@@ -236,7 +204,7 @@ export default {
         description: "",
         quantity: "",
         price: "",
-        pr: "",
+        sell: "",
       },
     };
   },
@@ -246,7 +214,7 @@ export default {
     },
     filteredItems() {
       return this.items.filter((item) => {
-        return item.description.includes(this.search.toLowerCase());
+        return true;//item.description.includes(this.search.toLowerCase());
       });
     },
   },
@@ -263,7 +231,7 @@ export default {
   async beforeCreate() {
     const sellId = this.$route.params.sellId;
     this.sellId = sellId;
-    const responses = await axios.get("/api/getAllProducts");
+    const responses = await axios.get("/api/getAllProductsForList");
     this.products = responses.data; //
 
     const response = await axios.get("/api/getAllSellDetails/" + sellId);
@@ -294,7 +262,7 @@ export default {
   },
   methods: {
 
-    enterClickEvent(){
+    enterClickEvent() {
 
       this.save();
 
@@ -306,6 +274,7 @@ export default {
 
     updateOnePrice() {
       this.editedItem.price = this.editedItem.total / this.editedItem.quantity;
+    
     },
 
     updatePrice() {
@@ -330,7 +299,9 @@ export default {
     },
 
     updateTotal() {
-      this.editedItem.total = this.editedItem.price * this.editedItem.quantity;
+
+      this.editedItem.total = this.editedItem.sell * this.editedItem.quantity;
+      this.invoiceTotal = this.invoiceTotal  + this.editedItem.total ;
     },
 
     checkLogedIn() {
@@ -345,6 +316,45 @@ export default {
     filterItems() {
       // This will automatically filter items as search input changes
     },
+
+    async onProductSelected(productName) {
+
+      const product = this.products.find(p => p.name === productName);
+
+      this.editedItem.id =  product.id ;
+      const productId = product.id;
+
+ 
+
+  if (!productId) {
+    this.editedItem.price = 0;
+    this.editedItem.price_after_descount = 0;
+    return;
+  }
+
+  try {
+    const response = await axios.get(`/api/products/${productId}/price`);
+
+    console.log("✅ تم اختيار المنتج ID:", response.data.price_in_sp_after_descount);
+
+    // جلب السعرين
+    this.editedItem.sell = response.data.dynamic_sell_in_sp; // السعر الأساسي
+    this.editedItem.price_after_descount = response.data.price_in_sp_after_descount;
+
+    // تحديث الإجمالي
+    if (this.editedItem.quantity) {
+      this.updateTotal();
+    }
+
+    console.log("✅ تم جلب السعر:", response.data);
+  } catch (error) {
+    console.error("❌ فشل في جلب السعر:", error);
+    this.editedItem.price = 0;
+    this.editedItem.price_after_descount = 0;
+  }
+},
+
+
     editItem(item) {
       // this.editedIndex = this.items.indexOf(item);
       // this.editedItem = Object.assign({}, item);
@@ -364,6 +374,7 @@ export default {
       console.log(item);
       const index = this.items.indexOf(item);
       this.items.splice(index, 1);
+      this.invoiceTotal =   this.invoiceTotal  - item.total ;
       await axios.delete(`/api/deleteSellDetail/${item.id}`);
     },
     close() {
@@ -407,6 +418,8 @@ export default {
         // update current area
 
         console.log("update");
+
+         console.log(this.editedItem);
         Object.assign(this.items[this.editedIndex], this.editedItem); // update local data
         const response = axios.put("/api/updateSellDetail/" + this.id, this.editedItem); // update in data base
       }
@@ -434,7 +447,6 @@ export default {
     display: none;
   }
 
-  .operation {
-  }
+  .operation {}
 }
 </style>

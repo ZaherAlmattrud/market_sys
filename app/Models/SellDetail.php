@@ -16,9 +16,9 @@ class SellDetail extends Model
     protected $fillable = [
         'sell_id',
         'total',
-        'description',
+        'name',
         'quantity',
-        'price',
+        'sell',
         'date',
         
     ];

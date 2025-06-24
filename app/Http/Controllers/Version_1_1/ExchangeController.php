@@ -41,8 +41,14 @@ class ExchangeController extends Controller
     public function update(Request $request, $id)
     {
 
-        $data = $request->all();;
 
+        $data = $request->all();;
+        $data['value'] = array_key_exists('value', $data)  && !empty($data['value']) ? $data['value'] : null;
+        $exchange =   Exchange::where('id', $id)->first();
+        if ($exchange) {
+            $exchange->value =  $data['value'];
+            $exchange->save();
+        }
 
 
         return response()->json();

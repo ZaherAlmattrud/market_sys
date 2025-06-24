@@ -2,18 +2,35 @@
   <v-container>
     <v-row>
       <v-col cols="12" md="10">
-        <v-text-field   variant="outlined" v-model="search" label="البحث" @input="filterItems"></v-text-field>
+        <v-text-field
+          variant="outlined"
+          v-model="search"
+          label="البحث"
+          @input="onSearchInput"
+          clearable
+        ></v-text-field>
       </v-col>
       <v-col cols="12" md="2">
-        <v-text-field   variant="outlined" >{{ filteredItems.length }}</v-text-field>
+        <v-text-field
+          variant="outlined"
+          :value="totalItems"
+          label="عدد النتائج"
+          readonly
+        ></v-text-field>
       </v-col>
     </v-row>
-    <v-data-table
-      :headers="headers"
-      :items="filteredItems"
-      item-key="id"
-      class="elevation-1"
-    >
+<v-data-table
+  :headers="headers"
+  :items="items"
+  :server-items-length="totalItems"
+  :items-per-page="itemsPerPage"
+  :page.sync="page"
+  :loading="loading"
+  item-key="id"
+  class="elevation-1"
+  @update:options="onOptionsUpdate"
+  hide-default-footer
+>
       <template v-slot:top>
         <v-toolbar flat>
           <v-toolbar-title>فواتير المبيعات</v-toolbar-title>
@@ -26,10 +43,8 @@
                 class="mb-2"
                 v-bind="attrs"
                 v-on="on"
-                @click="dialog = true"
-                  variant="outlined"
-                >فاتورة جديدة</v-btn
-              >
+                variant="outlined"
+              >فاتورة جديدة</v-btn>
             </template>
             <v-card>
               <v-card-title>
@@ -38,240 +53,261 @@
               <v-card-text>
                 <v-container>
                   <v-row>
-                    <v-col cols="12" sm="12" md="12">
-                      <!-- <label>صاحب الفاتورة</label> -->
+                    <v-col cols="12">
                       <v-autocomplete
                         v-model="editedItem.user_id"
                         :items="users"
                         item-title="user_name"
                         item-value="id"
-                       label="صاحب الفاتورة"
-                        placeholder="صاحب الفاتورة"
-                        crearable
-                          single-line  variant="outlined"
-                      >
-                      </v-autocomplete>
+                        label="صاحب الفاتورة"
+                        clearable
+                        single-line
+                        variant="outlined"
+                      ></v-autocomplete>
                     </v-col>
                   </v-row>
-
-                  <!-- <v-row>
-                    <v-col cols="12" sm="6" md="12">
-
-                      <v-select
-                        v-model="editedItem.is_paid"
-                        :items="invoice_status"
-                        item-title="title"
-                        item-value="value"
-                        label="مدفوعة ؟"
-                        persistent-hint
-                        single-line  variant="outlined"
-                      ></v-select>
-
-                    
-                    </v-col>
-                  </v-row> -->
                   <v-row>
-                    <v-col cols="12" sm="6" md="12">
-
+                    <v-col cols="12">
                       <v-text-field
                         v-model="editedItem.notes"
                         label="ملاحظات"
-                          variant="outlined"
+                        variant="outlined"
                       ></v-text-field>
- 
                     </v-col>
                   </v-row>
                 </v-container>
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn   variant="outlined" color="blue darken-1" text @click="close">إلغاء</v-btn>
-                <v-btn   variant="outlined" color="blue darken-1" text @click="save">حفظ</v-btn>
+                <v-btn variant="outlined" color="blue darken-1" text @click="close">إلغاء</v-btn>
+                <v-btn variant="outlined" color="blue darken-1" text @click="save">حفظ</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
         </v-toolbar>
       </template>
+
+      <template v-slot:item.date="{ item }">
+        {{ formatDate(item.date) }}
+      </template>
+
+      <template v-slot:item.user_id="{ item }">
+        {{  item.user_id }}
+            <!-- {{ getUserNameById(item.user_id) }} -->
+      </template>
+
       <template v-slot:item.actions="{ item }">
-        <v-icon v-if="loggedIn" larg @click="deleteItem(item)">mdi-delete</v-icon>
-        <v-icon v-if="loggedIn" larg @click="editItem(item)">mdi-pencil</v-icon>
-        <v-icon larg @click="moveToAccountDetails(item)">mdi-account-eye-outline</v-icon>
+        <v-icon v-if="loggedIn" large @click="deleteItem(item)">mdi-delete</v-icon>
+        <v-icon v-if="loggedIn" large @click="editItem(item)">mdi-pencil</v-icon>
+        <v-icon large @click="moveToAccountDetails(item)">mdi-account-eye-outline</v-icon>
       </template>
     </v-data-table>
+
+    <!-- أزرار الباجنيشن -->
+    <div class="my-4 d-flex justify-center">
+      <v-btn
+        v-for="(link, index) in paginationLinks"
+        :key="index"
+        :disabled="!link.url"
+        :color="link.active ? 'primary' : 'default'"
+        class="mx-1"
+        v-html="link.label"
+        @click="goToPage(link.url)"
+      ></v-btn>
+    </div>
   </v-container>
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   data() {
     return {
       loggedIn: false,
-      id: 0,
-      user_types: [],
-      areas: [],
-      itemsArray: [],
       search: "",
+      page: 1,
+      itemsPerPage: 6,
+      totalItems: 0,
+      loading: false,
       dialog: false,
-      dialogDelete: false,
+
       headers: [
         { title: "التسلسل", key: "id", sortable: false },
         { title: "الأسم", key: "user_id", sortable: false },
-        // { title: "الرصيد", key: "total", sortable: false },
         { title: "الاجمالي", key: "total", sortable: false },
         { title: "التاريخ", key: "date", sortable: false },
-        // { title: "حالة الفاتورة", key: "is_paid", sortable: false },
         { title: "الملاحظات", key: "notes", sortable: false },
-       
-
         { title: "العمليات", key: "actions", sortable: false },
       ],
-      items: [],
-      allUsers: 0,
 
+      items: [],
       users: [],
       editedIndex: -1,
-
-      invoice_status: [
-        {
-          title: "مدفوعة",
-          value:  "مدفوعة",
-        },
-
-        {
-          title: "غير مدفوعة",
-          value:"غير مدفوعة",
-        },
-
-        {
-          title: "تسعير",
-          value:"تسعير",
-        },
-
-      ],
       editedItem: {
         id: 0,
         user_id: "",
         total: "",
-        date: "",
-        notes : "",
+        notes: "",
         is_paid: "غير مدفوعة",
-
       },
+
+      searchTimeout: null,
+      paginationLinks: [],
     };
   },
+
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? "فاتورة جديدة" : "تحديث معلومات فاتورة";
-    },
-    filteredItems() {
-      return this.items.filter((item) => {
-        
-
-        return item.user_id.includes(this.search.toLowerCase()) 
-      });
     },
   },
 
   watch: {
     dialog(val) {
-      val || this.close();
-    },
-    dialogDelete(val) {
-      val || this.closeDelete();
+      if (!val) this.close();
     },
   },
-  async beforeCreate() {
-    const response = await axios.get("/api/getAllSells");
-    this.items = response.data;
 
-    const response2 = await axios.get("/api/getAllUsers");
-
-    this.users = response2.data;
-  },
-
-  mounted() {
+  async mounted() {
     this.checkLogedIn();
+    await this.fetchUsers();
+    await this.fetchItems();
   },
+
   methods: {
+    formatDate(dateString) {
+      if (!dateString) return "";
+      const options = { year: "numeric", month: "long", day: "numeric" };
+      return new Date(dateString).toLocaleDateString("ar-EG", options);
+    },
+
     checkLogedIn() {
-      const loggedIn = localStorage.getItem("user");
-      if (loggedIn) {
-        this.loggedIn = true;
-      } else {
-        this.loggedIn = false;
+      this.loggedIn = !!localStorage.getItem("user");
+    },
+
+    async fetchUsers() {
+      try {
+        const response = await axios.get("/api/getAllUsers");
+        this.users = response.data;
+      } catch (error) {
+        console.error("خطأ أثناء تحميل المستخدمين:", error);
       }
     },
+
+    async fetchItems() {
+      this.loading = true;
+      try {
+        const response = await axios.get("/api/getAllSells", {
+          params: {
+            page: this.page,
+            search: this.search,
+          },
+        });
+
+        this.items = response.data.data;
+        this.totalItems = response.data.total || response.data.meta?.total || 0;
+        this.itemsPerPage = response.data.per_page || response.data.meta?.per_page || this.itemsPerPage;
+        this.paginationLinks = response.data.links || [];
+
+      } catch (error) {
+        console.error("حدث خطأ أثناء تحميل البيانات:", error);
+      }
+      this.loading = false;
+    },
+
+    goToPage(url) {
+      if (!url) return;
+      try {
+        const urlObj = new URL(url);
+        const pageParam = urlObj.searchParams.get("page");
+        if (pageParam) {
+          this.page = Number(pageParam);
+          this.fetchItems();
+        }
+      } catch (e) {
+        console.error("رابط غير صالح للصفحة:", url);
+      }
+    },
+
+    onOptionsUpdate(options) {
+      let shouldFetch = false;
+      if (options.page !== this.page) {
+        this.page = options.page;
+        shouldFetch = true;
+      }
+      if (options.itemsPerPage !== this.itemsPerPage) {
+        this.itemsPerPage = options.itemsPerPage;
+        shouldFetch = true;
+      }
+      if (shouldFetch) {
+        this.fetchItems();
+      }
+    },
+
+    onSearchInput() {
+      clearTimeout(this.searchTimeout);
+      this.searchTimeout = setTimeout(() => {
+        this.page = 1;
+        this.fetchItems();
+      }, 500);
+    },
+
+    getUserNameById(id) {
+
+      console.log("id");
+       console.log(id);
+      const user = this.users.find((u) => u.id === id);
+      return user ? user.user_name : "غير معروف";
+    },
+
     moveToAccountDetails(item) {
-      console.log("=======================");
-
-      console.log(item.id);
-
       this.$router.push({ name: "sellDetails", params: { sellId: item.id } });
     },
 
-    filterItems() {
-      // This will automatically filter items as search input changes
-    },
     editItem(item) {
-      this.id = item.id;
       this.editedIndex = this.items.indexOf(item);
-      this.editedItem = Object.assign({}, item);
-
+      this.editedItem = { ...item };
       this.dialog = true;
+    },
 
-      // this.editedIndex = this.items.indexOf(item);
-      // this.editedItem = Object.assign({}, item);
-      // this.dialog = true;
-    },
     async deleteItem(item) {
-      // const index = this.items.indexOf(item);
-      // confirm('Are you sure you want to delete this item?') && this.items.splice(index, 1);
-      console.log("delete api");
-      console.log(item);
-      const index = this.items.indexOf(item);
-      this.items.splice(index, 1);
-      await axios.delete(`/api/deleteSell/${item.id}`);
+      try {
+        const index = this.items.indexOf(item);
+        await axios.delete(`/api/deleteSell/${item.id}`);
+        if (index > -1) this.items.splice(index, 1);
+        this.fetchItems();
+      } catch (error) {
+        console.error("حدث خطأ أثناء الحذف:", error);
+      }
     },
+
     close() {
       this.dialog = false;
       this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedItem = {
+          id: 0,
+          user_id: "",
+          total: "",
+          notes: "",
+          is_paid: "غير مدفوعة",
+        };
         this.editedIndex = -1;
       });
     },
-    save() {
-      // this.dialog = true;
-      // if (this.editedIndex > -1) {
-      //     Object.assign(this.items[this.editedIndex], this.editedItem);
-      // } else {
-      //     this.items.push(this.editedItem);
-      // }
-      // this.close();
 
-      this.dialog = true;
-
-      if (this.id == 0) {
-        // create new area
-
-        console.log("create");
-        // add to local data array
-        const response = axios.post("/api/createSell", this.editedItem).then((res)=>{
-
-          console.log(res.data);
-          this.items.unshift(res.data);
-        }); // add to data base
-
-        console.log(response.data);
-       // this.items.push(response.data);
-      } else {
-        // update current area
-
-        console.log("update");
-        Object.assign(this.items[this.editedIndex], this.editedItem); // update local data
-        const response = axios.put("/api/updateSell/" + this.id, this.editedItem); // update in data base
+    async save() {
+      try {
+        if (this.editedItem.id === 0) {
+          await axios.post("/api/createSell", this.editedItem);
+        } else {
+          await axios.put(`/api/updateSell/${this.editedItem.id}`, this.editedItem);
+        }
+        this.fetchItems();
+        this.close();
+      } catch (error) {
+        console.error("حدث خطأ أثناء الحفظ:", error);
       }
-
-      this.close();
     },
   },
 };

@@ -17,26 +17,74 @@ class SellController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        
-        $data = Sell::orderBy('id', 'desc')->get();
 
-        $res = $data->map(function ($item){
-            $user = User::where('id' , $item['user_id']  )->first();
+        // $data = Sell::orderBy('id', 'desc')->get();
 
-            $item['user_id'] =  $user ? $user->user_name : 'بدون اسم';
+        // $res = $data->map(function ($item){
+        //     $user = User::where('id' , $item['user_id']  )->first();
+
+        //     $item['user_id'] =  $user ? $user->user_name : 'بدون اسم';
 
 
-            $total = SellDetail::where('sell_id' , $item['id'])->sum('total');
-            $item['pr'] = $total - SellDetail::where('sell_id' , $item['id'])->sum('pr')  ;
-            $item['total'] =  $total ;
-            $item['balance'] =   $total  ;
-            
-            return $item;
+        //     $total = SellDetail::where('sell_id' , $item['id'])->sum('total');
+        //     $item['pr'] = $total - SellDetail::where('sell_id' , $item['id'])->sum('pr')  ;
+        //     $item['total'] =  $total ;
+        //     $item['balance'] =   $total  ;
+
+        //     return $item;
+        // });
+
+        // return response()->json($res);
+
+        // $pageSize = 6; // أو أي عدد تريده لكل صفحة
+        // $data = Sell::orderBy('id', 'desc')->paginate($pageSize);
+
+        // $data->getCollection()->transform(function ($item) {
+        //     $user = User::where('id', $item['user_id'])->first();
+        //     $item['user_id'] = $user ? $user->user_name : 'بدون اسم';
+
+        //     $total = SellDetail::where('sell_id', $item['id'])->sum('total');
+        //     $item['pr'] = $total - SellDetail::where('sell_id', $item['id'])->sum('pr');
+        //     $item['total'] = $total;
+        //     $item['balance'] = $total;
+
+        //     return $item;
+        // });
+
+        // return response()->json($data);
+
+        $search = $request->query('search');
+        $pageSize = 4;
+
+        $query = Sell::with(['user'])->orderBy('id', 'desc');
+
+        if ($search) {
+            // البحث على اسم المستخدم المرتبط
+            $query->whereHas('user', function ($q) use ($search) {
+                $q->where('user_name', 'like', "%{$search}%");
+            });
+        }
+
+        $data = $query->paginate($pageSize);
+
+        $data->getCollection()->transform(function ($item) {
+            $userName = $item->user ? $item->user->user_name : 'بدون اسم';
+
+            $total = 1 ; // $item->details->sum('total');
+            $prSum = 1 ; // $item->details->sum('pr');
+
+            return [
+                'id' => $item->id,
+                'user_id' => $userName,
+                'total' => $total,
+                'date' => $item->date,
+                // أضف أي بيانات إضافية تريدها
+            ];
         });
 
-        return response()->json($res);
+        return response()->json($data);
     }
 
     /**
@@ -57,30 +105,30 @@ class SellController extends Controller
     public function store(Request $request)
     {
 
-      
+
         //
         $data = $request->all();
         Log::info($data);
         $model = new Sell();
-        $model->user_id = array_key_exists('user_id' , $data) ? $data['user_id']  : null ;
-        $model->date =  Carbon::now()->format('Y-m-d H:i:s'); ; 
-      //  $model->is_paid = array_key_exists('is_paid' , $data) ? $data['is_paid']  : null;
-        $model->notes = array_key_exists('notes' , $data) ? $data['notes']  : null;
+        $model->user_id = array_key_exists('user_id', $data) ? $data['user_id']  : null;
+        $model->date =  Carbon::now()->format('Y-m-d H:i:s');;
+        //  $model->is_paid = array_key_exists('is_paid' , $data) ? $data['is_paid']  : null;
+        $model->notes = array_key_exists('notes', $data) ? $data['notes']  : null;
         $model->save();
 
-        $latest = Sell::orderBy('id','desc')->first();
+        $latest = Sell::orderBy('id', 'desc')->first();
 
         // $newSell['id'] =  $latest->id ;
         // $newSell['total'] =  0 ;
-        $user = User::where('id' ,  $latest->user_id  )->first();
-       // $newSell['user_id'] =  $user ? $user->user_name : 'بدون اسم';
+        $user = User::where('id',  $latest->user_id)->first();
+        // $newSell['user_id'] =  $user ? $user->user_name : 'بدون اسم';
         $latest->user_id =  $user ? $user->user_name : 'بدون اسم';
         // $newSell['date'] =   $latest->date;
         // $newSell['is_paid'] =   $latest->is_paid;
         // $newSell['notes'] =   $latest->notes;
 
-        Log::info(  $latest);
-    
+        Log::info($latest);
+
         return response()->json($latest);
     }
 
@@ -108,13 +156,13 @@ class SellController extends Controller
         //
 
         $data =  $request->all();
-        $model = Sell::where('id',$id)->first();
-        $res = false ;
-        if( $model  ){
-           //$model->user_id = array_key_exists('user_id' , $data) ? $data['user_id']  :   $model->user_id  ;
-            $model->is_paid = array_key_exists('is_paid' , $data) ? $data['is_paid']  :  $model->is_paid ; 
-            $model->notes = array_key_exists('notes' , $data) ? $data['notes']  :  $model->notes ; 
-            $res =  $model->save();         
+        $model = Sell::where('id', $id)->first();
+        $res = false;
+        if ($model) {
+            //$model->user_id = array_key_exists('user_id' , $data) ? $data['user_id']  :   $model->user_id  ;
+            $model->is_paid = array_key_exists('is_paid', $data) ? $data['is_paid']  :  $model->is_paid;
+            $model->notes = array_key_exists('notes', $data) ? $data['notes']  :  $model->notes;
+            $res =  $model->save();
         };
 
         return response()->json($res);
@@ -127,7 +175,7 @@ class SellController extends Controller
     {
         //
 
-        $res = Sell::where('id' , $id)->delete();
-        return response()->json( $res);
+        $res = Sell::where('id', $id)->delete();
+        return response()->json($res);
     }
 }

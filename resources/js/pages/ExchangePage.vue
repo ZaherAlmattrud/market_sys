@@ -260,7 +260,7 @@ if ( loggedIn ){
 
                 console.log('update');
                 Object.assign(this.items[this.editedIndex], this.editedItem); // update local data
-                const response = axios.put('/api/updateInvoice/' + this.id, this.editedItem); // update in data base
+                const response = axios.put('/api/updateExchange/' + this.id, this.editedItem); // update in data base
 
 
             }

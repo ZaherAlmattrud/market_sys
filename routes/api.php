@@ -82,6 +82,9 @@ Route::get('/invoice/photo/{id}', [InvoicesController::class, 'getPhoto']);
 
 Route::put('/updateProduct/{ProductId}', [ProductsController::class, 'update']);
 
+Route::get('/getAllProductsForList', [ProductsController::class, 'getAllProductsForList']);
+Route::get('/products/{id}/price', [ProductsController::class, 'getCalculatedPrice']);
+
 Route::get('/getProductImgLink/{productId}', [ApisController::class, 'getProductImgLink']);
 Route::get('/getAllProductsHealthy', [ApisController::class, 'getAllProductsHealthy']);
 Route::post('/createProduct', [ProductsController::class, 'create']);

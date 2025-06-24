@@ -18,8 +18,20 @@ use DB;
 
 class ProductsController extends Controller
 {
-    //
 
+
+
+    public function getCalculatedPrice($id)
+    {
+
+        return  $this->show($id);
+    }
+    //
+    public function getAllProductsForList()
+    {
+
+        return Product::get(['id', 'name']);
+    }
     public function getProductImg($id)
     {
 
@@ -37,6 +49,7 @@ class ProductsController extends Controller
 
     public function index(Request $request)
     {
+
 
 
         $search = $request->query('search');
