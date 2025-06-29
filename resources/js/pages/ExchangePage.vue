@@ -9,7 +9,7 @@
                     <v-dialog v-model="dialog" max-width="500px">
                         <template v-slot:activator="{ on, attrs }">
                             <v-btn    variant="outlined" color="primary" dark class="mb-2" v-bind="attrs" v-on="on" @click="dialog = true">
-                                صرف جديد</v-btn>
+                          عملة جديدة</v-btn>
                         </template>
                         <v-card>
                             <v-card-title>
@@ -68,6 +68,7 @@ export default {
             headers: [
 
                 { title: 'التسلسل', key: 'id', sortable: false },
+                  { title: 'العملة', key: 'name', sortable: false },
                 { title: 'القيمة بالليرة السورية', key: 'value', sortable: false },
                 { title: 'التاريخ', key: 'date', sortable: false },
                 // { title: 'الملف', key: 'file', sortable: false },

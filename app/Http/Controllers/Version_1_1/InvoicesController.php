@@ -70,7 +70,8 @@ class InvoicesController extends Controller
 
         Log::info($data);
 
-        $newRecord['total'] = array_key_exists('total', $data) && !empty($data['total']) ? $data['total'] : null;
+        $newRecord['currency'] = array_key_exists('currency', $data) && !empty($data['currency']) ? $data['currency'] : null;
+         $newRecord['total'] = array_key_exists('total', $data) && !empty($data['total']) ? $data['total'] : null;
         $newRecord['date'] = array_key_exists('date', $data) && !empty($data['date']) ? $data['date'] : null;
 
 

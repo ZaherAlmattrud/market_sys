@@ -8,10 +8,13 @@ export default defineConfig({
     
     
      server: {
-    host: '192.168.1.102', // ← استبدل بـ IP جهازك
+    host: '0.0.0.0', // ← استبدل بـ IP جهازك
     port: 5173,
     strictPort: true,
-    hmr: { host: '192.168.1.102' }, // ← نفس IP
+    hmr: { host: '192.168.1.114' }, // ← نفس IP
+     watch: {
+      usePolling: true,
+    },
     cors: true, // ← هذا السطر الحاسم!
   },
   

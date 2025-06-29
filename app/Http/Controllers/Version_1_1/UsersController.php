@@ -20,6 +20,42 @@ class UsersController extends Controller
             $this->accountController = $accountController ;
     }
 
+   public function getAllUserWithPagination(Request $request)
+{
+    $search = $request->query('search');
+    $pageSize = $request->query('pageSize', 6); // افتراضي 6 لو ما وصل شيء
+
+    $query = User::with(['userType', 'area']);
+
+    if ($search) {
+        $query->where(function ($q) use ($search) {
+            $q->where('user_name', 'like', "%{$search}%")
+              ->orWhere('code', 'like', "%{$search}%");
+        });
+    }
+
+    $users = $query->orderBy('id', 'desc')->paginate($pageSize);
+
+    $transformed = $users->getCollection()->transform(function ($item) {
+        return [
+            'id' => $item->id,
+            'user_name' => $item->user_name,
+            'user_type' => $item->userType ? $item->userType->type_name : 'غير محدد',
+            'area' => $item->area ? $item->area->name : 'غير محدد',
+            'account' => $item->id,
+            'number_in_book' => $item->number_in_book,
+            'mobile' => $item->mobile,
+            'balance' => null,
+        ];
+    });
+
+    return response()->json([
+        'items' => $transformed,
+        'total' => $users->total()
+    ]);
+}
+
+
     public function getAll()
     {
 

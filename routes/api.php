@@ -32,6 +32,9 @@ Route::delete('/deleteArea/{id}', [ApisController::class, 'deleteArea']);
 //================================================================================//
 Route::get('/getAllUserTypes', [ApisController::class, 'getAllUserTypes']);
 //================================================================================//
+
+Route::get('/getAllUserWithPagination', [UsersController::class, 'getAllUserWithPagination']);
+
 Route::get('/getAllUsers', [UsersController::class, 'getAll']);
 Route::post('/createUser', [ApisController::class, 'createUser']);
 Route::put('/updateUser/{id}', [UsersController::class, 'update']);

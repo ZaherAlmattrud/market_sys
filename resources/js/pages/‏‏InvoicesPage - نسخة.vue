@@ -3,6 +3,7 @@
     <v-row>
       <v-col cols="12" md="12">
         <v-text-field
+        
            variant="outlined"
           v-model="search"
           label="صاحب الفاتورة"

@@ -41,8 +41,8 @@
 
           <th>المنتج</th>
           <th>الشراء بالدولار</th>
-          <th> ثابت الشراء بالليرة</th>
-          <th> متغير الشراء بالليرة</th>
+          <!-- <th> ثابت الشراء بالليرة</th>
+          <th> متغير الشراء بالليرة</th> -->
           <th> متغير المبيع </th>
 
 
@@ -55,8 +55,8 @@
         <tr v-for="product in products.data" :key="product.id">
           <td>{{ product.name }}</td>
           <td>{{ product.fix_price_in_dollar }}</td>
-          <td>{{ product.fix_price_in_sp }}</td>
-          <td>{{ product.dynamic_price_in_sp }}</td>
+          <!-- <td>{{ product.fix_price_in_sp }}</td>
+          <td>{{ product.dynamic_price_in_sp }}</td> -->
           <td>{{ product.dynamic_sell }}</td>
 
 

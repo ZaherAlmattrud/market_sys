@@ -87,6 +87,7 @@ export default {
       editedIndex: -1,
       editedItem: {
         account_id: "",
+         currency: "SYP", // القيمة الافتراضية
         total: "",
         date: new Date().toISOString().slice(0, 10),
         photo: null,
@@ -96,11 +97,33 @@ export default {
         {
           name: "account_id",
           label: "مصدر الفاتورة",
-          component: "VSelect",
+          component: "VAutocomplete",
           items: [],
           itemTitle: "user_name",
           itemValue: "id",
           required: true,
+            filterable: true, // تمكين خاصية البحث
+              noDataText: "لا توجد نتائج مطابقة", // نص عند عدم وجود نتائج
+                cols: 6
+            
+        },
+         {
+           
+           name: "currency",
+    label: "العملة",
+    component: "VSelect",
+    items: [
+
+     { text: "ليرة سورية", value: "SYP" , default: true  },
+      { text: "دولار أمريكي", value: "USD" },
+      { text: "جنيه مصري", value: "EGP" },
+      { text: "ريال سعودي", value: "SAR" },
+      { text: "دينار كويتي", value: "KWD" }
+    ],
+    itemTitle: "text",
+    itemValue: "value",
+    required: true,
+    cols: 6 // جعل الحقل يأخذ نصف المساحة
         },
         { name: "total", label: "القيمة", type: "number", required: true },
         { name: "date", label: "التاريخ", type: "date", required: true },
@@ -150,6 +173,8 @@ export default {
     },
     openAddDialog() {
       this.editedItem = {
+
+         currency: "SYP", // القيمة الافتراضية
         
         account_id: "",
         total: "",

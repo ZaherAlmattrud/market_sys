@@ -19,7 +19,8 @@ class Invoice extends Model
         'account_id',
         'total',
         'date',
-        'photo'
+        'photo',
+        'currency'
          
     ];
 

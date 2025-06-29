@@ -263,7 +263,7 @@ class ProductsController extends Controller
         $newRecord['profit'] =  $newRecord['sell_in_dollar'] - ($newRecord['price_in_dollar'] + (($newRecord['price_in_dollar']) * $descount));
 
         $invoice =  Invoice::where('id',  $newRecord['invoice_id'])->first();
-        $newRecord['date'] =  $invoice ?  $invoice->date : null;
+        $newRecord['date'] =    $newRecord['invoice_id'] == null ? now() : null ;
         $newRecord['category_id'] = array_key_exists('category_id', $data) && !empty($data['category_id']) ? $data['category_id'] : null;
 
 
