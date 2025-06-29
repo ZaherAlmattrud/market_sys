@@ -29,7 +29,7 @@ class UsersController extends Controller
 
     if ($search) {
         $query->where(function ($q) use ($search) {
-            $q->where('user_name', 'like', "%{$search}%")
+            $q->where('user_name', 'like', "%{$search}%");
               
         });
     }
