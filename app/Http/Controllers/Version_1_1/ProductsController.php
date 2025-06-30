@@ -86,7 +86,8 @@ class ProductsController extends Controller
                 'name' => $product->name,
                 'code' => $product->code,
                 'price_in_sp' => $product->price_in_sp,
-                'price_in_dollar' => $product->price_in_dollar,
+                'price_in_dollar' =>  number_format((float) $product->price_in_dollar, 3)  ,
+
                 'sell_in_sp' => $product->sell_in_sp,
                 'sell_in_dollar' => $product->sell_in_dollar,
                 'invoice_id' => $product->invoice_id,
@@ -95,7 +96,7 @@ class ProductsController extends Controller
 
 
 
-                'fix_price_in_dollar' =>  $price_in_dollar, // after descount
+                'fix_price_in_dollar' => number_format((float)  $price_in_dollar, 2) , // after descount
                 'fix_price_in_sp' => $price_in_Sp, // after descount
                 'dynamic_price_in_sp' =>  $price_in_dollar * $dollar_now,
                 'dynamic_sell' =>  ceil((float)$dynamic_sell_sp) . "  ل.س / " .    number_format((float)$dynamic_sell_dollar, 2) . " دولار",
