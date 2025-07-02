@@ -109,7 +109,7 @@ class AccountController extends Controller
         $data = [];
         $items = [];
         $user = User::where('account_id' ,$accountId )->first();
-        Log::info("Account ID : ".$accountId);
+        Log::info("User ID : ".$accountId);
         
         $userType = UserType::where('id' ,  $user->user_type)->first();
         $data['user_name'] =   $user->user_name ;
@@ -125,6 +125,8 @@ class AccountController extends Controller
             $it['total'] = $item['total'] ;
             $it['date'] = $item['date'] ;
             $it['notes'] = $item['notes'] ;
+            $it['currency'] = $item['currency'] ;
+           
 
            $items[] = $it;
             $id++ ;
@@ -142,6 +144,7 @@ class AccountController extends Controller
             $it['total'] = SellDetail::where('sell_id' , $item['id'] )->sum('total') ;
             $it['date'] = $item['date'] ;
             $it['notes'] = $item['notes'] ;
+             $it['currency'] = $item['currency'] ;
 
 
             // if ( ! ($item['is_paid'] == 'مدفوعة' || $item['is_paid'] == 'تسعير') ){
@@ -169,6 +172,7 @@ class AccountController extends Controller
             $it['total'] = $item['total']   ;
             $it['date'] = $item['date'] ;
             $it['notes'] = $item['notes'] ;
+             $it['currency'] = $item['currency'] ;
 
             if ( $item['total']  != 0  ){
 
@@ -193,6 +197,7 @@ class AccountController extends Controller
             $it['total'] = $item['total']   ;
             $it['date'] = $item['date'] ;
             $it['notes'] = $item['notes'] ;
+             $it['currency'] = $item['currency'] ;
 
            $items[] = $it;
             $id++ ;
@@ -211,6 +216,7 @@ class AccountController extends Controller
             $it['total'] = $item['total']   ;
             $it['date'] = $item['date'] ;
             $it['notes'] = $item['notes'] ;
+             $it['currency'] = $item['currency'] ;
 
            $items[] = $it;
             $id++ ;
@@ -224,6 +230,8 @@ class AccountController extends Controller
             $incomeTotal =   $arrestedsTotals +   $purchoiceInvoicesTotal  ;
             $outcomeTotal =   $paidsTotals +     $sellInvoicesTotal +  $bookItemsTotal ;
 
+
+             
              if (  $userType ->type_name !== "تاجر"){
 
                 $total =   $outcomeTotal -  $incomeTotal  ;

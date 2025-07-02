@@ -1,48 +1,40 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="12" md="1">
-        <v-button @click="$router.go(-1)">كافة المبيعات</v-button>
-      </v-col>
-
-      <v-col cols="12" md="5">
-        <v-text-field v-model="search" label="البحث" @input="filterItems"></v-text-field>
-      </v-col>
-
-      <v-col cols="12" md="3">
-        <v-text-field>  {{ sellId }} </v-text-field>
-      </v-col>
-
-      <v-col cols="12" md="3">
-        <v-text-field> {{ total }} : الاجمالي </v-text-field>
+      <v-col cols="12" md="12">
+        <img src="/public/logo.png" height="150" />
       </v-col>
     </v-row>
 
-    <v-data-table
-      :headers="headers"
-      :items="filteredItems"
-      :items-per-page="5000"
-      item-key="id"
-      class="elevation-1"
-    >
+    <v-row>
+      <v-col cols="8" md="8">
+        <v-text-field variant="outlined"> الســـــــــــيد : {{ userName }}</v-text-field>
+      </v-col>
+
+      <v-col cols="4" md="4">
+        <v-text-field variant="outlined">
+          رقم الفاتورة : {{ this.$route.params.sellId }}</v-text-field>
+      </v-col>
+    </v-row>
+
+    <v-row v-if="!isPrintMode">
+      <v-col cols="12" md="12">
+        <v-text-field variant="outlined" v-model="search" label="البحث" @input="filterItems"></v-text-field>
+      </v-col>
+    </v-row>
+
+    <v-data-table :headers="headers" :items="filteredItems" :items-per-page="5000" item-key="id" class="elevation-1"
+      hide-default-footer>
       <template v-slot:top>
         <v-toolbar flat>
-          <v-toolbar-title>تفاصيل الفاتورة</v-toolbar-title>
+          <v-toolbar-title class="dataTableTitle"> تفاصيل الفاتورة</v-toolbar-title>
+
           <v-spacer></v-spacer>
           <v-dialog v-model="dialog" max-width="600px">
             <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                color="primary"
-                dark
-                class="mb-2"
-                v-bind="attrs"
-                v-on="on"
-                @click="dialog = true"
-              >
-                بيان جديد</v-btn
-              >
-
-              <!-- <h6>مركز المطرود التجاري</h6> -->
+              <v-btn color="primary" dark class="newItemButton mb-2 hidenAtPrint" v-bind="attrs" v-on="on"
+                @click="dialog = true" variant="outlined">
+                بيان جديد</v-btn>
             </template>
             <v-card>
               <v-card-title>
@@ -51,77 +43,118 @@
               <v-card-text>
                 <v-container>
                   <v-row>
-                    <v-col cols="12" sm="6" md="6">
-                      <v-text-field
-                        v-model="selectedItem.salePriceOne"
-                        label="الإفرادي"
-                        @change="updatePriceAllatUpdate"
-                      ></v-text-field>
-                    </v-col>
+                    
 
-                    <v-col cols="12" sm="6" md="6">
-                      <v-autocomplete
-                        v-model="selectedItem.description"
+                    <v-col cols="12" sm="12" md="12">
+                      <!-- <v-autocomplete
+                        v-model="editedItem.description"
                         :items="products"
                         item-title="name"
-                        item-value="id"
+                        item-value="name"
                         label="المنتج"
                         placeholder="المنتج"
                         crearable
-                        @update:modelValue="updatePriceOne"
+                        @update:modelValue="updatePrice"
+                   
                       >
-                      </v-autocomplete>
+                      </v-autocomplete> -->
+
+                      <v-combobox v-model="editedItem.name" :items="products.map(p => p.name)" item-title="name"
+                        item-value="id" label="المنتج" placeholder="اختر المنتج" clearable
+                        @update:modelValue="onProductSelected" variant="outlined" />
                     </v-col>
                   </v-row>
                   <v-row>
+
                     <v-col cols="12" sm="6" md="6">
-                      <v-text-field
-                        v-model="selectedItem.salePriceAll"
-                        label="الإجمالي"
-                      ></v-text-field>
+                      <v-text-field v-model.number="editedItem.quantity" label="الكمية" type="number" min="1"
+                        @change="onQuantityChange" variant="outlined" />
+                    </v-col>
+
+                    <v-col cols="6" sm="6" md="6">
+                      <v-text-field v-model="editedItem.price_after_descount" label="الشراء" disabled
+                        variant="outlined"></v-text-field>
+                    </v-col>
+
+                    <!-- <v-col cols="6" sm="6" md="6">
+                      <v-text-field v-model="editedItem.sell" label="المبيع" disabled variant="outlined"></v-text-field>
+                    </v-col> -->
+                  </v-row>
+                  <v-row>
+
+                    <v-col cols="12" sm="6" md="6">
+                      <v-text-field v-model="editedItem.sell" label="الإفرادي" @change="updateTotal"
+                        variant="outlined"></v-text-field>
                     </v-col>
 
                     <v-col cols="12" sm="6" md="6">
-                      <v-text-field
-                        v-model="selectedItem.quantity"
-                        label="الكمية"
-                        @change="updatePriceAll"
-                      ></v-text-field>
+                      <v-text-field v-model="editedItem.total" label="الإجمالي" @change="updateOnePrice"
+                        variant="outlined"></v-text-field>
+
+                      <!-- <mony   currency="EUR" locale="fr-FR" decimal="," thousand="," /> -->
                     </v-col>
+
+                    
                   </v-row>
                 </v-container>
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="close">إلغاء</v-btn>
-                <v-btn color="blue darken-1" text @click="save">حفظ</v-btn>
+
+                <v-btn @keyup.enter="enterClickEvent" variant="outlined" color="blue darken-1" text
+                  @click="save">حفظ</v-btn>
+                <v-btn variant="outlined" color="blue darken-1" text @click="close">إلغاء</v-btn>
               </v-card-actions>
+
+
+
             </v-card>
           </v-dialog>
         </v-toolbar>
       </template>
-      <template v-slot:item.actions="{ item }">
+      <template v-if="!isPrintMode" v-slot:item.actions="{ item }">
         <v-icon v-if="loggedIn" size="small" @click="deleteItem(item)">
           mdi-delete
         </v-icon>
         <v-icon v-if="loggedIn" larg @click="editItem(item)">mdi-pencil</v-icon>
       </template>
     </v-data-table>
+    <v-row>
+      <v-col cols="12" md="12"></v-col>
+    </v-row>
+
+    <v-row>
+      <v-col cols="6" md="6">
+        <v-text-field variant="outlined"> الاجمالي : {{ invoiceTotal  }} {{   currency   }}</v-text-field>
+      </v-col>
+
+      <v-col cols="6" md="6">
+        <v-text-field variant="outlined">{{ dateNow }}</v-text-field>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
 <script>
-import MoneyFormat from "vue-money-format";
 export default {
-  components: {
-    "money-format": MoneyFormat,
-  },
-
   data() {
     return {
+      dateNow:
+        new Date().getFullYear() +
+        "-" +
+        (new Date().getMonth() + 1) +
+        "-" +
+        new Date().getDate() +
+        " | " +
+        new Date().getHours() +
+        " : " +
+        new Date().getMinutes(),
 
-      sellId : 0 ,
-      user_id : 0 ,
+      sellId: 0,
+      isPrintMode: false,
+      userName: "صاحب الفاتورة",
+      currency : "ليرة سورية",
+      invoiceTotal: 0,
       loggedIn: false,
       book_number: 0,
       account_persion: "",
@@ -137,44 +170,41 @@ export default {
       dialog: false,
       dialogDelete: false,
       headers: [
-        { title: "التسلسل", key: "id", sortable: false },
-        { title: " البيــــــــــــان ", key: "description", sortable: false },
-        { title: "القيمة الإجمالية", key: "total", sortable: false },
-        { title: "السعر الإفرادي", key: "price", sortable: false },
+        { title: "التسلسل", key: "identity", sortable: false },
+        { title: " البيــــــــــــان ", key: "name", sortable: false },
+
+        { title: "السعر الإفرادي", key: "sell", sortable: false },
 
         { title: "الكمية", key: "quantity", sortable: false },
-        { title: "التاريخ", key: "date", sortable: false },
+        // { title: "التاريخ", key: "date", sortable: false },
+
+        { title: "القيمة الإجمالية", key: "total", sortable: false },
 
         { title: "العمليات", key: "actions", sortable: false },
       ],
-
-      products:[],
+      products: [],
       items: [],
-      selectedItem: {
-        id : 0 ,
-        sellId : 0 ,
-        description: 0,
-        price: 0,
-        total: 0,
-        quantity :  1,
-      },
-      salePriceOne: 0,
-      salePriceAll: 0,
       editedIndex: -1,
+
       editedItem: {
         id: 0,
-        total: "",
+        total: 0,
         description: "",
+        name: "",
         quantity: "",
-
-        price: "",
+        price: 0,
+        pr: 0,
+        sell: 0,
+        price_after_descount: 0,
       },
+
       defaultItem: {
         id: 1,
         total: "",
         description: "",
         quantity: "",
         price: "",
+        sell: "",
       },
     };
   },
@@ -183,9 +213,9 @@ export default {
       return this.editedIndex === -1 ? "بيان جديد" : "تحديث معلومات بيان";
     },
     filteredItems() {
-      // return this.items.filter((item) => {
-      //   return true ;
-      // });
+      return this.items.filter((item) => {
+        return true;//item.description.includes(this.search.toLowerCase());
+      });
     },
   },
 
@@ -199,17 +229,21 @@ export default {
   },
 
   async beforeCreate() {
-    
-    this.sellId =   this.$route.params.sellId;
-    
+    const sellId = this.$route.params.sellId;
+    this.sellId = sellId;
+    const responses = await axios.get("/api/getAllProductsForList");
+    this.products = responses.data; //
 
-    // console.log("account id");
-    // console.log(accountId);
-    const response = await axios.get("/api/getAllProducts");
-    this.products = response.data; // 
+    const response = await axios.get("/api/getAllSellDetails/" + sellId);
+    this.items = response.data["data"]; //
+
+    this.invoiceTotal = response.data["total"];
+    this.userName = response.data["userName"];
+
+    this.currency =  response.data["currency"];
 
     // this.invoices = response.data["invoices"];
-    // this.total = response.data["total"];
+    this.total = response.data["total"];
     // this.book = response.data["book"];
     // this.paids = response.data["paids"];
     // this.arresteds = response.data["arresteds"];
@@ -219,23 +253,57 @@ export default {
   },
 
   mounted() {
+    this.mediaQueryList = window.matchMedia("print");
+
+    this.mediaQueryList.addEventListener("change", this.updatePrintMode);
     this.checkLogedIn();
   },
-  methods: {
-    updatePriceOne() {
-      const item = this.products.find((i) => i.id === this.selectedItem.id);
 
-      if (item) {
-        this.selectedItem.salePriceOne = item.sell;
-        this.selectedItem.salePriceAll = item.sell;
+  beforeUnmount() {
+    this.mediaQueryList.removeEventListener("change", this.updatePrintMode);
+  },
+  methods: {
+
+    enterClickEvent() {
+
+      this.save();
+
+    },
+
+    updatePrintMode(event) {
+      this.isPrintMode = event.matches;
+    },
+
+    updateOnePrice() {
+      this.editedItem.price = this.editedItem.total / this.editedItem.quantity;
+
+    },
+
+    updatePrice() {
+      var itemName = "";
+
+      if (this.editedItem.description && typeof this.editedItem.description == "object") {
+        itemName = this.editedItem.description.name;
+      } else {
+        itemName = this.editedItem.description;
       }
 
-      console.log("ittttttttttttttttttttem : ".item);
+      const item = this.products.find((i) => i.name === itemName);
+
+      if (item) {
+        this.editedItem.price = item.sell;
+        this.editedItem.price_after_descount = item.price_after_descount;
+        //    this.editedItem.total = item.sell;
+      } else {
+        this.editedItem.price = 0;
+        this.editedItem.total = 0;
+      }
     },
-    updatePriceAll() {
 
-      this.selectedItem.salePriceAll =  this.selectedItem.salePriceOne *  this.selectedItem.quantity ;
+    updateTotal() {
 
+      this.editedItem.total = this.editedItem.sell * this.editedItem.quantity;
+      this.invoiceTotal = this.invoiceTotal + this.editedItem.total;
     },
 
     checkLogedIn() {
@@ -250,6 +318,45 @@ export default {
     filterItems() {
       // This will automatically filter items as search input changes
     },
+
+    async onProductSelected(productName) {
+
+      const product = this.products.find(p => p.name === productName);
+
+      this.editedItem.id = product.id;
+      const productId = product.id;
+
+
+
+      if (!productId) {
+        this.editedItem.price = 0;
+        this.editedItem.price_after_descount = 0;
+        return;
+      }
+
+      try {
+        const response = await axios.get(`/api/products/${productId}/price`);
+
+        console.log("✅ تم اختيار المنتج ID:", response.data.price_in_sp_after_descount);
+
+        // جلب السعرين
+        this.editedItem.sell = response.data.dynamic_sell_in_sp; // السعر الأساسي
+        this.editedItem.price_after_descount = response.data.price_in_sp_after_descount;
+
+        // تحديث الإجمالي
+        if (this.editedItem.quantity) {
+          this.updateTotal();
+        }
+
+        console.log("✅ تم جلب السعر:", response.data);
+      } catch (error) {
+        console.error("❌ فشل في جلب السعر:", error);
+        this.editedItem.price = 0;
+        this.editedItem.price_after_descount = 0;
+      }
+    },
+
+
     editItem(item) {
       // this.editedIndex = this.items.indexOf(item);
       // this.editedItem = Object.assign({}, item);
@@ -261,22 +368,30 @@ export default {
 
       this.dialog = true;
     },
-    async deleteItem(item) {
-      // const index = this.items.indexOf(item);
-      // confirm('Are you sure you want to delete this item?') && this.items.splice(index, 1);
-
-      console.log("delete api");
-      console.log(item);
-      const index = this.items.indexOf(item);
-      this.items.splice(index, 1);
-      await axios.delete(`/api/deleteAccountDetail/${item.id}`);
-    },
+  async deleteItem(item) {
+  const index = this.items.indexOf(item);
+  if (index > -1) {
+    this.items.splice(index, 1);
+  }
+  
+  // إعادة حساب المجموع بعد الحذف
+  this.invoiceTotal = this.items.reduce((sum, i) => sum + i.total, 0);
+  
+  await axios.delete(`/api/deleteSellDetail/${item.id}`);
+},
     close() {
       this.dialog = false;
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
       });
+    },
+
+    onQuantityChange() {
+      if (this.editedItem.quantity < 1) {
+        this.editedItem.quantity = 1;
+      }
+      this.updateTotal();
     },
     save() {
       // this.dialog = true;
@@ -287,31 +402,67 @@ export default {
       // }
       // this.close();
 
+      if (this.editedItem.quantity < 1) {
+        alert("الكمية يجب أن تكون 1 أو أكثر");
+        return;
+      }
+
       this.dialog = true;
 
       if (this.id == 0) {
         // create new area
 
+        if (
+          this.editedItem.description &&
+          typeof this.editedItem.description == "object"
+        ) {
+          this.editedItem.description = this.editedItem.description.name;
+        }
+
+        console.log(this.editedItem.description);
+
         console.log("create");
         // add to local data array
         const response = axios.post(
-          "/api/createAccountDetail/" + this.$route.params.accountId,
+          "/api/createSellDetail/" + this.$route.params.sellId,
           this.editedItem
         ); // add to data base
-        this.items.push(this.selectedItem);
+        this.items.push(this.editedItem);
       } else {
         // update current area
 
         console.log("update");
-        Object.assign(this.items[this.editedIndex], this.selectedItem); // update local data
-        const response = axios.put(
-          "/api/updateAccountDetail/" + this.id,
-          this.editedItem
-        ); // update in data base
+
+        console.log(this.editedItem);
+        Object.assign(this.items[this.editedIndex], this.editedItem); // update local data
+        const response = axios.put("/api/updateSellDetail/" + this.id, this.editedItem); // update in data base
       }
+
+       this.invoiceTotal = this.items.reduce((sum, i) => sum + i.total, 0);
 
       this.close();
     },
   },
 };
 </script>
+<style scoped>
+.userName {
+  font-size: 3rem !important;
+}
+
+.dataTableTitle {
+  font-size: 1rem !important;
+}
+
+@media print {
+  .newItemButton {
+    display: none;
+  }
+
+  .hidenAtPrint {
+    display: none;
+  }
+
+  .operation {}
+}
+</style>

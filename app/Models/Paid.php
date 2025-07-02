@@ -17,6 +17,7 @@ class Paid extends Model
         'date',
         'account_id',
         'notes',
+        'currency'
     ];
 
 

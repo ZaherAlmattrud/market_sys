@@ -17,6 +17,7 @@ class Day extends Model
         'arresteds',
         'paids',
         'box',
+        'before',
         'difference',
 
     ];

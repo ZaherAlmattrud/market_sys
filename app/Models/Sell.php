@@ -21,10 +21,16 @@ class Sell extends Model
         'date',
         'is_paid',
         'notes',
+        'currency'
     ];
 
      public function user()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+     public function details()
+    {
+        return $this->hasMany(SellDetail::class);
     }
 }

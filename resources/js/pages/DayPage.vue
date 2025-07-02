@@ -29,6 +29,17 @@
               </v-card-title>
               <v-card-text>
                 <v-container>
+
+                  
+                    <v-row>
+                    <v-col cols="12" sm="6" md="12">
+                      <v-text-field
+                        v-model="editedItem.before"
+                        label="مبلغ سابق"
+                          variant="outlined"
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
                   <v-row>
                     <v-col cols="12" sm="6" md="12">
                       <v-text-field
@@ -60,8 +71,10 @@
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
+
+                    <v-btn   variant="outlined" color="blue darken-1" text @click="save">حفظ</v-btn>
                 <v-btn   variant="outlined" color="blue darken-1" text @click="close">إلغاء</v-btn>
-                <v-btn   variant="outlined" color="blue darken-1" text @click="save">حفظ</v-btn>
+            
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -89,6 +102,7 @@ export default {
       headers: [
         { title: "التسلسل", key: "id", sortable: false },
         { title: "التاريخ", key: "day", sortable: false },
+         { title: "مبلغ سابق", key: "before", sortable: false },
         { title: "المقبوضات", key: "arresteds", sortable: false },
         { title: "المدفوعات", key: "paids", sortable: false },
         { title: "الصندوق", key: "box", sortable: false },
@@ -103,6 +117,7 @@ export default {
         arresteds: "",
         paids: "",
         box: "",
+        before: 0 ,
       },
       defaultItem: {
         id: 0,
@@ -110,6 +125,7 @@ export default {
         user_type: "",
         area: "",
         account: 0,
+           before: 0 ,
       },
     };
   },
@@ -184,34 +200,56 @@ export default {
         this.editedIndex = -1;
       });
     },
-    save() {
-      // this.dialog = true;
-      // if (this.editedIndex > -1) {
-      //     Object.assign(this.items[this.editedIndex], this.editedItem);
-      // } else {
-      //     this.items.push(this.editedItem);
-      // }
-      // this.close();
+   save() {
+  if (this.id == 0) {
+    // تعيين ID جديد (مثلاً الرقم التسلسلي الأحدث)
+    this.editedItem.id = this.items.length ? this.items[this.items.length - 1].id + 1 : 1;
 
-      this.dialog = true;
+    // تعيين التاريخ إلى اليوم الحالي (مثلاً)
+    this.editedItem.day = new Date().toLocaleDateString('ar-EG'); // أو التنسيق اللي بدك إياه
 
-      if (this.id == 0) {
-        // create new area
+    // حساب فرق الحساب
+   
+    this.editedItem.difference =
+  Number(this.editedItem.box + this.editedItem.before ) -
+  (Number(this.editedItem.arresteds) - Number(this.editedItem.paids));
+  
 
-        console.log("create");
-        // add to local data array
-        const response = axios.post("/api/createDay", this.editedItem); // add to data base
-        this.items.push(this.editedItem);
-      } else {
-        // update current area
+    // إضافة العنصر إلى القائمة
+    this.items.push(Object.assign({}, this.editedItem));
 
-        console.log("update");
-        Object.assign(this.items[this.editedIndex], this.editedItem); // update local data
-        const response = axios.put("/api/updateDay/" + this.id, this.editedItem); // update in data base
-      }
+    // إرسال لل API مع انتظار الرد (لو تحب تستخدم await)
+    axios.post("/api/createDay", this.editedItem)
+      .then(response => {
+        // ممكن تحدث العنصر بناء على الرد إذا فيه بيانات إضافية
+      })
+      .catch(error => {
+        console.error(error);
+      });
 
-      this.close();
-    },
+  } else {
+    // تحديث فرق الحساب
+  this.editedItem.difference =
+  Number(this.editedItem.box + this.editedItem.before) -
+  (Number(this.editedItem.arresteds) - Number(this.editedItem.paids));;
+
+    // تحديث العنصر في القائمة
+    Object.assign(this.items[this.editedIndex], this.editedItem);
+
+    // إرسال التحديث لل API
+    axios.put("/api/updateDay/" + this.id, this.editedItem)
+      .then(response => {
+        // تحديث إذا احتجت
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }
+
+  // إغلاق الحوار وتنظيف الحقول
+  this.close();
+}
+
   },
 };
 </script>

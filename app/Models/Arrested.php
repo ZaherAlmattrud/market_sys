@@ -16,6 +16,7 @@ class Arrested extends Model
         'date',
         'notes',
         'account_id',
+        'currency'
     ];
 
 

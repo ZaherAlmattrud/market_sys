@@ -93,7 +93,9 @@ export default {
 
         id: null,
         name: "",
-        code: ""
+        code: "",
+        category_id : "" ,
+
 
       },
       search: "",

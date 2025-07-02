@@ -264,7 +264,7 @@ export default {
   async beforeCreate() {
     const accountId = this.$route.params.accountId;
 
-    const responses = await axios.get("/api/getAllProducts");
+    const responses = await axios.get("/api/getAllProductsForList");
     this.products = responses.data; //
 
     console.log("account id");

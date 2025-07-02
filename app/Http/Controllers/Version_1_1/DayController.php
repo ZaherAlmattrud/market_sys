@@ -23,6 +23,7 @@ class DayController extends Controller
             return  [
 
                 'id' =>  $item['id'],
+                'before' =>  $item['before'],
                 'day' =>  $item['day'],
                 'arresteds' => $item['arresteds'],
                 'paids' => $item['paids'],
@@ -51,7 +52,7 @@ class DayController extends Controller
 
 
         $debts = $data['arresteds'] - $data['paids'];
-        $difference =  $data['box'] -  $debts;
+        $difference =  ($data['before'] + $data['box']) -  $debts;
 
         $res = Day::create([
 
@@ -60,6 +61,7 @@ class DayController extends Controller
             'paids' => $data['paids'],
             'box' => $data['box'],
             'difference' =>      $difference,
+                 'before' =>  $data['before'],
         ]);
 
         return response()->json($res);

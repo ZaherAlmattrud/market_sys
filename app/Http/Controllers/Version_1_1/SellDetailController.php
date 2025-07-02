@@ -18,38 +18,69 @@ class SellDetailController extends Controller
      */
     public function index($sellId)
     {
+
+          // جلب البيع مع التفاصيل والمستخدم مرة واحدة (Eager Loading)
+    $sell = Sell::with(['details', 'user'])->find($sellId);
+
+    if (!$sell) {
+        return response()->json([
+            'message' => 'البيع غير موجود'
+        ], 404);
+    }
+
+    $id = 1;
+
+    // بيانات التفاصيل مع إضافة identity لكل عنصر
+    $details = $sell->details->map(function($item) use (&$id) {
+        $item->identity = $id;
+        $id++;
+        return $item;
+    });
+
+    // مجموع الحقول 'total' من تفاصيل البيع
+    $total = $sell->details->sum('total');
+
+    $data = [
+        'data' => $details,
+        'total' => $total,
+        'userName' => $sell->user ? $sell->user->user_name : 'بدون اسم',
+        'currency'=>$sell->currency
+    ];
+
+    return response()->json($data);
+    
         //
 
-        $id = 1 ;
-        $dd =  SellDetail::where('sell_id' , $sellId)->get();
+        // $id = 1 ;
+        // $dd =  SellDetail::where('sell_id' , $sellId)->get();
 
-         $data['data'] = $dd->map(function($item)use(&$id){
-
-
-            $item['identity'] = $id ;
-
-            $id++ ;
-
-            return $item ;
+        //  $data['data'] = $dd->map(function($item)use(&$id){
 
 
+        //     $item['identity'] = $id ;
 
-         });
+        //     $id++ ;
 
-        $data['total'] = SellDetail::where('sell_id' , $sellId)->sum('total');
+        //     return $item ;
 
 
-        $data['userName'] = 'بدون اسم';
-        $sell = Sell::where('id' ,  $data['data'][0]['sell_id'])->first();
-        $userId =  $sell->user_id ;
-        $user = User::where('id' , $userId  )->first();
-        if( $user){
-            $data['userName'] = $user->user_name ;
 
-        }
+        //  });
+
+        // $data['total'] = SellDetail::where('sell_id' , $sellId)->sum('total');
+
+
+        // $data['userName'] = 'بدون اسم';
+        // $sell = Sell::where('id' ,  $data['data'][0]['sell_id'])->first();
+        // $userId =  $sell->user_id ;
+        // $user = User::where('id' , $userId  )->first();
+        // if( $user){
+        //     $data['userName'] = $user->user_name ;
+
+        // }
 
       
-        return response()->json($data);
+        // return response()->json($data);
     }
 
     /**

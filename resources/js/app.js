@@ -12,8 +12,15 @@ import ToastPlugin from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-bootstrap.css';
 
 import vuetify from "./vuetify";
+
+import Toast from 'vue-toastification';
+import 'vue-toastification/dist/index.css';
  
 
  
-createApp(AppPage).use(store).use(vuetify).use(router).use(ToastPlugin).mount('#app');
+createApp(AppPage).use(store).use(vuetify).use(router).use(ToastPlugin)
+.use(Toast, {
+  position: 'top-center',
+  timeout: 3000
+}).mount('#app');
 

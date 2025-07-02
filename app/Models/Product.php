@@ -28,7 +28,10 @@ class Product extends Model
 
     ];
 
-
+   public function setCategoryIdAttribute($value)
+    {
+        $this->attributes['category_id'] = ($value === 'null' || $value === '') ? null : $value;
+    }
 
 
     public function invoice()

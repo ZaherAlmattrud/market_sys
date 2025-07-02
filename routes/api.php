@@ -113,6 +113,7 @@ Route::delete('/deleteDay/{Id}', [DayController::class, 'delete']);
 Route::get('/getAll', [ExchangeController::class, 'getAll']);
 Route::post('/createExchange', [ExchangeController::class, 'create']);
 Route::put('/updateExchange/{Id}', [ExchangeController::class, 'update']);
+Route::delete('/deleteExchange/{Id}', [ExchangeController::class, 'delete']);
 
 //=============================================================================
 Route::get('/getAllSells', [SellController::class, 'index']);

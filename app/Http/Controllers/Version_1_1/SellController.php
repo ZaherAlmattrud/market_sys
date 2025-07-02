@@ -58,7 +58,7 @@ class SellController extends Controller
         $search = $request->query('search');
         $pageSize = 4;
 
-        $query = Sell::with(['user'])->orderBy('id', 'desc');
+        $query = Sell::with(['user','details'])->orderBy('id', 'desc');
 
         if ($search) {
             // البحث على اسم المستخدم المرتبط
@@ -72,14 +72,14 @@ class SellController extends Controller
         $data->getCollection()->transform(function ($item) {
             $userName = $item->user ? $item->user->user_name : 'بدون اسم';
 
-            $total = 1 ; // $item->details->sum('total');
-            $prSum = 1 ; // $item->details->sum('pr');
+            $total =   $item->details->sum('total');
 
             return [
                 'id' => $item->id,
                 'user_id' => $userName,
                 'total' => $total,
                 'date' => $item->date,
+                'currency'=>$item->currency,
                 // أضف أي بيانات إضافية تريدها
             ];
         });
@@ -114,6 +114,7 @@ class SellController extends Controller
         $model->date =  Carbon::now()->format('Y-m-d H:i:s');;
         //  $model->is_paid = array_key_exists('is_paid' , $data) ? $data['is_paid']  : null;
         $model->notes = array_key_exists('notes', $data) ? $data['notes']  : null;
+         $model->currency = array_key_exists('currency', $data) ? $data['currency']  : null;
         $model->save();
 
         $latest = Sell::orderBy('id', 'desc')->first();

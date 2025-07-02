@@ -89,6 +89,7 @@ export default {
         { title: "التسلسل", key: "identity", sortable: true },
         { title: "البيان", key: "description", sortable: false },
         { title: "المبلغ", key: "total", sortable: true },
+          { title: "العملة", key: "currency", sortable: true },
         { title: "التاريخ", key: "date", sortable: false },
         { title: "الملاحظات", key: "notes", sortable: false },
       ],

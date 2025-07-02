@@ -10,19 +10,7 @@
       </v-col>
     </v-row>
 
-    <v-row>
-      <v-col cols="12" md="6">
-        <v-text-field    variant="outlined">
-          {{ debtstotalSupplers }} : مستحقات التجار المتبقية علينا
-        </v-text-field>
-      </v-col>
-
-      <v-col cols="12" md="6">
-        <v-text-field    variant="outlined">
-          {{ debtstotalCustomers }} : مستحقات الزبائن المتبقية لنا
-        </v-text-field>
-      </v-col>
-    </v-row>
+     
 
     <v-data-table
       :headers="headers"

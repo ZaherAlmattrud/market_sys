@@ -481,6 +481,8 @@ class ApisController extends Controller
 
             'date'=>$data['date'],
             'notes' =>   $data['notes'],
+             'currency' =>   $data['currency'],
+             
             'account_id' => $user->account_id,
         ]);
 
@@ -658,10 +660,10 @@ class ApisController extends Controller
         return response()->json($res);
     }
 
-    public function getAllInvoices()
+    public function getAllInvoices(Request $request)
     {
 
-        return $this->invoicesController->getAll();
+        return $this->invoicesController->getAll($request);
         // $data = DB::table('invoices')->orderBy('id', 'desc')->get();
 
 

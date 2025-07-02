@@ -29,6 +29,7 @@ class PaidsController extends Controller
                 'total' => $item->total,
                 'date' =>  $item->date,
                 'notes' =>  $item->notes,
+                'currency'=>  $item->currency ,
                 'account_id' =>  $item->account->user->user_name,
             ];
         });

@@ -14,6 +14,6 @@ class Exchange extends Model
     protected $table = 'exchange';
 
     protected $fillable = [
-       'value' , 'name' , 'date'
+       'value' , 'name' , 'date','code'
     ];
 }

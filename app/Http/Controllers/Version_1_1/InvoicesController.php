@@ -49,11 +49,25 @@ class InvoicesController extends Controller
         // $mimeType = 'image/jpeg'; // Adjust this based on your actual image type
         return Response::make($imageContent, 200, ['Content-Type' => $mimeType]);
     }
-    public function getAll()
+    public function getAll(Request $request)
     {
 
-        $data = Invoice::paginate(6);
-        return response()->json($data);
+        $search = $request->query('search');
+
+        $query = Invoice::query();
+
+        if ($search) {
+            $query->whereHas('account.user', function ($q) use ($search) {
+                $q->where('user_name', 'like', "%{$search}%");
+            });
+        }
+
+        $invoices = $query->orderBy('id', 'desc')->paginate(6);
+
+
+
+        // $data = Invoice::orderBy('id', 'desc')->paginate(6);
+        return response()->json($invoices);
     }
 
     public function get($id)
@@ -71,7 +85,7 @@ class InvoicesController extends Controller
         Log::info($data);
 
         $newRecord['currency'] = array_key_exists('currency', $data) && !empty($data['currency']) ? $data['currency'] : null;
-         $newRecord['total'] = array_key_exists('total', $data) && !empty($data['total']) ? $data['total'] : null;
+        $newRecord['total'] = array_key_exists('total', $data) && !empty($data['total']) ? $data['total'] : null;
         $newRecord['date'] = array_key_exists('date', $data) && !empty($data['date']) ? $data['date'] : null;
 
 

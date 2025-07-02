@@ -7,13 +7,17 @@
           v-model="search"
           label="البحث"
           @input="filterItems"
-        ></v-text-field>
+        />
       </v-col>
-
       <v-col cols="12" md="2">
-        <v-text-field variant="outlined">{{ filteredItems.length }}</v-text-field>
+        <v-text-field
+          variant="outlined"
+          :model-value="filteredItems.length"
+          readonly
+        />
       </v-col>
     </v-row>
+
     <v-data-table
       :headers="headers"
       :items="filteredItems"
@@ -24,256 +28,213 @@
         <v-toolbar flat>
           <v-toolbar-title>المدفوعات</v-toolbar-title>
           <v-spacer></v-spacer>
-          <v-dialog v-model="dialog" max-width="500px">
+          <v-dialog v-model="dialog" max-width="600px">
             <template v-slot:activator="{ on, attrs }">
               <v-btn
                 variant="outlined"
-                v-if="loggedIn"
                 color="primary"
                 dark
                 class="mb-2"
                 v-bind="attrs"
                 v-on="on"
-                @click="dialog = true"
-                >دفع جديد</v-btn
+                @click="newItem"
               >
+                دفع جديد
+              </v-btn>
             </template>
+
             <v-card>
-              <v-card-title>
-                <span class="headline">{{ formTitle }}</span>
+              <v-card-title class="pb-0">
+                <v-row class="align-center">
+                  <v-col cols="12">
+                    <h3 class="text-h6 font-weight-bold mb-2">{{ formTitle }}</h3>
+                  </v-col>
+                </v-row>
               </v-card-title>
-              <v-card-text>
+
+              <v-card-text class="pt-0">
                 <v-container>
-                  <v-row>
-                    <v-col cols="12" sm="8" md="6">
-                      <v-text-field
-                        v-model="editedItem.total"
-                        label="المبلغ"
-                        variant="outlined"
-                      ></v-text-field>
-                    </v-col>
-
-                    <v-col cols="12" sm="6" md="6">
-                      <!-- <v-text-field v-model="editedItem.account_id" label="الحساب"></v-text-field> -->
-
-                      <!-- <v-select v-model="editedItem.account_id" :items="users"
-                                                item-title="user_name" item-value="id" label="صاحب الحساب"
-                                                persistent-hint single-line></v-select> -->
-
-                      <v-autocomplete
-                        v-model="editedItem.account_id"
-                        :items="users"
-                        item-title="user_name"
-                        item-value="id"
-                        label="صاحب الحساب"
-                        placeholder="ابدأ البحث"
-                        crearable
-                        variant="outlined"
-                      >
-                      </v-autocomplete>
-                    </v-col>
-                  </v-row>
-
-                  <v-row>
-                    <v-col cols="12" sm="12" md="12">
-                      
-                      <v-text-field
-                        label="التاريخ"
-                        type="date"
-                       
-                        variant="outlined"
-                        v-model="editedItem.date"
-                      
-                        clearable
-                        
-                      >
-                      </v-text-field>
-                      
-                    </v-col>
-                  </v-row>
-
-                  <v-row>
-                    <v-col cols="12" sm="12" md="12">
-                      <v-text-field
-                        v-model="editedItem.notes"
-                        label="الملاحظات"
-                        variant="outlined"
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
+                  <BaseForm
+                    v-model="editedItem"
+                    :fields="formFields"
+                    :submit-label="'حفظ'"
+                    :cancel-label="'إلغاء'"
+                    :show-cancel="true"
+                    :grid-cols="2"
+                    @submit="save"
+                    @cancel="close"
+                  />
                 </v-container>
               </v-card-text>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn variant="outlined" color="blue darken-1" text @click="close"
-                  >إلغاء</v-btn
-                >
-                <v-btn variant="outlined" color="blue darken-1" text @click="save"
-                  >حفظ</v-btn
-                >
-              </v-card-actions>
             </v-card>
           </v-dialog>
         </v-toolbar>
       </template>
-      <template v-slot:item.actions="{ item }">
-        <v-icon v-if="loggedIn" larg @click="editItem(item)">mdi-pencil</v-icon>
 
-        <v-icon v-if="loggedIn" larg @click="deleteItem(item)">mdi-delete</v-icon>
+      <template v-slot:item.currency="{ item }">
+        {{ getCurrencyName(item.currency) }}
+      </template>
+
+      <template v-slot:item.actions="{ item }">
+        <v-icon large @click="editItem(item)">mdi-pencil</v-icon>
+        <v-icon large @click="deleteItem(item)">mdi-delete</v-icon>
       </template>
     </v-data-table>
   </v-container>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      loggedIn: false,
-      users: [],
-      id: 0,
-      user_types: [],
-      areas: [],
-      itemsArray: [],
-      search: "",
-      dialog: false,
-      dialogDelete: false,
+<script setup>
+import { ref, computed, onMounted } from "vue";
+import axios from "axios";
+import BaseForm from "@/components/FormComponent.vue";
+import { currencies } from "@/data/currencies";
 
-      headers: [
-        { title: "التسلسل", key: "id", sortable: false },
-        { title: "رقم الحساب", key: "account_id", sortable: false },
-        { title: "المبلغ", key: "total", sortable: false },
-        { title: "التاريخ", key: "date", sortable: false },
-        { title: "الملاحظات", key: "notes", sortable: false },
-        { title: "العمليات", key: "actions", sortable: false },
-      ],
-      items: [],
-      editedIndex: -1,
-      editedItem: {
-        id: 0,
-        account_id: "",
-        total: 0,
-        notes: "",
-        date: "",
-      },
-      defaultItem: {
-        id: 0,
-        account_id: "",
-        total: 0,
-        notes: "",
-        date: "",
-      },
-    };
+const users = ref([]);
+const items = ref([]);
+const search = ref("");
+const dialog = ref(false);
+const id = ref(0);
+const editedIndex = ref(-1);
+
+const editedItem = ref({
+  id: 0,
+  account_id: "",
+  total: "",
+  currency: "",
+  notes: "",
+  date: new Date().toISOString().substring(0, 10),
+});
+
+const defaultItem = () => ({
+  id: 0,
+  account_id: "",
+  total: "",
+  currency: "",
+  notes: "",
+  date: new Date().toISOString().substring(0, 10),
+});
+
+const headers = [
+  { title: "التسلسل", key: "id", sortable: false },
+  { title: "رقم الحساب", key: "account_id", sortable: false },
+  { title: "المبلغ", key: "total", sortable: false },
+  { title: "العملة", key: "currency", sortable: false },
+  { title: "التاريخ", key: "date", sortable: false },
+  { title: "الملاحظات", key: "notes", sortable: false },
+  { title: "العمليات", key: "actions", sortable: false },
+];
+
+const formTitle = computed(() =>
+  editedIndex.value === -1 ? "دفعة جديدة" : "تحديث معلومات دفعة"
+);
+
+const filteredItems = computed(() => {
+  return items.value.filter((item) => {
+    if (search.value) {
+      return item.account_id
+        .toString()
+        .toLowerCase()
+        .includes(search.value.toLowerCase());
+    }
+    return true;
+  });
+});
+
+function getCurrencyName(code) {
+  const match = currencies.find((c) => c.value === code);
+  return match ? match.text : code;
+}
+
+function newItem() {
+  id.value = 0;
+  editedIndex.value = -1;
+  editedItem.value = defaultItem();
+  dialog.value = true;
+}
+
+function editItem(item) {
+  id.value = item.id;
+  editedIndex.value = items.value.indexOf(item);
+  editedItem.value = { ...item };
+  dialog.value = true;
+}
+
+async function deleteItem(item) {
+  const index = items.value.indexOf(item);
+  items.value.splice(index, 1);
+  await axios.delete(`/api/deletePaid/${item.id}`);
+}
+
+async function save() {
+  if (id.value === 0) {
+    await axios.post("/api/createPaid", editedItem.value);
+    items.value.unshift({ ...editedItem.value });
+  } else {
+    Object.assign(items.value[editedIndex.value], editedItem.value);
+    await axios.put(`/api/updatePaid/${id.value}`, editedItem.value);
+  }
+  close();
+}
+
+function close() {
+  dialog.value = false;
+  editedItem.value = defaultItem();
+  editedIndex.value = -1;
+  id.value = 0;
+}
+
+function filterItems() {
+  // فلترة موجودة عبر computed
+}
+
+const formFields = computed(() => [
+  {
+    name: "total",
+    label: "المبلغ",
+    type: "number",
+    component: "VTextField",
+    required: true,
   },
-  computed: {
-    formattedDate() {
-      return this.date ? new Date(this.date).toLocaleDateString() : "";
-    },
-    formTitle() {
-      return this.editedIndex === -1 ? "دفعة جديدة" : "تحديث معلومات دفعة";
-    },
-    filteredItems() {
-      return this.items.filter((item) => {
-        if (this.search != "") {
-          return (
-            // item.account_id == this.search
-            item.account_id.includes(this.search.toLowerCase())
-          );
-        } else {
-          return true;
-        }
-      });
-    },
+  {
+    name: "currency",
+    label: "العملة",
+    component: "VSelect",
+    items: currencies,
+    itemTitle: "text",
+    itemValue: "value",
+    required: true,
   },
-
-  watch: {
-    dialog(val) {
-      val || this.close();
-    },
-    dialogDelete(val) {
-      val || this.closeDelete();
-    },
+  {
+    name: "account_id",
+    label: "صاحب الحساب",
+    component: "VAutocomplete",
+    items: users.value,
+    itemTitle: "user_name",
+    itemValue: "id",
+    placeholder: "ابدأ البحث",
+    required: true,
   },
-  async beforeCreate() {
-    const response2 = await axios.get("/api/getAllUsers");
-    this.users = response2.data; // users
-
-    const response = await axios.get("/api/getAllPaids");
-    this.items = response.data;
+  {
+    name: "date",
+    label: "التاريخ",
+    type: "date",
+    component: "VTextField",
+    required: true,
   },
-
-  mounted() {
-    this.checkLogedIn();
+  {
+    name: "notes",
+    label: "الملاحظات",
+    component: "VTextField",
+    cols: 12,
   },
+]);
 
-  methods: {
-    checkLogedIn() {
-      const loggedIn = localStorage.getItem("user");
-      if (loggedIn) {
-        this.loggedIn = true;
-      } else {
-        this.loggedIn = false;
-      }
-    },
-
-    filterItems() {
-      // This will automatically filter items as search input changes
-    },
-    editItem(item) {
-      this.id = item.id;
-      this.editedIndex = this.items.indexOf(item);
-      this.editedItem = Object.assign({}, item);
-
-      this.dialog = true;
-
-      // this.editedIndex = this.items.indexOf(item);
-      // this.editedItem = Object.assign({}, item);
-      // this.dialog = true;
-    },
-    async deleteItem(item) {
-      // const index = this.items.indexOf(item);
-      // confirm('Are you sure you want to delete this item?') && this.items.splice(index, 1);
-      console.log("delete api");
-      console.log(item);
-      const index = this.items.indexOf(item);
-      this.items.splice(index, 1);
-      await axios.delete(`/api/deletePaid/${item.id}`);
-    },
-    close() {
-      this.dialog = false;
-      this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      });
-    },
-    save() {
-      // this.dialog = true;
-      // if (this.editedIndex > -1) {
-      //     Object.assign(this.items[this.editedIndex], this.editedItem);
-      // } else {
-      //     this.items.push(this.editedItem);
-      // }
-      // this.close();
-
-      this.dialog = true;
-
-      if (this.id == 0) {
-        // create new area
-
-        console.log("create");
-        // add to local data array
-        const response = axios.post("/api/createPaid", this.editedItem); // add to data base
-        this.items.unshift(this.editedItem);
-      } else {
-        // update current area
-
-        console.log("update");
-        Object.assign(this.items[this.editedIndex], this.editedItem); // update local data
-        const response = axios.put("/api/updatePaid/" + this.id, this.editedItem); // update in data base
-      }
-
-      this.close();
-    },
-  },
-};
+onMounted(async () => {
+  const [usersRes, paidsRes] = await Promise.all([
+    axios.get("/api/getAllUsers"),
+    axios.get("/api/getAllPaids"),
+  ]);
+  users.value = usersRes.data;
+  items.value = paidsRes.data;
+});
 </script>

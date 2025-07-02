@@ -24,7 +24,7 @@ import ExchangePage from "@/pages/ExchangePage.vue"
  import LibraCatalog from "@/pages/LibraCatalog.vue"
  import LibraRatingCatalog from "@/pages/LibraRatingCatalog.vue"
 
- import SellDetailsPage from "@/pages/SellDetailsPage.vue"
+ import SellDetailsPage from "@/pages/SellDetailsPageOld.vue"
  import SellsPage from "@/pages/SellsPage.vue"
 
  import AccountSummryPage from "@/pages/AccountSummryPage.vue"
