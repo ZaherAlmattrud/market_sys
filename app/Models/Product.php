@@ -33,6 +33,25 @@ class Product extends Model
         $this->attributes['category_id'] = ($value === 'null' || $value === '') ? null : $value;
     }
 
+     public function setPriceInSpAttribute($value)
+    {
+        $this->attributes['price_in_sp'] = ($value === 'null' || $value === '') ? null : $value;
+    }
+
+      public function setPriceInDollarAttribute($value)
+    {
+        $this->attributes['price_in_dollar'] = ($value === 'null' || $value === '') ? null : $value;
+    }
+
+      public function setSellInSpAttribute($value)
+    {
+        $this->attributes['sell_in_sp'] = ($value === 'null' || $value === '') ? null : $value;
+    }
+      public function setSellInDollarAttribute($value)
+    {
+        $this->attributes['sell_in_dollar'] = ($value === 'null' || $value === '') ? null : $value;
+    }
+
 
     public function invoice()
     { // فاتورة شراء

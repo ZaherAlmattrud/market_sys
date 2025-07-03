@@ -1,28 +1,25 @@
 <template>
   <v-container>
-    <!-- زر إضافة مستخدم جديد -->
-
-
-    <!-- البحث وعدد العناصر -->
     <v-row>
-      <v-col cols="2" md="2">
-        <v-btn class="add-button" color="primary" @click="openAddUserDialog">
+      <v-col cols="12" md="2">
+        <v-btn class="add-button" color="blue" @click="openAddUserDialog">
           <v-icon left>mdi-account-plus</v-icon>
           مستخدم جديد
         </v-btn>
-
       </v-col>
-      <v-col cols="8" md="8">
+
+      <v-col cols="12" md="8">
         <v-text-field v-model="search" label="البحث" variant="outlined" @input="onSearch" />
       </v-col>
+
       <v-col cols="12" md="2">
         <v-text-field :value="totalItems" label="عدد النتائج" variant="outlined" readonly />
       </v-col>
     </v-row>
 
-    <!-- جدول المستخدمين -->
-    <v-table class="mt-4">
-      <thead>
+    <!-- جدول -->
+    <v-table class="mt-4" style="background-color: #ffffff; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+      <thead style="background-color: #fafafa;">
         <tr>
           <th>الاسم</th>
           <th>رقمه بالدفتر</th>
@@ -38,30 +35,63 @@
           <td>{{ item.area }}</td>
           <td>{{ item.mobile }}</td>
           <td>
-            <v-icon v-if="loggedIn" @click="deleteItem(item)">mdi-delete</v-icon>
-            <v-icon v-if="loggedIn" @click="clearAccount(item)">mdi-notebook-remove-outline</v-icon>
-            <v-icon v-if="loggedIn" @click="editItem(item)">mdi-pencil</v-icon>
-            <v-icon @click="moveToAccountDetails(item)">mdi-book-open-page-variant-outline</v-icon>
-            <v-icon @click="moveToAccountSummary(item)">mdi-account-eye-outline</v-icon>
+            <v-icon
+              v-if="loggedIn"
+              @click="deleteItem(item)"
+              style="color: #e53935; cursor: pointer;"
+              title="حذف"
+            >mdi-delete</v-icon>
+            <v-icon
+              v-if="loggedIn"
+              @click="clearAccount(item)"
+              style="color: #fb8c00; cursor: pointer;"
+              title="مسح الحساب"
+            >mdi-notebook-remove-outline</v-icon>
+            <v-icon
+              v-if="loggedIn"
+              @click="editItem(item)"
+              style="color: #1e88e5; cursor: pointer;"
+              title="تعديل"
+            >mdi-pencil</v-icon>
+            <v-icon
+              @click="moveToAccountDetails(item)"
+              style="color: #43a047; cursor: pointer;"
+              title="تفاصيل الحساب"
+            >mdi-book-open-page-variant-outline</v-icon>
+            <v-icon
+              @click="moveToAccountSummary(item)"
+              style="color: #8e24aa; cursor: pointer;"
+              title="ملخص الحساب"
+            >mdi-account-eye-outline</v-icon>
           </td>
         </tr>
       </tbody>
     </v-table>
 
-    <!-- الباجنشن -->
+    <!-- تنقل بين الصفحات -->
     <v-row class="mt-4" justify="center" align="center">
-      <v-btn :disabled="currentPage === 1" @click="prevPage" variant="outlined">السابق</v-btn>
+      <v-btn :disabled="currentPage === 1" @click="prevPage" color="blue" variant="elevated">السابق</v-btn>
       <span class="mx-4">صفحة {{ currentPage }} من {{ totalPages }}</span>
-      <v-btn :disabled="currentPage === totalPages" @click="nextPage" variant="outlined">التالي</v-btn>
+      <v-btn :disabled="currentPage === totalPages" @click="nextPage" color="blue" variant="elevated">التالي</v-btn>
     </v-row>
 
-    <!-- مودال النموذج العام (إضافة أو تعديل) -->
+    <!-- مودال النموذج -->
     <v-dialog v-model="formDialog" max-width="600px">
       <v-card>
-        <v-card-title>{{ isEdit ? 'تعديل مستخدم' : 'إضافة مستخدم' }}</v-card-title>
+        <v-card-title class="text-white" style="background-color: #1e88e5;">
+          {{ isEdit ? 'تعديل مستخدم' : 'إضافة مستخدم' }}
+        </v-card-title>
         <v-card-text>
-          <DynamicForm v-model="formData" :fields="formFields" submit-label="حفظ" cancel-label="إلغاء"
-            :show-cancel="true" @submit="handleSubmit" @cancel="formDialog = false" :grid-cols="1" />
+          <DynamicForm
+            v-model="formData"
+            :fields="formFields"
+            submit-label="حفظ"
+            cancel-label="إلغاء"
+            :show-cancel="true"
+            @submit="handleSubmit"
+            @cancel="formDialog = false"
+            :grid-cols="1"
+          />
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -72,6 +102,7 @@
 import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
 import DynamicForm from '@/components/FormComponent.vue';
+import { useRouter } from 'vue-router';
 
 const items = ref([]);
 const totalItems = ref(0);
@@ -110,21 +141,14 @@ const formFields = computed(() => [
     rules: [(v) => !!v || 'مطلوب'],
   },
   {
-
+    name: "area",
+    label: "البلدة",
+    component: "VAutocomplete",
     items: areas.value,
     itemTitle: 'name',
     itemValue: 'id',
     rules: [(v) => !!v || 'مطلوب'],
-
-    name: "area",
-    label: "البلدة",
-    component: "VAutocomplete",  // الأفضل هنا استخدام VAutocomplete لتفعيل البحث
-
-
     clearable: true,
-
-
-
   },
   {
     name: 'mobile',
@@ -132,6 +156,8 @@ const formFields = computed(() => [
     component: 'VTextField',
   },
 ]);
+
+const router = useRouter();
 
 async function loadUsers() {
   const res = await axios.get('/api/getAllUserWithPagination', {
@@ -165,16 +191,11 @@ function prevPage() {
   }
 }
 
-function checkLogedIn() {
+function checkLoggedIn() {
   loggedIn.value = !!localStorage.getItem('user');
 }
-import { useRouter } from 'vue-router';
-
-const router = useRouter();
-
 
 function moveToAccountDetails(item) {
-   
   router.push({ name: 'accountDetails', params: { accountId: item.account } });
 }
 
@@ -235,28 +256,28 @@ async function fetchUserTypes() {
 }
 
 onMounted(() => {
-  checkLogedIn();
+  checkLoggedIn();
   loadUsers();
   fetchAreas();
   fetchUserTypes();
 });
 </script>
-<style scoped>
 
+<style scoped>
 .add-button {
-  flex: 1;
   padding: 10px 14px;
   font-size: 14px;
-  white-space: nowrap;
-  cursor: pointer;
-  border: none;
-  border-radius: 4px;
-  background-color: #1976d2;
+  background-color: #1e88e5;
   color: white;
-  transition: background-color 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  border-radius: 8px;
+  transition: 0.3s ease;
 }
 
+.add-button:hover {
+  background-color: #1565c0;
+}
+
+v-icon {
+  font-size: 20px;
+}
 </style>

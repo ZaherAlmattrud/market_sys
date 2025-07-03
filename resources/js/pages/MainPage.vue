@@ -61,9 +61,21 @@
 
 
           <td>
-            <v-icon small class="mr-2" color="primary" @click="edit(product)">mdi-pencil</v-icon>
-            <v-icon small class="mr-2" color="red" @click="destroy(product.id)">mdi-delete</v-icon>
-            <v-icon small color="info" @click="viewDetails(product.id)">mdi-information</v-icon>
+            <v-icon
+    small
+    class="mr-2 icon-white-transparent"
+    @click="edit(product)"
+  >mdi-pencil</v-icon>
+  <v-icon
+    small
+    class="mr-2 icon-white-transparent"
+    @click="destroy(product.id)"
+  >mdi-delete</v-icon>
+  <v-icon
+    small
+    class="icon-white-transparent"
+    @click="viewDetails(product.id)"
+  >mdi-information</v-icon>
           </td>
         </tr>
       </tbody>
@@ -298,12 +310,15 @@ export default {
 </script>
 
 <style scoped>
+
+
 .container {
   max-width: 900px;
   margin: 50px auto;
   font-family: 'Roboto', sans-serif;
   padding: 0 15px;
   direction: rtl;
+  background: #ffffff; /* أبيض للخلفية */
 }
 
 .search-row {
@@ -316,15 +331,18 @@ export default {
   flex: 3;
   padding: 10px 12px;
   font-size: 14px;
-  border: 1px solid #c0c0c0;
+  border: 1px solid #a3c1f7; /* أزرق فاتح متناسق */
   border-radius: 4px;
   outline: none;
   transition: border-color 0.3s ease;
+  background-color: #f0f5ff; /* خلفية سماوية فاتحة */
+  color: #1a237e; /* أزرق غامق للنص */
 }
 
 .search-input:focus {
   border-color: #1976d2;
   box-shadow: 0 0 5px rgba(25, 118, 210, 0.5);
+  background-color: #e6f0ff; /* تمييز خلفية عند التركيز */
 }
 
 .add-button {
@@ -335,30 +353,32 @@ export default {
   cursor: pointer;
   border: none;
   border-radius: 4px;
-  background-color: #1976d2;
+  background-color: #5c9ded; /* أزرق متوسط */
   color: white;
   transition: background-color 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 2px 6px rgba(92, 157, 237, 0.5);
 }
 
 .add-button:hover {
-  background-color: #115293;
+  background-color: #3b73d1; /* أزرق غامق عند المرور */
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 5px rgba(92, 157, 237, 0.15); /* ظل أزرق خفيف */
   border-radius: 8px;
   overflow: hidden;
+  background: #f9fbff; /* خلفية بيضاء مع لمسة سماوية */
 }
 
 thead {
-  background-color: #f5f5f5;
-  color: #424242;
+  background-color: #d6e4ff; /* سماوي فاتح */
+  color: #0d47a1; /* أزرق داكن */
   font-weight: 600;
 }
 
@@ -366,11 +386,12 @@ table th,
 table td {
   padding: 12px 15px;
   text-align: center;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid #b3c7ff; /* فاصل أزرق فاتح */
+  color: #1a237e; /* نص أزرق غامق */
 }
 
 tbody tr:hover {
-  background-color: #e3f2fd;
+  background-color: #e6f0ff; /* تمييز صف عند المرور */
   cursor: pointer;
 }
 
@@ -385,8 +406,8 @@ tbody tr:hover {
   padding: 6px 10px;
   font-size: 14px;
   border-radius: 4px;
-  background-color: #eeeeee;
-  color: #424242;
+  background-color: #dae6ff; /* أزرق سماوي فاتح */
+  color: #0d47a1;
   border: 1px solid transparent;
   transition: all 0.3s ease;
 }
@@ -409,3 +430,4 @@ tbody tr:hover {
   opacity: 0.5;
 }
 </style>
+

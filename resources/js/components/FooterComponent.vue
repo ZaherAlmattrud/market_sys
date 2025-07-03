@@ -1,33 +1,13 @@
 <template>
-    <v-footer color="gray" class="bg-grey-lighten-1">
-      <v-row justify="center" no-gutters>
-        <!-- <v-btn
-          v-for="link in links"
-          :key="link"
-          class="mx-2"
-          color="white"
-          rounded="xl"
-          variant="text"
-        >
-          {{ link }}
-        </v-btn> -->
-        <v-col class="text-center" cols="12">
-          {{ new Date().getFullYear() }} — <strong>مركز المطرود التجاري</strong>
-        </v-col>
-      </v-row>
-    </v-footer>
-  </template>
-  <script>
-    export default {
-      data: () => ({
-        links: [
-          'تمديدات كهربائية',
-          'أكسسوارات صحية',
-          'خراطيم زراعية',
-          'رومانات',
-          'قشط',
-          'براغي',
-        ],
-      }),
-    }
-  </script>
+  <v-footer color="#c9def8" class="pa-4">
+    <v-row justify="center" no-gutters>
+      <v-col
+        class="text-center"
+        cols="12"
+        style="color: #fff; font-weight: 600; text-shadow: 0 0 5px rgba(0,0,0,0.4);"
+      >
+        {{ new Date().getFullYear() }} — <strong>مركز المطرود التجاري</strong>
+      </v-col>
+    </v-row>
+  </v-footer>
+</template>

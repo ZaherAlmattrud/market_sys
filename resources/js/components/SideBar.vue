@@ -1,159 +1,158 @@
 <template>
   <v-card>
-    <!-- <v-layout> -->
-    <v-navigation-drawer  color="orange-lighten-5"  location="right" permanent :width="200" v-model="drawerVisible":value="drawerVisible">
+    <v-navigation-drawer
+      color="orange-lighten-5"
+      location="right"
+      permanent
+      :width="200"
+      v-model="drawerVisible"
+    >
       <template v-slot:prepend>
         <v-list-item
           lines="two"
           prepend-avatar="storage/uploads/profile.jpg"
-          subtitle=""
-          title="المهندس زاهر "
-        ></v-list-item>
+          title="المهندس زاهر"
+        />
       </template>
 
-      <v-divider></v-divider>
+      <v-divider />
 
       <v-list density="compact" nav>
-        <RouterLink   to="/products">
-          <v-list-item
-            prepend-icon="mdi-list-box-outline"
-            title="المنتجات"
-            value="home"
-             color="blue"
-           
-          ></v-list-item>
+
+        <!-- المنتجات -->
+        <RouterLink to="/products">
+          <v-list-item class="hover-blue">
+            <template v-slot:prepend>
+              <v-icon color="blue">mdi-list-box-outline</v-icon>
+            </template>
+            المنتجات
+          </v-list-item>
         </RouterLink>
 
-        <!-- <RouterLink to="/healthy"> <v-list-item prepend-icon="mdi-pipe-valve" title="الصحية"
-              value="account"></v-list-item>
-          </RouterLink> -->
-        <!-- <RouterLink to="/customers"> <v-list-item prepend-icon="mdi-account-box-outline" title="الزبائن"
-              value="users"></v-list-item></RouterLink> -->
+        <!-- الحسابات -->
         <RouterLink to="/users">
-          <v-list-item
-            prepend-icon="mdi-briefcase-account-outline"
-            title="الحسابات"
-            value="users"
-             color="purple"
-          ></v-list-item
-        >
+          <v-list-item class="hover-purple">
+            <template v-slot:prepend>
+              <v-icon color="purple">mdi-briefcase-account-outline</v-icon>
+            </template>
+            الحسابات
+          </v-list-item>
+        </RouterLink>
 
-      </RouterLink>
-
+        <!-- المبيعات -->
         <RouterLink to="/SellsPage">
-          <v-list-item
-            prepend-icon="mdi-invoice-text-multiple-outline"
-            title="المبيعات"
-             color="indigo"
-            value="SellsPage"
-          ></v-list-item
-        >
-
-        
-        
-        
+          <v-list-item class="hover-indigo">
+            <template v-slot:prepend>
+              <v-icon color="indigo">mdi-invoice-text-multiple-outline</v-icon>
+            </template>
+            المبيعات
+          </v-list-item>
         </RouterLink>
+
+        <!-- المقبوضات -->
         <RouterLink to="/arresteds">
-          <v-list-item
-            prepend-icon="mdi-import"
-            title="المقبوضات"
-            value="arresteds"
-              color="green"
-          ></v-list-item>
+          <v-list-item class="hover-green">
+            <template v-slot:prepend>
+              <v-icon color="green">mdi-import</v-icon>
+            </template>
+            المقبوضات
+          </v-list-item>
         </RouterLink>
-        <!-- <RouterLink to="/accounts"> <v-list-item prepend-icon="mdi-briefcase-account-outline" title="الحسابات"
-              value="accounts"></v-list-item></RouterLink> -->
 
+        <!-- المشتريات -->
         <RouterLink to="/invoices">
-          <v-list-item
-            prepend-icon="mdi-invoice-text-multiple-outline"
-            title="المشتريات"
-            value="invoices"
-             color="orange"
-          ></v-list-item
-        ></RouterLink>
+          <v-list-item class="hover-orange">
+            <template v-slot:prepend>
+              <v-icon color="orange">mdi-invoice-text-multiple-outline</v-icon>
+            </template>
+            المشتريات
+          </v-list-item>
+        </RouterLink>
 
+        <!-- المدفوعات -->
         <RouterLink to="/paids">
-          <v-list-item
-            prepend-icon="mdi-export"
-            title="المدفوعات"
-            value="paids"
-            
-             color="red"
-          ></v-list-item>
+          <v-list-item class="hover-red">
+            <template v-slot:prepend>
+              <v-icon color="red">mdi-export</v-icon>
+            </template>
+            المدفوعات
+          </v-list-item>
         </RouterLink>
+
+        <!-- المناطق -->
         <RouterLink to="/areas">
-          <v-list-item
-            prepend-icon="mdi-map-marker-multiple-outline"
-            title="المناطق"
-            value="areas"
-             color="brown"
-          ></v-list-item
-        ></RouterLink>
+          <v-list-item class="hover-brown">
+            <template v-slot:prepend>
+              <v-icon color="brown">mdi-map-marker-multiple-outline</v-icon>
+            </template>
+            المناطق
+          </v-list-item>
+        </RouterLink>
 
+        <!-- اليومية -->
         <RouterLink to="/days">
-          <v-list-item
-            prepend-icon="mdi-alarm-panel-outline"
-            title="اليومية"
-            value="days"
-                      color="lime"
-          ></v-list-item>
+          <v-list-item class="hover-lime">
+            <template v-slot:prepend>
+              <v-icon color="lime">mdi-alarm-panel-outline</v-icon>
+            </template>
+            اليومية
+          </v-list-item>
         </RouterLink>
 
+        <!-- التقارير -->
         <RouterLink to="/reports">
-          <v-list-item
-            prepend-icon="mdi-chart-bar"
-            title="التقارير"
-            value="reports"
-            color="orange"
-          ></v-list-item>
+          <v-list-item class="hover-orange">
+            <template v-slot:prepend>
+              <v-icon color="orange">mdi-chart-bar</v-icon>
+            </template>
+            التقارير
+          </v-list-item>
         </RouterLink>
 
+        <!-- الأصناف -->
         <RouterLink to="/category">
-          <v-list-item
-            prepend-icon="mdi-shape-plus-outline"
-            title="الأصناف"
-            value="category"
-             color="purple"
-          ></v-list-item>
+          <v-list-item class="hover-deep-purple">
+            <template v-slot:prepend>
+              <v-icon color="deep-purple">mdi-shape-plus-outline</v-icon>
+            </template>
+            الأصناف
+          </v-list-item>
         </RouterLink>
 
+        <!-- العملات -->
         <RouterLink to="/exchange">
-          <v-list-item
-            prepend-icon="mdi-currency-usd"
-            title="العملات"
-            value="exchange"
-             color="blue"
-          ></v-list-item>
+          <v-list-item class="hover-cyan">
+            <template v-slot:prepend>
+              <v-icon color="cyan">mdi-currency-usd</v-icon>
+            </template>
+            العملات
+          </v-list-item>
         </RouterLink>
 
+        <!-- الأرصدة -->
         <RouterLink to="/accountsCash">
-          <v-list-item
-            prepend-icon="mdi-briefcase-account-outline"
-            title="الأرصدة"
-            value="accountsCash"
-             color="BROWN"
-          ></v-list-item>
+          <v-list-item class="hover-teal">
+            <template v-slot:prepend>
+              <v-icon color="teal">mdi-briefcase-account-outline</v-icon>
+            </template>
+            الأرصدة
+          </v-list-item>
         </RouterLink>
-        <v-list-item
-          @click="logout"
-          prepend-icon="mdi-account-lock-outline"
-          title="الخروج"
-          value="logOut"
-           color="red"
-        ></v-list-item>
+
+        <!-- تسجيل الخروج -->
+        <v-list-item @click="logout" class="hover-red">
+          <template v-slot:prepend>
+            <v-icon color="red">mdi-account-lock-outline</v-icon>
+          </template>
+          الخروج
+        </v-list-item>
+
       </v-list>
     </v-navigation-drawer>
-    <!-- <v-main>
-        <RouterView />
-
-      </v-main>
-    </v-layout> -->
   </v-card>
 </template>
-<script>
- 
 
+<script>
 export default {
   props: {
     drawer: {
@@ -161,25 +160,11 @@ export default {
       required: true,
     },
   },
-  data() {
-    return {
-      loggedIn: false,
-    };
-  },
-
   computed: {
     drawerVisible() {
-      return this.$store.getters.drawerVisible; // الحصول على حالة الشريط الجانبي من Vuex
-    }
+      return this.$store.getters.drawerVisible;
+    },
   },
-
-  beforeCreate() {
-    const loggedIn = localStorage.getItem("user");
-    if (loggedIn) this.loggedIn = true;
-  },
-
- 
-
   methods: {
     logout() {
       localStorage.removeItem("user");
@@ -188,3 +173,44 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.v-list-item {
+  transition: background-color 0.2s ease;
+  border-radius: 8px;
+}
+
+.hover-blue:hover {
+  background-color: rgba(33, 150, 243, 0.1);
+}
+.hover-purple:hover {
+  background-color: rgba(156, 39, 176, 0.1);
+}
+.hover-indigo:hover {
+  background-color: rgba(63, 81, 181, 0.1);
+}
+.hover-green:hover {
+  background-color: rgba(76, 175, 80, 0.1);
+}
+.hover-orange:hover {
+  background-color: rgba(255, 152, 0, 0.1);
+}
+.hover-red:hover {
+  background-color: rgba(244, 67, 54, 0.1);
+}
+.hover-brown:hover {
+  background-color: rgba(121, 85, 72, 0.1);
+}
+.hover-lime:hover {
+  background-color: rgba(205, 220, 57, 0.15);
+}
+.hover-deep-purple:hover {
+  background-color: rgba(103, 58, 183, 0.1);
+}
+.hover-cyan:hover {
+  background-color: rgba(0, 188, 212, 0.1);
+}
+.hover-teal:hover {
+  background-color: rgba(0, 150, 136, 0.1);
+}
+</style>
