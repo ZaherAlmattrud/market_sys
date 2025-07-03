@@ -1,26 +1,6 @@
-<script setup>
-import PDF from "pdf-vue3";
-import { onMounted } from "vue";
-
-
- 
-
-const myFunction = () => {
-  console.log('test function')
-}
-
-
-
-onMounted(() => {
-  
-  
- 
-})
-
-</script>
-
 <template>
-  <PDF src="totalCatolog2024.pdf" />
-  <!-- <PDF :src="BASE64" /> -->
-  <!-- <PDF :src="Uint8Array" /> -->
+  <iframe
+    src="/totalCatolog2024.pdf"
+    style="width:100%; height:600px; border:none"
+  ></iframe>
 </template>

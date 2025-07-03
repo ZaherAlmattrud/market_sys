@@ -8,6 +8,19 @@
 
     <!-- <v-app-bar-title>مركز المطرود التجاري</v-app-bar-title>  -->
 
+<div class="ticker-container">
+  <div class="ticker-text">
+    <span v-for="(zekr, index) in azkar" :key="'first-' + index">
+      {{ zekr }} &nbsp; • &nbsp;
+    </span>
+    <span v-for="(zekr, index) in azkar" :key="'second-' + index">
+      {{ zekr }} &nbsp; • &nbsp;
+    </span>
+  </div>
+</div>
+
+
+
     <template v-slot:append>
       <v-row justify="center" no-gutters>
         <v-btn
@@ -28,26 +41,27 @@
 <script>
 export default {
   data: () => ({
+
+     azkar: [
+ 
+    
+      "سبحان الله",
+      "الحمد لله",
+      "لا إله إلا الله",
+     
+      "الله أكبر",
+      "لا حول ولا قوة إلا بالله",
+      "أستغفر الله",
+       "اللهم صل وسلم وبارك على سيدنا محمد",
+       
+        "الله اكبر ولله الحمد",
+         "سبحان الله وبحمده سبحان الله العظيم",
+   
+     
+       
+    ],
     links: [
-      { id: 8, title: "دليل البراغي", page: "TotalCatalog", pdf: "totalCatolog2024.pdf" },
-
-      {
-        id: 7,
-        title: "دليل الكهرباء",
-        page: "TotalCatalog",
-        pdf: "totalCatolog2024.pdf",
-      },
-
-      { id: 6, title: "دليل الصحية", page: "TotalCatalog", pdf: "totalCatolog2024.pdf" },
-
-      {
-        id: 5,
-        title: "دليل الرومانات",
-        page: "TotalCatalog",
-        pdf: "totalCatolog2024.pdf",
-      },
-
-      { id: 4, title: "دليل القشط", page: "TotalCatalog", pdf: "totalCatolog2024.pdf" },
+    
 
       {
         id: 3,
@@ -72,3 +86,31 @@ export default {
   },
 };
 </script>
+<style scoped> 
+ .ticker-container {
+  width: 60%;
+  overflow: hidden;
+  direction: rtl;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  background: transparent;
+}
+
+.ticker-text {
+  display: inline-block;
+  white-space: nowrap;
+  animation: scroll-continuous 40s linear infinite;
+}
+
+@keyframes scroll-continuous {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(+100%);
+  }
+}
+
+
+</style>
