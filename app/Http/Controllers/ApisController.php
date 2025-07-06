@@ -427,11 +427,11 @@ class ApisController extends Controller
         return response()->json($res);
     }
 
-    public function getAccountSummary($accountId)
+    public function getAccountSummary($accountId , $pagination=7)
     {
 
 
-        return $this->accountController->getAccountSummary($accountId);
+        return $this->accountController->getAccountSummary($accountId , 7);
 
         // $data = DB::table('account_details')->where('account_id', $accountId)->get();
 
