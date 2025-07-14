@@ -128,7 +128,12 @@ export default {
         } else {
           return true;
         }
-      });
+      })  .map((item, index) => {
+      return {
+        ...item,
+        identity: index + 1  // 🧠 الرقم التسلسلي هنا
+      };
+    });
     },
   },
 

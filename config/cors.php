@@ -15,9 +15,9 @@ return [
     |
     */
 
-  'paths' => ['api/*', 'sanctum/csrf-cookie', 'login', 'logout'], // مسارات تسمح بـ CORS
+  'paths' => ['api/*','*', 'sanctum/csrf-cookie', 'login', 'logout'], // مسارات تسمح بـ CORS
     'allowed_methods' => ['*'],
-    'allowed_origins' => ['*'], // أو ['http://localhost:5173', 'http://192.168.x.x:5173'] للشبكة المحلية
+    'allowed_origins' => ['http://192.168.1.114:8000'], // أو ['http://localhost:5173', 'http://192.168.x.x:5173'] للشبكة المحلية
     'allowed_headers' => ['*'],
     'exposed_headers' => [],
     'max_age' => 0,

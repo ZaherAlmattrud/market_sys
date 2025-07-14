@@ -99,16 +99,7 @@
           </v-list-item>
         </RouterLink>
 
-        <!-- التقارير -->
-        <RouterLink to="/reports">
-          <v-list-item class="hover-orange">
-            <template v-slot:prepend>
-              <v-icon color="orange">mdi-chart-bar</v-icon>
-            </template>
-            التقارير
-          </v-list-item>
-        </RouterLink>
-
+        
         <!-- الأصناف -->
         <RouterLink to="/category">
           <v-list-item class="hover-deep-purple">

@@ -1,0 +1,32 @@
+
+> dev
+> vite --host
+
+
+  VITE v6.3.5  ready in 630 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: http://192.168.1.114:5173/
+  ➜  press h + enter to show help
+
+  LARAVEL v11.45.1  plugin v1.3.0
+
+  ➜  APP_URL: http://192.168.1.114:8000
+9:38:41 AM [vite] vite.config.js changed, restarting server...
+9:38:42 AM [vite] server restarted.
+
+  LARAVEL v11.45.1  plugin v1.3.0
+
+  ➜  APP_URL: http://192.168.1.114:8000
+9:38:46 AM [vite] vite.config.js changed, restarting server...
+9:38:46 AM [vite] server restarted.
+
+  LARAVEL v11.45.1  plugin v1.3.0
+
+  ➜  APP_URL: http://192.168.1.114:8000
+9:38:48 AM [vite] vite.config.js changed, restarting server...
+9:38:48 AM [vite] server restarted.
+
+  LARAVEL v11.45.1  plugin v1.3.0
+
+  ➜  APP_URL: http://192.168.1.114:8000

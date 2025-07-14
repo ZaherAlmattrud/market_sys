@@ -255,23 +255,50 @@ class AccountController extends Controller
 
 
 
-    public function getAccountSummaryTotal($accountId)
+
+    function convertToUsdAndSyp($amount, $currency)
     {
 
-        $id = 1;
-        $total = 0;
-        $data = [];
+        // سعر الصرف — يمكنك تغييره حسب السعر الحالي
+        $exchangeRate = 10000; // 1 USD = 14000 SYP
+
+        // نحول الرمز لأحرف كبيرة
+        $currency = strtoupper(trim($currency));
+
+        if ($currency === 'USD') {
+
+            $usd = $amount;
+            $syp = $amount * $exchangeRate;
+        } elseif ($currency === 'SYP') {
+
+            $syp = $amount;
+            $usd = $amount / $exchangeRate;
+        } else {
+            // إذا العملة غير مدعومة
+            return null;
+        }
+
+        // نُرجع القيم كمصفوفة
+        return [
+            'USD' => round($usd, 2),
+            'SYP' => round($syp, 2),
+        ];
+    }
+
+
+
+
+    public function calcAccountDetails($accountId)
+    {
+
+
         $items = [];
-        $user = User::where('account_id', $accountId)->first();
-        Log::info("User ID : " . $accountId);
+        $bookItemsTotal_SYP = 0;
+        $bookItemsTotal_USD = 0;
 
-        $userType = UserType::where('id',  $user->user_type)->first();
-        $data['user_name'] =   $user->user_name;
-
-        $bookItemsTotal = 0;
         $bookItems = AccountDetail::where('account_id', $accountId)->get();
 
-        $bookItems->map(function ($item) use (&$items, &$id, &$bookItemsTotal) {
+        $bookItems->map(function ($item) use (&$items, &$id, &$bookItemsTotal_SYP, &$bookItemsTotal_USD) {
 
             $qua = $item['quantity'] > 1 ? '  عدد ' . $item['quantity'] : null;
             $it['identity'] = $id;
@@ -281,16 +308,30 @@ class AccountController extends Controller
             $it['notes'] = $item['notes'];
             $it['currency'] = $item['currency'];
 
+            $res = $this->convertToUsdAndSyp($it['total'], $item['currency']);
+
+            $bookItemsTotal_SYP = $bookItemsTotal_SYP +  $res['SYP'];
+            $bookItemsTotal_USD = $bookItemsTotal_USD + $res['USD'];
+
 
             $items[] = $it;
             $id++;
-            $bookItemsTotal = $bookItemsTotal + $item['total'];
         });
 
-        $sellInvoicesTotal = 0;
+        return ['USD' =>  $bookItemsTotal_USD, 'SYP' =>  $bookItemsTotal_SYP, 'items' => $items];
+    }
+
+    public function calcSells($accountId, $user)
+    {
+
+
+        $items = [];
+        $sellInvoicesTotal_SYP = 0;
+        $sellInvoicesTotal_USD = 0;
+
         $sellInvoices  = Sell::where('user_id', $user->id)->get();
 
-        $sellInvoices->map(function ($item) use (&$items, &$id, &$sellInvoicesTotal) {
+        $sellInvoices->map(function ($item) use (&$items, &$id, &$sellInvoicesTotal_USD, &$sellInvoicesTotal_SYP) {
 
             $it['identity'] = $id;
             $it['description'] = 'فاتورة مبيعات رقم :  ' . $item['id'];;
@@ -298,27 +339,35 @@ class AccountController extends Controller
             $it['date'] = $item['date'];
             $it['notes'] = $item['notes'];
             $it['currency'] = $item['currency'];
-
-
-            // if ( ! ($item['is_paid'] == 'مدفوعة' || $item['is_paid'] == 'تسعير') ){
-
-
             $items[] = $it;
             $id++;
-            $sellInvoicesTotal =  $sellInvoicesTotal +  $it['total'];
-
-            // }
 
 
 
+            $res = $this->convertToUsdAndSyp($it['total'], $item['currency']);
 
+
+
+
+            $sellInvoicesTotal_SYP =  $sellInvoicesTotal_SYP +  $res['SYP'];
+            $sellInvoicesTotal_USD =  $sellInvoicesTotal_USD +  $res['USD'];
         });
 
 
-        $purchoiceInvoicesTotal = 0;
+        return ['USD' =>  $sellInvoicesTotal_USD, 'SYP' =>  $sellInvoicesTotal_SYP, 'items' => $items];
+    }
+
+
+    public function calcPurchess($accountId)
+    {
+
+        $purchoiceInvoicesTotal_SYP = 0;
+        $purchoiceInvoicesTotal_USD = 0;
+        $items = [];
+
         $purchoiceInvoices  = Invoice::where('account_id', $accountId)->get();
 
-        $purchoiceInvoices->map(function ($item) use (&$items, &$id, &$purchoiceInvoicesTotal) {
+        $purchoiceInvoices->map(function ($item) use (&$items, &$id, &$purchoiceInvoicesTotal_SYP, &$purchoiceInvoicesTotal_USD) {
 
             $it['identity'] = $id;
             $it['description'] = '  فاتورة مشتريات رقم  :   ' . $item['id'];
@@ -332,15 +381,26 @@ class AccountController extends Controller
 
                 $items[] = $it;
                 $id++;
-                $purchoiceInvoicesTotal =   $purchoiceInvoicesTotal +  $it['total'];
+
+                $res = $this->convertToUsdAndSyp($it['total'], $item['currency']);
+                $purchoiceInvoicesTotal_SYP = $purchoiceInvoicesTotal_SYP +  $res['SYP'];
+                $purchoiceInvoicesTotal_USD = $purchoiceInvoicesTotal_USD + $res['USD'];
             }
         });
 
+        return ['USD' => $purchoiceInvoicesTotal_USD, 'SYP' => $purchoiceInvoicesTotal_SYP, 'items' => $items];
+    }
 
-        $arrestedsTotals = 0;
+
+    public function calcArresteds($accountId)
+    {
+
+        $arrestedsTotals_SYP = 0;
+        $arrestedsTotals_USD = 0;
+        $items = [];
         $arresteds = Arrested::where('account_id', $accountId)->get();
 
-        $arresteds->map(function ($item) use (&$items, &$id, &$arrestedsTotals) {
+        $arresteds->map(function ($item) use (&$items, &$id, &$arrestedsTotals_SYP, &$arrestedsTotals_USD) {
             $it['identity'] = $id;
             $it['description'] = 'رصيد مقبوض';
             $it['total'] = $item['total'];
@@ -350,14 +410,28 @@ class AccountController extends Controller
 
             $items[] = $it;
             $id++;
-            $arrestedsTotals =  $arrestedsTotals +   $it['total'];
+
+            $res = $this->convertToUsdAndSyp($it['total'], $item['currency']);
+            $arrestedsTotals_SYP = $arrestedsTotals_SYP +  $res['SYP'];
+            $arrestedsTotals_USD = $arrestedsTotals_USD + $res['USD'];
         });
 
 
-        $paidsTotals = 0;
+        return ['USD' => $arrestedsTotals_USD, 'SYP' => $arrestedsTotals_SYP, 'items' => $items];
+    }
+
+
+    public function calcPaids($accountId)
+    {
+
+
+
+        $paidsTotals_SYP = 0;
+        $paidsTotals_USD = 0;
+        $items = [];
         $paids = Paid::where('account_id', $accountId)->get();
 
-        $paids->map(function ($item) use (&$items, &$id, &$paidsTotals) {
+        $paids->map(function ($item) use (&$items, &$id, &$paidsTotals_SYP, &$paidsTotals_USD) {
 
             $it['identity'] = $id;
             $it['description'] = 'رصيد مدفوع';
@@ -368,30 +442,122 @@ class AccountController extends Controller
 
             $items[] = $it;
             $id++;
-            $paidsTotals =  $paidsTotals +   $it['total'];
+
+
+            $res = $this->convertToUsdAndSyp($it['total'], $item['currency']);
+            $paidsTotals_SYP = $paidsTotals_SYP +  $res['SYP'];
+            $paidsTotals_USD = $paidsTotals_USD + $res['USD'];
         });
 
+        return ['USD' => $paidsTotals_USD, 'SYP' => $paidsTotals_SYP, 'items' => $items];
+    }
 
 
 
-        $incomeTotal =   $arrestedsTotals +   $purchoiceInvoicesTotal;
-        $outcomeTotal =   $paidsTotals +     $sellInvoicesTotal +  $bookItemsTotal;
+
+
+    public function getAccountSummaryTotal($accountId)
+    {
 
 
 
+        $id = 1;
+        $total_SYP = 0;
+        $total_USD = 0;
+        $data = [];
+        $items = [];
+        $user = User::where('account_id', $accountId)->first();
+        Log::info("User ID : " . $accountId);
+
+        $userType = UserType::where('id',  $user->user_type)->first();
+        $data['user_name'] =   $user->user_name;
+
+
+
+        $calcAccountDetails = $this->calcAccountDetails($accountId);
+        $bookItemsTotal_SYP =  $calcAccountDetails['SYP'];
+        $bookItemsTotal_USD =  $calcAccountDetails['USD'];
+        $items = array_merge($items, $calcAccountDetails['items']);
+
+
+
+        $calSells = $this->calcSells($accountId, $user);
+
+
+
+
+        $sellInvoicesTotal_SYP =    $calSells['SYP'];
+        $sellInvoicesTotal_USD =    $calSells['USD'];
+        $items = array_merge($items, $calSells['items']);
+
+
+
+
+
+
+
+        $calPurchess = $this->calcPurchess($accountId);
+        $purchoiceInvoicesTotal_SYP = $calPurchess['SYP'];
+        $purchoiceInvoicesTotal_USD = $calPurchess['USD'];
+        $items = array_merge($items, $calPurchess['items']);
+
+
+
+
+
+        $calcArresteds = $this->calcArresteds($accountId);
+        $arrestedsTotals_SYP =  $calcArresteds['SYP'];
+        $arrestedsTotals_USD =  $calcArresteds['USD'];
+        $items = array_merge($items, $calcArresteds['items']);
+
+
+        $calcPaids = $this->calcPaids($accountId);
+        $paidsTotals_SYP = $calcPaids['SYP'];
+        $paidsTotals_USD = $calcPaids['USD'];
+        $items = array_merge($items, $calcPaids['items']);
+
+
+        // $incomeTotal =   $arrestedsTotals +   $purchoiceInvoicesTotal;
+        $incomeTotalSYP =  $arrestedsTotals_SYP +   $purchoiceInvoicesTotal_SYP;
+        $incomeTotalUSD =  $arrestedsTotals_USD +   $purchoiceInvoicesTotal_USD;
+
+
+
+
+
+        // $outcomeTotal =   $paidsTotals +     $sellInvoicesTotal +  $bookItemsTotal;
+        $outcomeTotalSYP = $paidsTotals_SYP +     $sellInvoicesTotal_SYP + $bookItemsTotal_SYP;
+        $outcomeTotalUSD = $paidsTotals_USD +     $sellInvoicesTotal_USD + $bookItemsTotal_USD;
+
+
+
+        $total = null;
         if ($userType->type_name !== "تاجر") {
 
-            $total =   $outcomeTotal -  $incomeTotal;
+
+            $total_SYP =   $outcomeTotalSYP -  $incomeTotalSYP;
+            $total_USD = $outcomeTotalUSD -  $incomeTotalUSD;
+            $total =  $total_SYP . ' ليرة سورية ' . ' / ' . $total_USD . ' دولار';
         } else {
 
-            $total =     $incomeTotal - $outcomeTotal;
+
+
+            $total_SYP =    $incomeTotalSYP - $outcomeTotalSYP;
+            $total_USD =  $incomeTotalUSD - $outcomeTotalUSD;
+            $total =  $total_SYP . ' ليرة سورية ' . ' / ' . $total_USD . ' دولار';
         }
 
 
+        $balance =   $total;
 
+
+
+        foreach ($items as $index => $obj) {
+            $obj['id'] = $index + 1;
+        }
 
         $data['data'] =   $items;
-        $data['total'] =   $total;
+        $data['total'] =   $balance;
 
         return $data;
     }
