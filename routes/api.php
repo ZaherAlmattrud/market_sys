@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\ApisController;
 use App\Http\Controllers\Version_1_1\DayController;
 use App\Http\Controllers\Version_1_1\ExchangeController;
@@ -46,6 +47,8 @@ Route::prefix('auth')->group(function () {
 });
 
 
+
+Route::get('/getLastFiveActivityLog', [ActivityLogController::class, 'getLastFiveActivityLog']);
 
 //================================================================================//
 Route::get('/getAllAreas', [ApisController::class, 'getAllAreas']);
