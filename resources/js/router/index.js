@@ -37,11 +37,16 @@ import ExchangePage from "@/pages/ExchangePage.vue"
 
   import UserTypes from "@/pages/UserTypes.vue"
 
+    import UserDetails from "@/pages/UserDetails.vue"
+
  
  
 
  
 const routes = [
+
+
+   { path: '/userDetails/:id', component: UserDetails, props: true, name: 'userDetails', meta: { requiresAuth: true }, },
 
 
    { path: '/userTypes', component: UserTypes, name: 'userTypes', meta: { requiresAuth: false }, },

@@ -1,18 +1,9 @@
 <template>
   <v-card>
-    <v-navigation-drawer
-      color="orange-lighten-5"
-      location="right"
-      permanent
-      :width="200"
-      v-model="drawerVisible"
-    >
+    <v-navigation-drawer color="orange-lighten-5" location="right" permanent :width="200" v-model="drawerVisible">
       <template v-slot:prepend>
-        <v-list-item
-          lines="two"
-          prepend-avatar="storage/uploads/profile.jpg"
-          title="المهندس زاهر"
-        />
+        <v-list-item lines="two" prepend-avatar="storage/uploads/profile.jpg" title="المهندس زاهر"
+          @click="goToProfile" />
       </template>
 
       <v-divider />
@@ -99,7 +90,7 @@
           </v-list-item>
         </RouterLink>
 
-        
+
         <!-- الأصناف -->
         <RouterLink to="/category">
           <v-list-item class="hover-deep-purple">
@@ -130,13 +121,13 @@
           </v-list-item>
         </RouterLink>
 
-           <!-- إدارة المستخدمين -->
+        <!-- إدارة المستخدمين -->
         <RouterLink to="/usersSetting">
           <v-list-item class="hover-purple">
             <template v-slot:prepend>
               <v-icon color="purple">mdi-account-cog</v-icon>
             </template>
-             المستخدمين
+            المستخدمين
           </v-list-item>
         </RouterLink>
 
@@ -168,21 +159,30 @@ export default {
     },
   },
   methods: {
-   async logout() {
+
+    goToProfile() {
+      const user = JSON.parse(localStorage.getItem("user"));
+      if (user && user.id) {
+        this.$router.push(`/userDetails/${user.id}`);
+      } else {
+        console.warn("لم يتم العثور على معلومات المستخدم.");
+      }
+    },
+    async logout() {
       // localStorage.removeItem("user");
       // this.$router.push({ name: "login" });
 
-       try {
-    await axios.post("/api/auth/logout");
+      try {
+        await axios.post("/api/auth/logout");
 
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    delete axios.defaults.headers.common["Authorization"];
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        delete axios.defaults.headers.common["Authorization"];
 
-    this.$router.push({ name: "login" });
-  } catch (error) {
-    console.error("فشل تسجيل الخروج:", error);
-  }
+        this.$router.push({ name: "login" });
+      } catch (error) {
+        console.error("فشل تسجيل الخروج:", error);
+      }
     },
   },
 };
@@ -197,33 +197,43 @@ export default {
 .hover-blue:hover {
   background-color: rgba(33, 150, 243, 0.1);
 }
+
 .hover-purple:hover {
   background-color: rgba(156, 39, 176, 0.1);
 }
+
 .hover-indigo:hover {
   background-color: rgba(63, 81, 181, 0.1);
 }
+
 .hover-green:hover {
   background-color: rgba(76, 175, 80, 0.1);
 }
+
 .hover-orange:hover {
   background-color: rgba(255, 152, 0, 0.1);
 }
+
 .hover-red:hover {
   background-color: rgba(244, 67, 54, 0.1);
 }
+
 .hover-brown:hover {
   background-color: rgba(121, 85, 72, 0.1);
 }
+
 .hover-lime:hover {
   background-color: rgba(205, 220, 57, 0.15);
 }
+
 .hover-deep-purple:hover {
   background-color: rgba(103, 58, 183, 0.1);
 }
+
 .hover-cyan:hover {
   background-color: rgba(0, 188, 212, 0.1);
 }
+
 .hover-teal:hover {
   background-color: rgba(0, 150, 136, 0.1);
 }

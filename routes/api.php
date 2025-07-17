@@ -38,6 +38,10 @@ Route::prefix('auth')->group(function () {
         Route::post('logout-all', [AuthController::class, 'logoutAll']);   // تسجيل الخروج من كل الأجهزة
         Route::get('me', [AuthController::class, 'me']);                   // بيانات المستخدم الحالي
         Route::post('update-password', [AuthController::class, 'updatePassword']); // تحديث كلمة المرور
+                         
+        
+   
+   
     });
 });
 
@@ -78,6 +82,8 @@ Route::get('/getAllUsers', [UsersController::class, 'getAll']);
 Route::post('/createUser', [ApisController::class, 'createUser']);
 Route::put('/updateUser/{id}', [UsersController::class, 'update']);
 Route::delete('/deleteUser/{id}', [ApisController::class, 'deleteUser']);
+
+ Route::get('getUserInfo/{id}', [UsersController::class, 'getUserInfo']); 
 //===============================================================================
 Route::get('/getAllAccounts', [ApisController::class, 'getAllAccounts']);
 Route::put('/updateAccount/{id}', [ApisController::class, 'updateAccount']);

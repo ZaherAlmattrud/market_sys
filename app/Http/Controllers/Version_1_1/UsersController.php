@@ -21,6 +21,27 @@ class UsersController extends Controller
     }
 
 
+    public function getUserInfo ($id){
+
+
+         $user = User::with(['userType', 'area'])->findOrFail($id);
+
+    return response()->json([
+        'id' => $user->id,
+        'user_name' => $user->user_name,
+        'mobile' => $user->mobile,
+        'number_in_book' => $user->number_in_book,
+        'userType' => [
+            'type_name' => $user->userType?->type_name,
+        ],
+        'area' => [
+            'name' => $user->area?->name,
+        ],
+        'avatar' => 'storage/uploads/profile.jpg', // صورة افتراضية
+    ]);
+    }
+
+
     public function getAllSystemUsers(Request $request){
 
 
