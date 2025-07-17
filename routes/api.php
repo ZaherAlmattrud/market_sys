@@ -16,12 +16,31 @@ use App\Http\Controllers\Version_1_1\CategoriesController;
 use App\Models\Invoice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Version_1_1\UserTypesController ;
 
 
 
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
 // })->middleware('auth:sanctum');
+
+
+
+
+use App\Http\Controllers\AuthController;
+
+Route::prefix('auth')->group(function () {
+    Route::post('register', [AuthController::class, 'register']);      // تسجيل مستخدم جديد
+    Route::post('login', [AuthController::class, 'login']);            // تسجيل الدخول
+
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('logout', [AuthController::class, 'logout']);          // تسجيل الخروج من الجلسة الحالية
+        Route::post('logout-all', [AuthController::class, 'logoutAll']);   // تسجيل الخروج من كل الأجهزة
+        Route::get('me', [AuthController::class, 'me']);                   // بيانات المستخدم الحالي
+        Route::post('update-password', [AuthController::class, 'updatePassword']); // تحديث كلمة المرور
+    });
+});
+
 
 
 //================================================================================//
@@ -31,10 +50,30 @@ Route::put('/updateArea/{id}', [ApisController::class, 'updateArea']);
 Route::delete('/deleteArea/{id}', [ApisController::class, 'deleteArea']);
 //================================================================================//
 Route::get('/getAllUserTypes', [ApisController::class, 'getAllUserTypes']);
+
+// مجموعة خاصة بأنواع المستخدمين
+Route::prefix('user-types')->group(function () {
+    // جلب كل الأنواع
+    Route::get('/', [UserTypesController::class, 'getAll']);
+
+    // جلب نوع مستخدم محدد بالـ ID
+    Route::get('/{id}', [UserTypesController::class, 'get']);
+
+    // إنشاء نوع جديد
+    Route::post('/', [UserTypesController::class, 'create']);
+
+    // تعديل نوع موجود
+    Route::put('/{id}', [UserTypesController::class, 'update']);
+
+    // حذف نوع مستخدم
+    Route::delete('/{id}', [UserTypesController::class, 'delete']);
+});
 //================================================================================//
 
 Route::get('/getAllUserWithPagination', [UsersController::class, 'getAllUserWithPagination']);
 
+
+Route::get('/getAllSystemUsers', [UsersController::class, 'getAllSystemUsers']);
 Route::get('/getAllUsers', [UsersController::class, 'getAll']);
 Route::post('/createUser', [ApisController::class, 'createUser']);
 Route::put('/updateUser/{id}', [UsersController::class, 'update']);

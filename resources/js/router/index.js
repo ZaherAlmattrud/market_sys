@@ -33,11 +33,20 @@ import ExchangePage from "@/pages/ExchangePage.vue"
 
  import  ProductDetails from "@/pages/ProductDetails.vue"
 
+ import UsersSetting from "@/pages/UsersSettingsPage.vue"
+
+  import UserTypes from "@/pages/UserTypes.vue"
+
  
  
 
  
 const routes = [
+
+
+   { path: '/userTypes', component: UserTypes, name: 'userTypes', meta: { requiresAuth: false }, },
+   { path: '/usersSetting', component: UsersSetting, name: 'usersSetting', meta: { requiresAuth: false }, },
+
   { path: '/products', component: ProductPage, name: 'products', meta: { requiresAuth: false }, },
   { path: '/AccountsCash', component: AccountsCashPage, name: 'accountsCash', meta: { requiresAuth: false }, },
   

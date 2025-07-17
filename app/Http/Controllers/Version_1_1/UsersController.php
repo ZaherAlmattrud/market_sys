@@ -20,6 +20,54 @@ class UsersController extends Controller
             $this->accountController = $accountController ;
     }
 
+
+    public function getAllSystemUsers(Request $request){
+
+
+    $search = $request->query('search');
+    $pageSize = $request->query('pageSize', 6); // عدد النتائج في الصفحة (افتراضي 6)
+
+    $query = User::with(['userType'])
+        ->whereHas('userType', function ($q) {
+            $q->whereNotIn('type_name', ['مورد', 'تاجر', 'زبون']);
+       });
+
+    if ($search) {
+        $query->where(function ($q) use ($search) {
+            $q->where('user_name', 'like', "%{$search}%");
+        });
+    }
+
+    $users = $query->orderBy('id', 'desc')->paginate($pageSize);
+
+    $transformed = $users->getCollection()->transform(function ($item) {
+        return [
+            'id' => $item->id,
+            'user_name' => $item->user_name,
+            'user_type' => $item->userType ? $item->userType->type_name : 'غير محدد',
+            'area' => $item->area ? $item->area->name : 'غير محدد',
+            'account' => $item->id,
+            'number_in_book' => $item->number_in_book,
+            'mobile' => $item->mobile,
+            'balance' => null,
+        ];
+    });
+
+    return response()->json([
+        'data' => $transformed,
+        'links' => [
+            'current_page' => $users->currentPage(),
+            'last_page' => $users->lastPage(),
+            'per_page' => $users->perPage(),
+            'total' => $users->total(),
+            'next_page_url' => $users->nextPageUrl(),
+            'prev_page_url' => $users->previousPageUrl(),
+        ]
+    ]);
+
+
+    }
+
    public function getAllUserWithPagination(Request $request)
 {
     $search = $request->query('search');

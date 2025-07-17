@@ -130,6 +130,17 @@
           </v-list-item>
         </RouterLink>
 
+           <!-- إدارة المستخدمين -->
+        <RouterLink to="/usersSetting">
+          <v-list-item class="hover-purple">
+            <template v-slot:prepend>
+              <v-icon color="purple">mdi-account-cog</v-icon>
+            </template>
+             المستخدمين
+          </v-list-item>
+        </RouterLink>
+
+
         <!-- تسجيل الخروج -->
         <v-list-item @click="logout" class="hover-red">
           <template v-slot:prepend>
