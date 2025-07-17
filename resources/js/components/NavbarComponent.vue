@@ -31,15 +31,43 @@
           {{ link.title }}
         </v-btn>
 
-        <v-btn icon @click="openNotifications" title="الإشعارات" color="white">
-          <v-icon>mdi-bell-outline</v-icon>
-        </v-btn>
+        <!-- زر الإشعارات مع القائمة المنبثقة -->
+        <v-menu
+          v-model="notificationsMenu"
+          offset-y
+          transition="scale-transition"
+          close-on-content-click
+        >
+          <template #activator="{ on, attrs }">
+            <v-btn icon v-bind="attrs" v-on="on" @click="openNotifications" title="الإشعارات" color="white">
+              <v-icon>mdi-bell-outline</v-icon>
+            </v-btn>
+          </template>
 
-        <v-btn icon @click="toggleLanguage" title="تغيير اللغة" color="white">
-          <v-icon>mdi-translate</v-icon>
-        </v-btn>
+          <v-card style="min-width: 320px; max-height: 400px; overflow-y: auto;">
+            <v-list dense>
+              <v-list-item v-if="notifications.length === 0">
+                <v-list-item-title>لا توجد أحداث جديدة</v-list-item-title>
+              </v-list-item>
 
-        <!-- Profile Avatar with dropdown -->
+              <v-list-item v-for="(audit, index) in notifications" :key="index">
+                <v-list-item-content>
+                  <v-list-item-title class="font-weight-bold">
+                    {{ audit.user_name || 'مستخدم مجهول' }} 
+                  </v-list-item-title>
+                  <v-list-item-subtitle>
+                    {{ audit.event }} على {{ shortModelName(audit.auditable_type) }} #{{ audit.auditable_id || 'N/A' }}
+                  </v-list-item-subtitle>
+                  <v-list-item-subtitle style="font-size: 11px; opacity: 0.6;">
+                    {{ formatDate(audit.created_at) }}
+                  </v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list>
+          </v-card>
+        </v-menu>
+
+        <!-- صورة الملف الشخصي مع القائمة -->
         <v-menu
           v-model="profileMenu"
           offset-y
@@ -75,10 +103,9 @@
               <v-divider></v-divider>
 
               <v-list-item @click="logout" style="cursor: pointer;">
-               
-                 
-                
-                <v-list-item-title>  <v-icon color="red">mdi-logout</v-icon> تسجيل الخروج</v-list-item-title>
+                <v-list-item-title>
+                  <v-icon color="red">mdi-logout</v-icon> تسجيل الخروج
+                </v-list-item-title>
               </v-list-item>
             </v-list>
           </v-card>
@@ -94,9 +121,9 @@ import axios from "axios";
 export default {
   data() {
     return {
-
-        user: {},
       profileMenu: false,
+      notificationsMenu: false,
+      notifications: [],
       azkar: [
         "سبحان الله",
         "الحمد لله",
@@ -128,8 +155,14 @@ export default {
     moveTo(page) {
       this.$router.push({ name: page });
     },
-    openNotifications() {
-      alert("هنا تضع منطق عرض الإشعارات");
+    async openNotifications() {
+      try {
+        const response = await axios.get("/api/getLastFiveActivityLog");
+        this.notifications = response.data;
+        this.notificationsMenu = true;
+      } catch (error) {
+        console.error("فشل جلب الأحداث:", error);
+      }
     },
     toggleLanguage() {
       alert("هنا تضع منطق تغيير اللغة");
@@ -144,6 +177,21 @@ export default {
       } catch (error) {
         console.error("فشل تسجيل الخروج:", error);
       }
+    },
+    shortModelName(fullName) {
+      if (!fullName) return "";
+      return fullName.split("\\").pop();
+    },
+    formatDate(datetime) {
+      if (!datetime) return "";
+      return new Date(datetime).toLocaleString("ar-EG", {
+        hour12: false,
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+      });
     },
   },
 };
@@ -195,5 +243,4 @@ export default {
   padding-top: 6px !important;
   padding-bottom: 6px !important;
 }
-
 </style>

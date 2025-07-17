@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Version_1_1;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Area;
 
 class AreasController extends Controller
 {
@@ -25,21 +26,41 @@ class AreasController extends Controller
     public function create(Request $request)
     {
 
-        $data = [];
-        return response()->json($data);
+        $data = $request->all();
+        $area = new Area();
+        $area->name = $data['name'];
+        $res = $area->save();
+
+        return response()->json($res);
     }
 
     public function update(Request $request, $id)
     {
 
-        $data = [];
-        return response()->json($data);
+
+        $data = $request->all();
+        $area = Area::find($id);
+
+        if ($area) {
+            $area->name = $data['name'];
+            $res = $area->save();
+        } else {
+            $res = false;
+        }
+
+        return response()->json($res);
     }
 
     public function delete($id)
     {
 
-        $data = [];
-        return response()->json($data);
+        $area =  Area::find($id);
+
+        if ($area) {
+            $area->delete();
+            return response()->json(true);
+        } else {
+            return response()->json(false);
+        }
     }
 }

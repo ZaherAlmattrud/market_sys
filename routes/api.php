@@ -17,14 +17,8 @@ use App\Http\Controllers\Version_1_1\CategoriesController;
 use App\Models\Invoice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Version_1_1\UserTypesController ;
-
-
-
-// Route::get('/user', function (Request $request) {
-//     return $request->user();
-// })->middleware('auth:sanctum');
-
+use App\Http\Controllers\Version_1_1\UserTypesController;
+use App\Http\Controllers\Version_1_1\AreasController;
 
 
 
@@ -39,143 +33,144 @@ Route::prefix('auth')->group(function () {
         Route::post('logout-all', [AuthController::class, 'logoutAll']);   // تسجيل الخروج من كل الأجهزة
         Route::get('me', [AuthController::class, 'me']);                   // بيانات المستخدم الحالي
         Route::post('update-password', [AuthController::class, 'updatePassword']); // تحديث كلمة المرور
-                         
-        
-   
-   
+
+
+
+
     });
 });
 
+Route::middleware('auth:sanctum')->group(function () {
 
 
-Route::get('/getLastFiveActivityLog', [ActivityLogController::class, 'getLastFiveActivityLog']);
 
-//================================================================================//
-Route::get('/getAllAreas', [ApisController::class, 'getAllAreas']);
-Route::post('/createArea', [ApisController::class, 'createArea']);
-Route::put('/updateArea/{id}', [ApisController::class, 'updateArea']);
-Route::delete('/deleteArea/{id}', [ApisController::class, 'deleteArea']);
-//================================================================================//
-Route::get('/getAllUserTypes', [ApisController::class, 'getAllUserTypes']);
+    Route::get('/getLastFiveActivityLog', [ActivityLogController::class, 'getLastFiveActivityLog']);
 
-// مجموعة خاصة بأنواع المستخدمين
-Route::prefix('user-types')->group(function () {
-    // جلب كل الأنواع
-    Route::get('/', [UserTypesController::class, 'getAll']);
+    //================================================================================//
+    Route::get('/getAllAreas', [ApisController::class, 'getAllAreas']);
+    Route::post('/createArea', [AreasController::class, 'create']);
+    Route::put('/updateArea/{id}', [ApisController::class, 'updateArea']);
+    Route::delete('/deleteArea/{id}', [AreasController::class, 'delete']);
+    //================================================================================//
+    Route::get('/getAllUserTypes', [ApisController::class, 'getAllUserTypes']);
 
-    // جلب نوع مستخدم محدد بالـ ID
-    Route::get('/{id}', [UserTypesController::class, 'get']);
+    // مجموعة خاصة بأنواع المستخدمين
+    Route::prefix('user-types')->group(function () {
+        // جلب كل الأنواع
+        Route::get('/', [UserTypesController::class, 'getAll']);
 
-    // إنشاء نوع جديد
-    Route::post('/', [UserTypesController::class, 'create']);
+        // جلب نوع مستخدم محدد بالـ ID
+        Route::get('/{id}', [UserTypesController::class, 'get']);
 
-    // تعديل نوع موجود
-    Route::put('/{id}', [UserTypesController::class, 'update']);
+        // إنشاء نوع جديد
+        Route::post('/', [UserTypesController::class, 'create']);
 
-    // حذف نوع مستخدم
-    Route::delete('/{id}', [UserTypesController::class, 'delete']);
+        // تعديل نوع موجود
+        Route::put('/{id}', [UserTypesController::class, 'update']);
+
+        // حذف نوع مستخدم
+        Route::delete('/{id}', [UserTypesController::class, 'delete']);
+    });
+    //================================================================================//
+
+
+    Route::get('/getAllUserWithPagination', [UsersController::class, 'getAllUserWithPagination']);
+    Route::get('/getAllSystemUsers', [UsersController::class, 'getAllSystemUsers']);
+    Route::get('/getAllUsers', [UsersController::class, 'getAll']);
+    Route::post('/createUser', [UsersController::class, 'create']);
+    Route::put('/updateUser/{id}', [UsersController::class, 'update']);
+    Route::delete('/deleteUser/{id}', [UsersController::class, 'delete']);
+    Route::get('getUserInfo/{id}', [UsersController::class, 'getUserInfo']);
+
+    //===============================================================================
+
+    Route::get('/getAllAccounts', [ApisController::class, 'getAllAccounts']);
+    Route::put('/updateAccount/{id}', [ApisController::class, 'updateAccount']);
+    Route::get('/getAccountSummary', [ApisController::class, 'getAccountSummary']);
+    Route::delete('/clearAccount/{id}', [AccountController::class, 'clearAccount']);
+    Route::get('/getAllAccountsCash', [AccountController::class, 'getAllAccountsCash']);
+
+
+
+    //===============================================================================
+    Route::get('/getAccountDetails/{accountId}', [ApisController::class, 'getAccountDetails']);
+    Route::post('/createAccountDetail/{accountId}', [ApisController::class, 'createAccountDetail']);
+    Route::put('/updateAccountDetail/{accountDetailId}', [AccountDetailsController::class, 'update']);
+    Route::delete('/deleteAccountDetail/{accountDetailId}', [ApisController::class, 'deleteAccountDetail']);
+    Route::get('/getAccountSummary/{accountId}', [ApisController::class, 'getAccountSummary']);
+    //===============================================================================
+    Route::get('/getAllPaids', [ApisController::class, 'getAllPaids']);
+    Route::post('/createPaid', [ApisController::class, 'createPaid']);
+    Route::put('/updatePaid/{paidId}', [PaidsController::class, 'update']);
+    Route::delete('/deletePaid/{paidId}', [ApisController::class, 'deletePaid']);
+    //===============================================================================
+    Route::get('/getAllArresteds', [ApisController::class, 'getAllArresteds']);
+    Route::post('/createArrested', [ApisController::class, 'createArrested']);
+    Route::put('/updateArrested/{ArrestedId}', [ArrestedsController::class, 'update']);
+    Route::delete('/deleteArrested/{ArrestedId}', [ApisController::class, 'deleteArrested']);
+    //===============================================================================
+    Route::get('/getAllCategoriesForList', [CategoriesController::class, 'getAllCategoriesForList']);
+    Route::get('/getAllCategories', [ApisController::class, 'getAllCategories']);
+    Route::post('/createCategory', [ApisController::class, 'createCategory']);
+    Route::put('/updateCategory/{CategoryId}', [ApisController::class, 'updateCategory']);
+    Route::delete('/deleteCategory/{CategoryId}', [ApisController::class, 'deleteCategory']);
+    //=============================================================================
+    Route::get('/getAllInvoices', [ApisController::class, 'getAllInvoices']);
+    Route::get('/getInvoiceImgLink/{invoiceId}', [ApisController::class, 'getInvoiceImgLink']);
+    Route::post('/createInvoice', [ApisController::class, 'createInvoice']);
+    Route::post('/updateInvoice/{InvoiceId}', [InvoicesController::class, 'update']);
+    Route::delete('/deleteInvoice/{InvoiceId}', [InvoicesController::class, 'delete']);
+
+    Route::get('/getAllInvoicesForList', [InvoicesController::class, 'getAllInvoicesForList']);
+    Route::get('/invoice/photo/{id}', [InvoicesController::class, 'getPhoto']);
+
+
+    //=============================================================================
+
+    Route::put('/updateProduct/{ProductId}', [ProductsController::class, 'update']);
+
+    Route::get('/getAllProductsForList', [ProductsController::class, 'getAllProductsForList']);
+    Route::get('/products/{id}/price', [ProductsController::class, 'getCalculatedPrice']);
+    // Route::get('/getProductImgLink/{productId}', [ApisController::class, 'getProductImgLink']);
+    Route::get('/getAllProductsHealthy', [ApisController::class, 'getAllProductsHealthy']);
+    Route::post('/createProduct', [ProductsController::class, 'create']);
+
+    Route::delete('/deleteProduct/{ProductId}', [ApisController::class, 'deleteProduct']);
+
+
+    Route::get('/products', [ProductsController::class, 'getAll']);
+    Route::get('/products/{id}', [ProductsController::class, 'show']);
+    Route::post('/products', [ProductsController::class, 'save']);
+    Route::patch('/products/{id}', [ProductsController::class, 'update']);
+    Route::delete('/products/{id}', [ProductsController::class, 'delete']);
+
+    //=============================================================================
+    Route::get('/report', [ApisController::class, 'getReport']);
+    //=============================================================================
+    Route::get('/getAllDays', [DayController::class, 'getAll']);
+    Route::post('/createDay', [DayController::class, 'create']);
+    Route::put('/updateDay/{Id}', [DayController::class, 'update']);
+    Route::delete('/deleteDay/{Id}', [DayController::class, 'delete']);
+    //=============================================================================
+
+    Route::get('/getAll', [ExchangeController::class, 'getAll']);
+    Route::post('/createExchange', [ExchangeController::class, 'create']);
+    Route::put('/updateExchange/{Id}', [ExchangeController::class, 'update']);
+    Route::delete('/deleteExchange/{Id}', [ExchangeController::class, 'delete']);
+
+    //=============================================================================
+    Route::get('/getAllSells', [SellController::class, 'index']);
+    Route::post('/createSell', [SellController::class, 'store']);
+    Route::put('/updateSell/{Id}', [SellController::class, 'update']);
+    Route::delete('/deleteSell/{Id}', [SellController::class, 'destroy']);
+    //=============================================================================
+
+    //=============================================================================
+    Route::get('/getAllSellDetails/{sellId}', [SellDetailController::class, 'index']);
+    Route::post('/createSellDetail/{sellId}', [SellDetailController::class, 'store']);
+    Route::put('/updateSellDetail/{Id}', [SellDetailController::class, 'update']);
+    Route::delete('/deleteSellDetail/{Id}', [SellDetailController::class, 'destroy']);
+    //=============================================================================
+
+    Route::get('/exchange', [ExchangeController::class, 'getExchange']);
 });
-//================================================================================//
-
-Route::get('/getAllUserWithPagination', [UsersController::class, 'getAllUserWithPagination']);
-
-
-Route::get('/getAllSystemUsers', [UsersController::class, 'getAllSystemUsers']);
-Route::get('/getAllUsers', [UsersController::class, 'getAll']);
-Route::post('/createUser', [ApisController::class, 'createUser']);
-Route::put('/updateUser/{id}', [UsersController::class, 'update']);
-Route::delete('/deleteUser/{id}', [ApisController::class, 'deleteUser']);
-
- Route::get('getUserInfo/{id}', [UsersController::class, 'getUserInfo']); 
-//===============================================================================
-Route::get('/getAllAccounts', [ApisController::class, 'getAllAccounts']);
-Route::put('/updateAccount/{id}', [ApisController::class, 'updateAccount']);
-Route::get('/getAccountSummary', [ApisController::class, 'getAccountSummary']);
-Route::delete('/clearAccount/{id}', [AccountController::class, 'clearAccount']);
-Route::get('/getAllAccountsCash', [AccountController::class, 'getAllAccountsCash']);
-
-
-
-//===============================================================================
-Route::get('/getAccountDetails/{accountId}', [ApisController::class, 'getAccountDetails']);
-Route::post('/createAccountDetail/{accountId}', [ApisController::class, 'createAccountDetail']);
-Route::put('/updateAccountDetail/{accountDetailId}', [AccountDetailsController::class, 'update']);
-Route::delete('/deleteAccountDetail/{accountDetailId}', [ApisController::class, 'deleteAccountDetail']);
-Route::get('/getAccountSummary/{accountId}', [ApisController::class, 'getAccountSummary']);
-//===============================================================================
-Route::get('/getAllPaids', [ApisController::class, 'getAllPaids']);
-Route::post('/createPaid', [ApisController::class, 'createPaid']);
-Route::put('/updatePaid/{paidId}', [PaidsController::class, 'update']);
-Route::delete('/deletePaid/{paidId}', [ApisController::class, 'deletePaid']);
-//===============================================================================
-Route::get('/getAllArresteds', [ApisController::class, 'getAllArresteds']);
-Route::post('/createArrested', [ApisController::class, 'createArrested']);
-Route::put('/updateArrested/{ArrestedId}', [ArrestedsController::class, 'update']);
-Route::delete('/deleteArrested/{ArrestedId}', [ApisController::class, 'deleteArrested']);
-//===============================================================================
-Route::get('/getAllCategoriesForList', [CategoriesController::class, 'getAllCategoriesForList']);
-Route::get('/getAllCategories', [ApisController::class, 'getAllCategories']);
-Route::post('/createCategory', [ApisController::class, 'createCategory']);
-Route::put('/updateCategory/{CategoryId}', [ApisController::class, 'updateCategory']);
-Route::delete('/deleteCategory/{CategoryId}', [ApisController::class, 'deleteCategory']);
-//=============================================================================
-Route::get('/getAllInvoices', [ApisController::class, 'getAllInvoices']);
-Route::get('/getInvoiceImgLink/{invoiceId}', [ApisController::class, 'getInvoiceImgLink']);
-Route::post('/createInvoice', [ApisController::class, 'createInvoice']);
-Route::post('/updateInvoice/{InvoiceId}', [InvoicesController::class, 'update']);
-Route::delete('/deleteInvoice/{InvoiceId}', [InvoicesController::class, 'delete']);
-
-Route::get('/getAllInvoicesForList', [InvoicesController::class, 'getAllInvoicesForList']);
-Route::get('/invoice/photo/{id}', [InvoicesController::class, 'getPhoto']);
-
-
-//=============================================================================
-
-Route::put('/updateProduct/{ProductId}', [ProductsController::class, 'update']);
-
-Route::get('/getAllProductsForList', [ProductsController::class, 'getAllProductsForList']);
-Route::get('/products/{id}/price', [ProductsController::class, 'getCalculatedPrice']);
-
-Route::get('/getProductImgLink/{productId}', [ApisController::class, 'getProductImgLink']);
-Route::get('/getAllProductsHealthy', [ApisController::class, 'getAllProductsHealthy']);
-Route::post('/createProduct', [ProductsController::class, 'create']);
-
-Route::delete('/deleteProduct/{ProductId}', [ApisController::class, 'deleteProduct']);
-
-
-Route::get('/products', [ApisController::class, 'getAllProducts']);
-Route::get('/products/{id}', [ProductsController::class, 'show']);
-Route::post('/products', [ProductsController::class, 'save']);
-Route::patch('/products/{id}', [ProductsController::class, 'update']);
-Route::delete('/products/{id}', [ProductsController::class, 'delete']);
-
-//=============================================================================
-Route::get('/report', [ApisController::class, 'getReport']);
-//=============================================================================
-Route::get('/getAllDays', [DayController::class, 'getAll']);
-Route::post('/createDay', [DayController::class, 'create']);
-Route::put('/updateDay/{Id}', [DayController::class, 'update']);
-Route::delete('/deleteDay/{Id}', [DayController::class, 'delete']);
-//=============================================================================
-
-Route::get('/getAll', [ExchangeController::class, 'getAll']);
-Route::post('/createExchange', [ExchangeController::class, 'create']);
-Route::put('/updateExchange/{Id}', [ExchangeController::class, 'update']);
-Route::delete('/deleteExchange/{Id}', [ExchangeController::class, 'delete']);
-
-//=============================================================================
-Route::get('/getAllSells', [SellController::class, 'index']);
-Route::post('/createSell', [SellController::class, 'store']);
-Route::put('/updateSell/{Id}', [SellController::class, 'update']);
-Route::delete('/deleteSell/{Id}', [SellController::class, 'destroy']);
-//=============================================================================
-
-//=============================================================================
-Route::get('/getAllSellDetails/{sellId}', [SellDetailController::class, 'index']);
-Route::post('/createSellDetail/{sellId}', [SellDetailController::class, 'store']);
-Route::put('/updateSellDetail/{Id}', [SellDetailController::class, 'update']);
-Route::delete('/deleteSellDetail/{Id}', [SellDetailController::class, 'destroy']);
-//=============================================================================
-
-Route::get('/exchange', [ExchangeController::class, 'getExchange']);
-

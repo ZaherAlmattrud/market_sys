@@ -16,10 +16,36 @@ class ActivityLogController extends Controller
     {
 
 
-        $audits = Audit::orderBy('created_at', 'desc')
-            ->limit(5)
-            ->get();
+        // $audits = Audit::orderBy('created_at', 'desc')
+        //     ->limit(5)
+        //     ->get();
 
-        return response()->json($audits);
+        // return response()->json($audits);
+ 
+ 
+
+$audits = Audit::orderBy('created_at', 'desc')
+    ->limit(5)
+    ->get()
+    ->map(function ($audit) {
+        $user = null;
+
+        // إذا فيه user_type و user_id نجيب المستخدم
+        if ($audit->user_type && $audit->user_id) {
+            $userClass = $audit->user_type;
+            $user = $userClass::find($audit->user_id);
+        }
+
+        // نضيف اسم المستخدم (أو null إذا ما فيه)
+        $audit->user_name = $user ? ($user->user_name ?? $user->user_name ?? 'اسم غير معروف') : null;
+
+           return $audit->makeHidden('user_type');
+
+        return $audit;
+    });
+
+return response()->json($audits);
+
+        
     }
 }
