@@ -168,9 +168,21 @@ export default {
     },
   },
   methods: {
-    logout() {
-      localStorage.removeItem("user");
-      this.$router.push({ name: "login" });
+   async logout() {
+      // localStorage.removeItem("user");
+      // this.$router.push({ name: "login" });
+
+       try {
+    await axios.post("/api/auth/logout");
+
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    delete axios.defaults.headers.common["Authorization"];
+
+    this.$router.push({ name: "login" });
+  } catch (error) {
+    console.error("فشل تسجيل الخروج:", error);
+  }
     },
   },
 };

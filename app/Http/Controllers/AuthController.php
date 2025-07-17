@@ -48,12 +48,17 @@ class AuthController extends Controller
     // 🟢 تسجيل الدخول
     public function login(Request $request)
     {
+
+          Log::info($request->all());
         $request->validate([
-            'mobile'    => 'required|string',
+            'user_name'    => 'required|string',
             'password' => 'required|string',
         ]);
 
-        $user = User::where('mobile', $request->mobile)->first();
+        $user = User::where('user_name', $request->user_name)->first();
+
+
+      
 
         if (! $user || ! Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([

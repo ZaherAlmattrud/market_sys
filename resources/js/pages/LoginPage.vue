@@ -1,41 +1,22 @@
 <template>
   <v-container fluid class="py-6">
-    <v-row
-      no-gutters
-      class="outer-border mx-4"
-      style="border: 2px solid #ccc;"
-    >
+    <v-row no-gutters class="outer-border mx-4" style="border: 2px solid #ccc;">
       <!-- القسم الأيمن: تسجيل الدخول -->
-      <v-col
-        cols="12"
-        md="6"
-        class="d-flex flex-column align-center justify-center"
-        style="border-left: 1px solid #ccc; padding: 40px 0;"
-      >
+      <v-col cols="12" md="6" class="d-flex flex-column align-center justify-center"
+        style="border-left: 1px solid #ccc; padding: 40px 0;">
         <v-card width="100%" max-width="400" class="pa-6" elevation="2">
           <v-card-title class="text-h6 justify-center">
-         بسم الله الرحمن الرحيم
+            بسم الله الرحمن الرحيم
           </v-card-title>
           <v-card-text>
             <v-form @submit.prevent="login">
-              <v-text-field
-                v-model="username"
-                label="أسم المستخدم"
-                required
-                variant="outlined"
-                prepend-inner-icon="mdi-account"
-              ></v-text-field>
+              <v-text-field v-model="username" label="أسم المستخدم" required variant="outlined"
+                prepend-inner-icon="mdi-account"></v-text-field>
 
-              <v-text-field
-                v-model="password"
-                :type="showPassword ? 'text' : 'password'"
-                label="كلمة المرور"
-                required
-                variant="outlined"
-                prepend-inner-icon="mdi-lock"
+              <v-text-field v-model="password" :type="showPassword ? 'text' : 'password'" label="كلمة المرور" required
+                variant="outlined" prepend-inner-icon="mdi-lock"
                 :append-inner-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
-                @click:append-inner="togglePassword"
-              ></v-text-field>
+                @click:append-inner="togglePassword"></v-text-field>
 
               <v-btn type="submit" color="#e6f0ff" block class="mt-4">
                 تسجيل الدخول
@@ -53,68 +34,45 @@
           </v-card-text>
         </v-card>
 
-         <!-- بطاقة معلومات المهندس -->
+        <!-- بطاقة معلومات المهندس -->
         <v-card width="100%" max-width="400" class="pa-4" elevation="1" outlined>
           <v-card-title class="justify-center text-h6"></v-card-title>
           <v-card-text class="text-center">
             <p><strong>زاهر محي الدين المطرود</strong></p>
-              <br/>
+            <br />
             <p>مبرمج ومطور تطبيقات ويب وتطبيقات موبايل</p>
 
             <v-row justify="center" class="mt-3" dense>
               <v-col cols="auto">
-                <v-btn
-                  icon
-                  href="https://www.linkedin.com/in/zaher-almattrud-0b097721b/"
-                  target="_blank"
-                  rel="noopener"
-                  color="#0077b5"
-                  aria-label="LinkedIn"
-                >
+                <v-btn icon href="https://www.linkedin.com/in/zaher-almattrud-0b097721b/" target="_blank" rel="noopener"
+                  color="#0077b5" aria-label="LinkedIn">
                   <v-icon size="28">mdi-linkedin</v-icon>
                 </v-btn>
               </v-col>
 
               <v-col cols="auto">
-                <v-btn
-                  icon
-                  href="https://www.facebook.com/zaher.almattrud.2025"
-                  target="_blank"
-                  rel="noopener"
-                  color="#1877f2"
-                  aria-label="Facebook"
-                >
+                <v-btn icon href="https://www.facebook.com/zaher.almattrud.2025" target="_blank" rel="noopener"
+                  color="#1877f2" aria-label="Facebook">
                   <v-icon size="28">mdi-facebook</v-icon>
                 </v-btn>
               </v-col>
 
               <v-col cols="auto">
-                <v-btn
-                  icon
-                  href="https://wa.me/+963930826948"
-                  target="_blank"
-                  rel="noopener"
-                  color="#25D366"
-                  aria-label="WhatsApp"
-                >
+                <v-btn icon href="https://wa.me/+963930826948" target="_blank" rel="noopener" color="#25D366"
+                  aria-label="WhatsApp">
                   <v-icon size="28">mdi-whatsapp</v-icon>
                 </v-btn>
               </v-col>
             </v-row>
           </v-card-text>
         </v-card>
-      
+
 
       </v-col>
 
       <!-- القسم الأيسر: صورة -->
-      <v-col
-        cols="12"
-        md="6"
-        style="border-right: 1px solid #ccc;padding:10px; background:#e6f0ff;"
-      >
-        <div
-          style="
+      <v-col cols="12" md="6" style="border-right: 1px solid #ccc;padding:10px; background:#e6f0ff;">
+        <div style="
             height: 100%;
             
             min-height: 600px;
@@ -122,8 +80,7 @@
             background-size: 165% auto;
             background-position: center;
             
-          "
-        ></div>
+          "></div>
       </v-col>
     </v-row>
   </v-container>
@@ -138,24 +95,44 @@ export default {
       showPassword: false,
       azkar: [
 
-      
+
         "سبحان الله"
         ,
-        "الحمد لله", 
-        "لا إله إلا الله", 
+        "الحمد لله",
+        "لا إله إلا الله",
         "الله أكبر",
-          "اللهم صل وسلم وبارك على سيدنا محمد"
-        
+        "اللهم صل وسلم وبارك على سيدنا محمد"
+
       ],
     };
   },
   methods: {
-    login() {
-      if (this.username === 'zaher' && this.password === '123qwe7891') {
-        localStorage.setItem('user', JSON.stringify({ username: this.username }));
-        this.$router.push({ name: 'products' });
-      } else {
-        alert('بيانات الدخول غير صحيحة');
+    // login() {
+    //   if (this.username === 'zaher' && this.password === '123qwe7891') {
+    //     localStorage.setItem('user', JSON.stringify({ username: this.username }));
+    //     this.$router.push({ name: 'products' });
+    //   } else {
+    //     alert('بيانات الدخول غير صحيحة');
+    //   }
+    // },
+
+    async login() {
+      try {
+        const response = await axios.post("/api/auth/login", {
+          user_name: this.username,
+          password: this.password,
+        });
+
+        const { token, user } = response.data;
+
+        localStorage.setItem("token", token);
+        localStorage.setItem("user", JSON.stringify(user));
+        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+        this.$router.push({ name: "products" });
+      } catch (error) {
+        alert("بيانات الدخول غير صحيحة");
+        console.error(error);
       }
     },
     togglePassword() {
@@ -196,6 +173,7 @@ export default {
   0% {
     transform: translateX(0%);
   }
+
   100% {
     transform: translateX(-100%);
   }

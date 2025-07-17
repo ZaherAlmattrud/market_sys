@@ -47,7 +47,7 @@ const routes = [
    { path: '/userTypes', component: UserTypes, name: 'userTypes', meta: { requiresAuth: false }, },
    { path: '/usersSetting', component: UsersSetting, name: 'usersSetting', meta: { requiresAuth: false }, },
 
-  { path: '/products', component: ProductPage, name: 'products', meta: { requiresAuth: false }, },
+  { path: '/products', component: ProductPage, name: 'products', meta: { requiresAuth: true }, },
   { path: '/AccountsCash', component: AccountsCashPage, name: 'accountsCash', meta: { requiresAuth: false }, },
   
   { path: '/AccountSummryPage:accountId', component: AccountSummryPage, name: 'accountSummary', meta: { requiresAuth: false }, },
@@ -92,14 +92,17 @@ const router = createRouter({
   routes,
 })
 
-router.beforeEach((to, from, next) => {
-  const loggedIn = localStorage.getItem('user');
 
-  if (to.matched.some(record => record.meta.requiresAuth) && !loggedIn) {
-    next('/login');
+ router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem("token");
+
+  if (to.meta.requiresAuth && !token) {
+    next({ name: "login" });
   } else {
     next();
   }
 });
+
+
 
 export default router
