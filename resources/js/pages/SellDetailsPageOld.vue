@@ -214,8 +214,13 @@ export default {
     },
     filteredItems() {
       return this.items.filter((item) => {
-        return true;//item.description.includes(this.search.toLowerCase());
-      });
+        return  item.name.includes(this.search.toLowerCase());
+      }).map((item, index) => {
+      return {
+        ...item,
+         identity: index + 1  // 🧠 الرقم التسلسلي هنا
+      };
+    });;;
     },
   },
 
