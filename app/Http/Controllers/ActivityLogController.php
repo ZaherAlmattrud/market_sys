@@ -25,7 +25,7 @@ class ActivityLogController extends Controller
  
 
 $audits = Audit::orderBy('created_at', 'desc')
-    ->limit(5)
+    ->limit(3)
     ->get()
     ->map(function ($audit) {
         $user = null;

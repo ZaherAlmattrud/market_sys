@@ -19,70 +19,79 @@
 
     <template v-slot:append>
       <v-row align="center" no-gutters class="mx-3" style="gap: 12px;">
-        <v-btn
-          v-for="link in links"
-          :key="link.id"
-          color="white"
-          rounded="xl"
-          variant="text"
-          @click="moveTo(link.page)"
-          class="mx-1"
-        >
+        <v-btn v-for="link in links" :key="link.id" color="white" rounded="xl" variant="text" @click="moveTo(link.page)"
+          class="mx-1">
           {{ link.title }}
         </v-btn>
 
         <!-- زر الإشعارات مع القائمة المنبثقة -->
-        <v-menu
-          v-model="notificationsMenu"
-          offset-y
-          transition="scale-transition"
-          close-on-content-click
-        >
+        <v-menu v-model="notificationsMenu" offset-y transition="scale-transition" close-on-content-click>
           <template #activator="{ on, attrs }">
-            <v-btn icon v-bind="attrs" v-on="on" @click="openNotifications" title="الإشعارات" color="white">
+            <v-badge color="red" dot overlap v-if="notifications.length > 0 && hasUnreadNotifications">
+              <v-btn icon v-bind="attrs" v-on="on" @click="openNotifications" title="الإشعارات" color="white">
+                <v-icon>mdi-bell-outline</v-icon>
+              </v-btn>
+            </v-badge>
+
+            <v-btn v-else icon v-bind="attrs" v-on="on" @click="openNotifications" title="الإشعارات" color="white">
               <v-icon>mdi-bell-outline</v-icon>
             </v-btn>
           </template>
 
-          <v-card style="min-width: 320px; max-height: 400px; overflow-y: auto;">
+          <v-card style="min-width: 340px; max-height: 400px; overflow-y: auto; background-color: #f9f9f9;"
+            class="pa-2">
             <v-list dense>
               <v-list-item v-if="notifications.length === 0">
-                <v-list-item-title>لا توجد أحداث جديدة</v-list-item-title>
+                <v-list-item-title class="text-center text-grey darken-1">
+                  لا توجد أحداث جديدة
+                </v-list-item-title>
               </v-list-item>
 
-              <v-list-item v-for="(audit, index) in notifications" :key="index">
+              <v-list-item v-for="(audit, index) in notifications" :key="index" class="mb-2 rounded-lg"
+                style="background-color: #ffffff; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);">
+                <!-- أيقونة نوع العملية -->
+                <v-list-item-icon>
+                  <v-icon :color="getEventColor(audit.event)">
+                    {{ getEventIcon(audit.event) }}
+                  </v-icon>
+                </v-list-item-icon>
+
                 <v-list-item-content>
-                  <v-list-item-title class="font-weight-bold">
-                    {{ audit.user_name || 'مستخدم مجهول' }} 
+                  <v-list-item-title class="font-weight-bold"
+                    :style="`font-size: 15px; color: ${getEventColor(audit.event)};`">
+                    {{ audit.user_name || 'مستخدم مجهول' }}
                   </v-list-item-title>
-                  <v-list-item-subtitle>
+                  <v-list-item-subtitle style="font-size: 13px; color: #444;">
                     {{ audit.event }} على {{ shortModelName(audit.auditable_type) }} #{{ audit.auditable_id || 'N/A' }}
                   </v-list-item-subtitle>
-                  <v-list-item-subtitle style="font-size: 11px; opacity: 0.6;">
+                  <v-list-item-subtitle style="font-size: 11px; color: #888;">
                     {{ formatDate(audit.created_at) }}
                   </v-list-item-subtitle>
                 </v-list-item-content>
+
+                <!-- زر تمييز كمقروء -->
+                <!-- <v-list-item-action>
+          <v-tooltip bottom>
+            <template #activator="{ on, attrs }">
+              <v-btn icon small v-bind="attrs" v-on="on" @click="markAsRead(audit)">
+                <v-icon color="grey">mdi-check</v-icon>
+              </v-btn>
+            </template>
+            <span>تمييز كمقروء</span>
+          </v-tooltip>
+        </v-list-item-action> -->
               </v-list-item>
             </v-list>
           </v-card>
         </v-menu>
 
+
+
         <!-- صورة الملف الشخصي مع القائمة -->
-        <v-menu
-          v-model="profileMenu"
-          offset-y
-          transition="scale-transition"
-          close-on-content-click
-        >
+        <v-menu v-model="profileMenu" offset-y transition="scale-transition" close-on-content-click>
           <template #activator="{ props, on }">
-            <v-avatar
-              v-bind="props"
-              v-on="on"
-              size="40"
-              class="profile-avatar"
-              role="button"
-              aria-label="فتح قائمة المستخدم"
-            >
+            <v-avatar v-bind="props" v-on="on" size="40" class="profile-avatar" role="button"
+              aria-label="فتح قائمة المستخدم">
               <v-img :src="user.avatar || defaultAvatar" />
             </v-avatar>
           </template>
@@ -121,6 +130,9 @@ import axios from "axios";
 export default {
   data() {
     return {
+      notificationsMenu: false,
+      notifications: [], // قائمة الإشعارات
+      hasUnreadNotifications: true, // يمكنك تعديلها حسب منطقك
       profileMenu: false,
       notificationsMenu: false,
       notifications: [],
@@ -149,6 +161,41 @@ export default {
     };
   },
   methods: {
+
+    getEventIcon(event) {
+      switch ((event || '').toLowerCase()) {
+        case 'created':
+          return 'mdi-plus-circle-outline';
+        case 'updated':
+          return 'mdi-pencil-outline';
+        case 'deleted':
+          return 'mdi-delete-outline';
+        default:
+          return 'mdi-information-outline';
+      }
+    },
+    getEventColor(event) {
+      switch ((event || '').toLowerCase()) {
+        case 'created':
+          return '#4CAF50'; // أخضر
+        case 'updated':
+          return '#2196F3'; // أزرق
+        case 'deleted':
+          return '#F44336'; // أحمر
+        default:
+          return '#9E9E9E'; // رمادي
+      }
+    },
+    openNotifications() {
+      this.notificationsMenu = true;
+      // منطق فتح الإشعارات أو تحميلها
+    },
+    markAsRead(audit) {
+      // منطق التمييز كمقروء، مثل تحديث حالة `audit.read = true`
+      // مثلاً:
+      this.hasUnreadNotifications = false;
+      console.log(`تمت قراءة الإشعار: ${audit.id}`);
+    },
     toggleDrawer() {
       this.$store.commit("toggleDrawer");
     },
@@ -218,6 +265,7 @@ export default {
   from {
     transform: translateX(-100%);
   }
+
   to {
     transform: translateX(100%);
   }
