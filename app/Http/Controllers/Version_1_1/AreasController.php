@@ -12,7 +12,7 @@ class AreasController extends Controller
 
     public function getAll()
     {
-        $data = [];
+        $data = Area::orderBy('id', 'desc')->get(['id', 'name']);
         return response()->json($data);
     }
 
@@ -39,16 +39,16 @@ class AreasController extends Controller
 
 
         $data = $request->all();
+
         $area = Area::find($id);
 
         if ($area) {
             $area->name = $data['name'];
-            $res = $area->save();
-        } else {
-            $res = false;
+            $area->save();
+            return response()->json(true);
         }
 
-        return response()->json($res);
+        return response()->json(false, 404);
     }
 
     public function delete($id)

@@ -47,9 +47,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/getLastFiveActivityLog', [ActivityLogController::class, 'getLastFiveActivityLog']);
 
     //================================================================================//
-    Route::get('/getAllAreas', [ApisController::class, 'getAllAreas']);
+    Route::get('/getAllAreas', [ApisController::class, 'getAll']);
     Route::post('/createArea', [AreasController::class, 'create']);
-    Route::put('/updateArea/{id}', [ApisController::class, 'updateArea']);
+    Route::put('/updateArea/{id}', [AreasController::class, 'update']);
     Route::delete('/deleteArea/{id}', [AreasController::class, 'delete']);
     //================================================================================//
     Route::get('/getAllUserTypes', [ApisController::class, 'getAllUserTypes']);
@@ -84,17 +84,17 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //===============================================================================
 
-    Route::get('/getAllAccounts', [ApisController::class, 'getAllAccounts']);
-    Route::put('/updateAccount/{id}', [ApisController::class, 'updateAccount']);
-    Route::get('/getAccountSummary', [ApisController::class, 'getAccountSummary']);
+    Route::get('/getAllAccounts', [AccountController::class, 'getAll']);
+    Route::put('/updateAccount/{id}', [AccountController::class, 'update']);
+    Route::get('/getAccountSummary', [AccountController::class, 'getAccountSummaryTotal']);
     Route::delete('/clearAccount/{id}', [AccountController::class, 'clearAccount']);
     Route::get('/getAllAccountsCash', [AccountController::class, 'getAllAccountsCash']);
 
 
 
     //===============================================================================
-    Route::get('/getAccountDetails/{accountId}', [ApisController::class, 'getAccountDetails']);
-    Route::post('/createAccountDetail/{accountId}', [ApisController::class, 'createAccountDetail']);
+    Route::get('/getAccountDetails/{accountId}', [AccountDetailsController::class, 'getAccountDetails']);
+    Route::post('/createAccountDetail/{accountId}', [AccountDetailsController::class, 'create']);
     Route::put('/updateAccountDetail/{accountDetailId}', [AccountDetailsController::class, 'update']);
     Route::delete('/deleteAccountDetail/{accountDetailId}', [ApisController::class, 'deleteAccountDetail']);
     Route::get('/getAccountSummary/{accountId}', [ApisController::class, 'getAccountSummary']);

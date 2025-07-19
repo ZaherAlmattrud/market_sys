@@ -582,8 +582,17 @@ class AccountController extends Controller
     public function update(Request $request, $id)
     {
 
-        $data = [];
-        return response()->json($data);
+        $data = $request->all();
+
+        $account = Account::find($id);
+
+        if ($account) {
+            $account->account_num = $data['account'];
+            $account->save();
+            return response()->json(true);
+        }
+
+        return response()->json(false, 404);
     }
 
     public function delete($id)

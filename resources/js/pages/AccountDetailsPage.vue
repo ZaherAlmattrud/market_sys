@@ -128,7 +128,7 @@
                   <v-row>
                     <v-col cols="12" sm="6" md="6">
                       <v-text-field
-                        v-model="editedItem.price"
+                        v-model="editedItem.sell"
                         label="الإفرادي"
                         @change="updateTotal"
                         variant="outlined"
@@ -230,6 +230,7 @@ export default {
         quantity: "",
 
         price: "",
+          sell: "",
       },
       defaultItem: {
         id: 1,
@@ -237,6 +238,7 @@ export default {
         description: "",
         quantity: "",
         price: "",
+          sell: "",
       },
       products:[],
     };
@@ -288,7 +290,7 @@ export default {
   methods: {
 
     updateOnePrice() {
-      this.editedItem.price = this.editedItem.total / this.editedItem.quantity;
+      this.editedItem.sell = this.editedItem.total / this.editedItem.quantity;
     },
 
     updatePrice() {
@@ -314,12 +316,13 @@ if (item) {
 }else{
 
   this.editedItem.price = 0;
+    this.editedItem.sell = 0;
   this.editedItem.total = 0;
 }
 },
 
 updateTotal() {
-this.editedItem.total = this.editedItem.price * this.editedItem.quantity;
+this.editedItem.total = this.editedItem.sell * this.editedItem.quantity;
 },
     checkLogedIn() {
       const loggedIn = localStorage.getItem("user");
