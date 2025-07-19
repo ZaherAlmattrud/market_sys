@@ -65,7 +65,7 @@ const routes = [
   { path: '/invoices', component: InvoicesPage, meta: { requiresAuth: false }, },
   { path: '/areas', component: AreasPage, meta: { requiresAuth: false }, },
   { path: '/category', component: CategoryPage, meta: { requiresAuth: false }, },
-  { path: '/accountDetails:accountId', component: AccountDetailsPage, props: true, name: 'accountDetails', meta: { requiresAuth: false }, },
+  { path: '/accountDetails/:accountId', component: AccountDetailsPage, props: true, name: 'accountDetails', meta: { requiresAuth: false }, },
   { path: '/', component: LoginPage, name: 'login' },
   { path: '/arresteds', component: ArrestedsPage, meta: { requiresAuth: false }, },
   { path: '/paids', component: PaidsPage, meta: { requiresAuth: false }, },

@@ -79,7 +79,7 @@ class AccountDetailsController extends Controller
             'description' => $data['description'],
             'quantity' => $data['quantity'],
             'total' => $data['total'],
-            'price' => $data['price'],
+            'price' => $data['sell'],
             'date' => Carbon::now(),
             'account_id' => $accountId,
         ]);
