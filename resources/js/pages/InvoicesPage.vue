@@ -30,7 +30,7 @@
               <v-card-text>
                 <div><strong>القيمة الإجمالية:</strong> {{ item.total }}</div>
                 <div><strong> العملة:</strong> {{ item.currency }}</div>
-                <div><strong>مصدر الفاتورة:</strong> {{ getUserName(item.account_id) }}</div>
+                <div><strong>مصدر الفاتورة:</strong> {{ getUserName(item.user_id) }}</div>
                 <div><strong>التاريخ:</strong> {{ item.date }}</div>
               </v-card-text>
               <v-card-actions>

@@ -47,7 +47,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/getLastFiveActivityLog', [ActivityLogController::class, 'getLastFiveActivityLog']);
 
     //================================================================================//
-    Route::get('/getAllAreas', [ApisController::class, 'getAll']);
+    Route::get('/getAllAreas', [AreasController::class, 'getAll']);
     Route::post('/createArea', [AreasController::class, 'create']);
     Route::put('/updateArea/{id}', [AreasController::class, 'update']);
     Route::delete('/deleteArea/{id}', [AreasController::class, 'delete']);

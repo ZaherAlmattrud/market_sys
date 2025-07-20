@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Version_1_1;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Account;
 use App\Models\UserType;
 use App\Models\Invoice;
 use Carbon\Carbon;
@@ -63,6 +64,13 @@ class InvoicesController extends Controller
         }
 
         $invoices = $query->orderBy('id', 'desc')->paginate(6);
+
+        $invoices->getCollection()->transform(function ($invoice) {
+
+            $account = Account::where('id',$invoice->account_id)->first();
+            $invoice->user_id = $account ? $account->user_id : null ;
+            return $invoice;
+        });
 
 
 
