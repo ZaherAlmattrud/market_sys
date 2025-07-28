@@ -68,9 +68,16 @@ class AuthController extends Controller
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
+           // جلب الأدوار والصلاحيات
+    $roles = $user->roles->pluck('name'); // مجموعة أسماء الأدوار فقط
+    $permissions = $user->getAllPermissions()->pluck('name'); // مجموعة أسماء الصلاحيات فقط
+
+
         return response()->json([
             'user'  => $user,
             'token' => $token,
+               'roles' => $roles,
+            'permissions' => $permissions,
         ]);
     }
 

@@ -43,6 +43,7 @@ import ExchangePage from "@/pages/ExchangePage.vue"
       import RolesPage from "@/pages/RolesPage.vue"
        import PermissionsPage from "@/pages/PermissionsPage.vue"
         import RolesPermissionsPage from "@/pages/RolesPermissionsPage.vue"
+        import store from '@/vuex'  // استيراد الستور
 
  
  
@@ -122,10 +123,13 @@ const router = createRouter({
 
 
  router.beforeEach((to, from, next) => {
-  const token = localStorage.getItem("token");
 
-  if (to.meta.requiresAuth && !token) {
-    next({ name: "login" });
+  // const token = localStorage.getItem("token");
+
+  const isAuthenticated = store.getters.isAuthenticated;
+
+  if (to.meta.requiresAuth && !isAuthenticated) {
+    next({ name: 'login' });
   } else {
     next();
   }

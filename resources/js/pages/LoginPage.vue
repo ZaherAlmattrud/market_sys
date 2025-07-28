@@ -87,6 +87,8 @@
 </template>
 
 <script>
+
+import { mapActions } from 'vuex';
 export default {
   data() {
     return {
@@ -107,6 +109,12 @@ export default {
     };
   },
   methods: {
+
+     ...mapActions(['setAuth']), // 🟦 هنا بتربط الدالة setAuth من store
+
+  togglePassword() {
+    this.showPassword = !this.showPassword;
+  },
     // login() {
     //   if (this.username === 'zaher' && this.password === '123qwe7891') {
     //     localStorage.setItem('user', JSON.stringify({ username: this.username }));
@@ -116,25 +124,55 @@ export default {
     //   }
     // },
 
+    // async login() {
+    //   try {
+    //     const response = await axios.post("/api/auth/login", {
+    //       user_name: this.username,
+    //       password: this.password,
+    //     });
+
+    //     const { token, user } = response.data;
+
+    //     localStorage.setItem("token", token);
+    //     localStorage.setItem("user", JSON.stringify(user));
+    //     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+    //     this.$router.push({ name: "products" });
+    //   } catch (error) {
+    //     alert("بيانات الدخول غير صحيحة");
+    //     console.error(error);
+    //   }
+    // },
+
     async login() {
-      try {
-        const response = await axios.post("/api/auth/login", {
-          user_name: this.username,
-          password: this.password,
-        });
+  try {
+    const response = await axios.post("/api/auth/login", {
+      user_name: this.username,
+      password: this.password,
+      
+    });
 
-        const { token, user } = response.data;
+    const { token, user , roles , permissions } = response.data;
 
-        localStorage.setItem("token", token);
-        localStorage.setItem("user", JSON.stringify(user));
-        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    // حفظ التوكن واليوزر بـ localStorage
+    // localStorage.setItem("token", token);
+    // localStorage.setItem("user", JSON.stringify(user));
 
-        this.$router.push({ name: "products" });
-      } catch (error) {
-        alert("بيانات الدخول غير صحيحة");
-        console.error(error);
-      }
-    },
+    // إعداد التوكن للهيدر
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+    // 👇 هنا نستدعي أكشن Vuex لتخزين البيانات في الستور
+    this.setAuth({ token, user , roles , permissions });
+
+    // توجيه المستخدم بعد تسجيل الدخول
+    this.$router.push({ name: "products" });
+
+  } catch (error) {
+    alert("بيانات الدخول غير صحيحة");
+    console.error(error);
+  }
+},
+
     togglePassword() {
       this.showPassword = !this.showPassword;
     },
