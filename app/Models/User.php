@@ -73,4 +73,10 @@ class User extends Authenticatable implements Auditable
 
         
     }
+
+    public function operations(){
+
+          return $this->hasMany(Audit::class, 'user_id', 'id');
+
+    }
 }

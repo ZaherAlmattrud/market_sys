@@ -19,6 +19,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Version_1_1\UserTypesController;
 use App\Http\Controllers\Version_1_1\AreasController;
+use App\Http\Controllers\AuditController;
 
 
 
@@ -173,4 +174,9 @@ Route::middleware('auth:sanctum')->group(function () {
     //=============================================================================
 
     Route::get('/exchange', [ExchangeController::class, 'getExchange']);
+
+    //=============================================================================
+
+
+    Route::get('audits', [AuditController::class, 'index']);
 });

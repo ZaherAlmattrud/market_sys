@@ -38,6 +38,7 @@ import ExchangePage from "@/pages/ExchangePage.vue"
   import UserTypes from "@/pages/UserTypes.vue"
 
     import UserDetails from "@/pages/UserDetails.vue"
+     import AuditsPage from "@/pages/AuditsPage.vue"
 
  
  
@@ -45,6 +46,9 @@ import ExchangePage from "@/pages/ExchangePage.vue"
  
 const routes = [
 
+ { path: '/auditsPage', component: AuditsPage, name: 'auditsPage', meta: { requiresAuth: false }, },
+  
+   
 
    { path: '/userDetails/:id', component: UserDetails, props: true, name: 'userDetails', meta: { requiresAuth: true }, },
 

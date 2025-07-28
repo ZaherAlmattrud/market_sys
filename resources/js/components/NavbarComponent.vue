@@ -50,16 +50,16 @@
               <v-list-item v-for="(audit, index) in notifications" :key="index" class="mb-2 rounded-lg"
                 style="background-color: #ffffff; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);">
                 <!-- أيقونة نوع العملية -->
-                <v-list-item-icon>
-                  <v-icon :color="getEventColor(audit.event)">
-                    {{ getEventIcon(audit.event) }}
-                  </v-icon>
-                </v-list-item-icon>
+               
 
                 <v-list-item-content>
                   <v-list-item-title class="font-weight-bold"
                     :style="`font-size: 15px; color: ${getEventColor(audit.event)};`">
-                    {{ audit.user_name || 'مستخدم مجهول' }}
+                    <v-list-item-icon>
+                  <v-icon :color="getEventColor(audit.event)">
+                    {{ getEventIcon(audit.event) }}
+                  </v-icon>
+                </v-list-item-icon>  {{ audit.user_name || 'مستخدم مجهول' }}
                   </v-list-item-title>
                   <v-list-item-subtitle style="font-size: 13px; color: #444;">
                     {{ audit.event }} على {{ shortModelName(audit.auditable_type) }} #{{ audit.auditable_id || 'N/A' }}
@@ -77,10 +77,27 @@
                 <v-icon color="grey">mdi-check</v-icon>
               </v-btn>
             </template>
-            <span>تمييز كمقروء</span>
+            <span>تمييز كمقروء</span> 
           </v-tooltip>
-        </v-list-item-action> -->
+
+               <v-list-item-title class="text-center text-grey darken-1">
+                  لا توجد أحداث جديدة
+                </v-list-item-title>
               </v-list-item>
+
+        </v-list-item-action> -->
+
+
+              </v-list-item>
+               <v-list-item :to="{ name: 'auditsPage' }" link>
+
+              <v-list-item-title class="text-center text-black darken-1">
+                كافة العمليات
+              </v-list-item-title>
+              </v-list-item>
+
+
+
             </v-list>
           </v-card>
         </v-menu>
