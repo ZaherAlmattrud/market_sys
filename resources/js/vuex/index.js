@@ -9,7 +9,7 @@ const store = createStore({
       token: null,
       roles: [],
       permissions: [],
-      avatar: "/storage/uploads/user.jpg"
+      avatar: "/storage/uploads/user.png"
     }
   },
 

@@ -2,8 +2,17 @@
   <v-card>
     <v-navigation-drawer color="orange-lighten-5" location="right" permanent :width="200" v-model="drawerVisible">
       <template v-slot:prepend>
-        <v-list-item lines="two" prepend-avatar="storage/uploads/profile.jpg" title="المهندس زاهر"
-          @click="goToProfile" />
+        <v-list-item @click="goToProfile" class="user-info" style="cursor:pointer;">
+          <template v-slot:prepend>
+            <v-avatar size="40">
+              <img :src="avatar" alt="User avatar" />
+            </v-avatar>
+          </template>
+          <v-list-item-content>
+            <v-list-item-title class="user-name">{{ userName }}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
       </template>
 
       <v-divider />
@@ -123,7 +132,7 @@
 
 
 
-          <!-- إدارة الوصول -->
+        <!-- إدارة الوصول -->
         <RouterLink to="/authorizationPag">
           <v-list-item class="hover-cyan">
             <template v-slot:prepend>
@@ -170,6 +179,15 @@ export default {
     drawerVisible() {
       return this.$store.getters.drawerVisible;
     },
+    userInfo() {
+      return this.$store.state.user;
+    },
+    userName() {
+      return this.userInfo?.user_name || 'مستخدم';
+    },
+    avatar() {
+      return this.$store.state.avatar;
+    }
   },
   methods: {
 
@@ -250,4 +268,13 @@ export default {
 .hover-teal:hover {
   background-color: rgba(0, 150, 136, 0.1);
 }
+
+.user-name {
+  font-size: 0.85rem; /* حجم أصغر */
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 </style>

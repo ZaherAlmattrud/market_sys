@@ -90,7 +90,7 @@ const routes = [
   { path: '/areas', component: AreasPage, meta: { requiresAuth: false }, },
   { path: '/category', component: CategoryPage, meta: { requiresAuth: false }, },
   { path: '/accountDetails/:accountId', component: AccountDetailsPage, props: true, name: 'accountDetails', meta: { requiresAuth: false }, },
-  { path: '/', component: LoginPage, name: 'login' },
+  { path: '/', component: LoginPage, name: 'login' ,requiresAuth: false  },
   { path: '/arresteds', component: ArrestedsPage, meta: { requiresAuth: false }, },
   { path: '/paids', component: PaidsPage, meta: { requiresAuth: false }, },
 
@@ -128,9 +128,23 @@ const router = createRouter({
 
   const isAuthenticated = store.getters.isAuthenticated;
 
+
+  // log.("isAuthenticated");
+  // log.(isAuthenticated);
+
+
   if (to.meta.requiresAuth && !isAuthenticated) {
+
+     console.log("==============================")
+     console.log(isAuthenticated)
+     console.log("==============================")
+
     next({ name: 'login' });
   } else {
+
+       console.log("==============================")
+     console.log(isAuthenticated)
+     console.log("==============================")
     next();
   }
 });

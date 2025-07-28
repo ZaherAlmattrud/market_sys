@@ -109,7 +109,7 @@
           <template #activator="{ props, on }">
             <v-avatar v-bind="props" v-on="on" size="40" class="profile-avatar" role="button"
               aria-label="فتح قائمة المستخدم">
-              <v-img :src="user.avatar || defaultAvatar" />
+              <v-img :src="avatar" />
             </v-avatar>
           </template>
 
@@ -118,10 +118,10 @@
               <v-list-item>
                 <v-list-item-content>
                   <v-list-item-title class="font-weight-bold">
-                    {{ user.user_name || "غير معروف" }}
+                    {{ userName|| "غير معروف" }}
                   </v-list-item-title>
                   <v-list-item-subtitle>
-                    {{ user.userType?.type_name || "غير محدد" }}
+                    {{ role  || "غير محدد" }}
                   </v-list-item-subtitle>
                 </v-list-item-content>
               </v-list-item>
@@ -172,7 +172,7 @@ export default {
       user: {
         user_name: "المهندس زاهر",
         userType: { type_name: "مدير النظام" },
-        avatar: "/storage/uploads/profile.jpg",
+        avatar: "/storage/uploads/user.png",
       },
       defaultAvatar: "/storage/uploads/profile.jpg",
     };
@@ -257,6 +257,23 @@ export default {
         minute: "2-digit",
       });
     },
+  },
+   computed: {
+    userInfo() {
+      return this.$store.state.user;
+    },
+    userName() {
+      return this.userInfo?.user_name || 'مستخدم';
+    },
+    avatar() {
+     return this.$store.state.avatar;
+    },
+    role(){
+
+      return this.$store.state.roles[0]['name'];
+
+    }
+
   },
 };
 </script>
