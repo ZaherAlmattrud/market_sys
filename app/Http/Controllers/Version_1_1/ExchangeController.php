@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Version_1_1;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Models\Exchange;
+use App\Models\Currency;
 use Illuminate\Support\Facades\Log;
 
 class ExchangeController extends Controller
@@ -15,14 +15,14 @@ class ExchangeController extends Controller
     public function getExchange()
     {
 
-        $dollar_now = Exchange::where('code', 'USD')->first()->value;
+        $dollar_now = Currency::where('code', 'USD')->first()->value;
         return response()->json($dollar_now);
     }
 
     public function getAll()
     {
 
-        $data =  Exchange::all();
+        $data =  Currency::all();
         return response()->json($data);
     }
 
@@ -34,7 +34,7 @@ class ExchangeController extends Controller
         $data = $request->all();
         Log::info($data);
 
-        Exchange::create($data);
+        Currency::create($data);
 
 
 
@@ -49,7 +49,7 @@ class ExchangeController extends Controller
         $data = $request->all();;
         $data['value'] = array_key_exists('value', $data)  && !empty($data['value']) ? $data['value'] : null;
         $data['code'] = array_key_exists('code', $data)  && !empty($data['code']) ? $data['code'] : null;
-        $exchange =   Exchange::where('id', $id)->first();
+        $exchange =   Currency::where('id', $id)->first();
         if ($exchange) {
             $exchange->value =  $data['value'];
             $exchange->code =  $data['code'];
@@ -64,7 +64,7 @@ class ExchangeController extends Controller
     {
 
 
-        $exchange = Exchange::where('id', $id)->first();
+        $exchange = Currency::where('id', $id)->first();
         if ($exchange) {
 
             $exchange->delete();

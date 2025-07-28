@@ -6,14 +6,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
 
-class Exchange extends Model  implements Auditable
+class Currency extends Model  implements Auditable
 {
     use HasFactory;
      use \OwenIt\Auditing\Auditable;
 
     public $timestamps = false;
 
-    protected $table = 'exchange';
+    protected $table = 'currencies';
 
     protected $fillable = [
        'value' , 'name' , 'date','code'

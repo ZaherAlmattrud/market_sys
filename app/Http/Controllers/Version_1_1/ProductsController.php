@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Version_1_1;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Exchange;
+use App\Models\Currency;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Invoice;
@@ -63,7 +63,7 @@ class ProductsController extends Controller
 
         $products = $query->orderBy('id', 'desc')->paginate(6);
 
-        $dollar_now = Exchange::where('code', 'USD')->first()->value;
+        $dollar_now = Currency::where('code', 'USD')->first()->value;
 
         $products->getCollection()->transform(function ($product) use ($dollar_now) {
 
@@ -120,7 +120,7 @@ class ProductsController extends Controller
             return response()->json(['message' => 'المنتج غير موجود'], 404);
         }
 
-        $dollar_now = Exchange::where('code', 'USD')->first()->value;
+        $dollar_now = Currency::where('code', 'USD')->first()->value;
 
         $category = Category::where('id', $product->category_id)->first();
         $descount = $category && $category->descount ? $category->descount : 0;
@@ -228,7 +228,7 @@ class ProductsController extends Controller
     public function save(Request $request)
     {
 
-        $exchangeRate   = Exchange::where('code', 'USD')->first()->value; // ثابت مؤقت، يفضل قراءته من config أو DB
+        $exchangeRate   = Currency::where('code', 'USD')->first()->value; // ثابت مؤقت، يفضل قراءته من config أو DB
         Log::info($exchangeRate);
         $data = $request->all();
 
@@ -370,7 +370,7 @@ class ProductsController extends Controller
 
 
         $model = null;
-        $exchange =   Exchange::where('name', 'dollar')->first();
+        $exchange =   Currency::where('name', 'dollar')->first();
 
         //Add New Item 
 
@@ -449,7 +449,7 @@ class ProductsController extends Controller
         }
 
         $category =     DB::table('categories')->where('id', $model->category_id)->first();
-        $exchange =     DB::table('exchange')->first();
+        $exchange =     DB::table('currencies')->first();
         $suppler = null;
         $invoice = null;
         $invoice =     DB::table('invoices')->where('id', $model->invoice_id)->first();
@@ -493,7 +493,7 @@ class ProductsController extends Controller
         }
 
 
-        $exchangeRate   = Exchange::where('name', 'dollar')->first()->value; // ثابت مؤقت، يفضل قراءته من config أو DB
+        $exchangeRate   = Currency::where('name', 'dollar')->first()->value; // ثابت مؤقت، يفضل قراءته من config أو DB
         Log::info($exchangeRate);
         $data = $request->all();
 

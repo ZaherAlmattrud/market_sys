@@ -12,7 +12,7 @@ use App\Models\Sell;
 use App\Models\SellDetail;
 use App\Models\Invoice;
 use App\Models\Arrested;
-use App\Models\Exchange;
+use App\Models\Currency;
 use App\Models\Paid;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -191,7 +191,7 @@ class AccountController extends Controller
         $id = 1;
 
         // أسعار الصرف (ثابتة أو من جدول exchanges)
-        $usdToSyp =    Exchange::where('code', 'USD')->first()->value;
+        $usdToSyp =    Currency::where('code', 'USD')->first()->value;
         $sypToUsd = 1 / $usdToSyp;
 
         // دمج الحركات

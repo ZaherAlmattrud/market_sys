@@ -53,7 +53,7 @@ class UsersController extends Controller
         $search = $request->query('search');
         $pageSize = $request->query('pageSize', 6); // عدد النتائج في الصفحة (افتراضي 6)
 
-        $query = User::with(['userType'])
+        $query = User::with(['userType','roles'])
             ->whereHas('userType', function ($q) {
                 $q->whereNotIn('type_name', ['مورد', 'تاجر', 'زبون']);
             });
@@ -73,6 +73,7 @@ class UsersController extends Controller
                 'user_type' => $item->userType ? $item->userType->type_name : 'غير محدد',
                 'area' => $item->area ? $item->area->name : 'غير محدد',
                 'account' => $item->id,
+                   'role' => $item->roles->first()->name ?? null,
                 'number_in_book' => $item->number_in_book,
                 'mobile' => $item->mobile,
                 'balance' => null,

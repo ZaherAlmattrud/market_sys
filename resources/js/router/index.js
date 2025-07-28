@@ -39,12 +39,31 @@ import ExchangePage from "@/pages/ExchangePage.vue"
 
     import UserDetails from "@/pages/UserDetails.vue"
      import AuditsPage from "@/pages/AuditsPage.vue"
+     import AuthorizationPag from "@/pages/authorizationPage.vue"
+      import RolesPage from "@/pages/RolesPage.vue"
+       import PermissionsPage from "@/pages/PermissionsPage.vue"
+        import RolesPermissionsPage from "@/pages/RolesPermissionsPage.vue"
 
  
  
 
  
 const routes = [
+
+
+   { path: '/rolesPermissionsPage/:id', component: RolesPermissionsPage, props: true, name: 'rolesPermissionsPage', meta: { requiresAuth: true }, },
+
+
+   { path: '/rolesPage', component: RolesPage, name: 'rolesPage', meta: { requiresAuth: false }, },
+  
+  
+    { path: '/permissionsPage', component: PermissionsPage, name: 'permissionsPage', meta: { requiresAuth: false }, },
+  
+  
+
+   { path: '/authorizationPag', component: AuthorizationPag, name: 'authorizationPag', meta: { requiresAuth: false }, },
+  
+  
 
  { path: '/auditsPage', component: AuditsPage, name: 'auditsPage', meta: { requiresAuth: false }, },
   

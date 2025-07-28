@@ -37,7 +37,7 @@
     </v-card-title>
     <v-card-text class="text-body-2">
       <div class="mb-1">
-        <strong>نوع المستخدم:</strong> {{ user.user_type }}
+        <strong> الدور:</strong> {{ user.role ??  'غير متوفر' }}
       </div>
       <div class="mb-1">
         <strong>المنطقة:</strong> {{ user.area }}

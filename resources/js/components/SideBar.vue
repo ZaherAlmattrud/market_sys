@@ -121,6 +121,19 @@
           </v-list-item>
         </RouterLink>
 
+
+
+          <!-- إدارة الوصول -->
+        <RouterLink to="/authorizationPag">
+          <v-list-item class="hover-cyan">
+            <template v-slot:prepend>
+              <v-icon color="cyan">mdi-account-cog</v-icon>
+            </template>
+            التحكم بالوصول
+          </v-list-item>
+        </RouterLink>
+
+
         <!-- إدارة المستخدمين -->
         <RouterLink to="/usersSetting">
           <v-list-item class="hover-purple">
@@ -133,12 +146,12 @@
 
 
         <!-- تسجيل الخروج -->
-        <v-list-item @click="logout" class="hover-red">
+        <!-- <v-list-item @click="logout" class="hover-red">
           <template v-slot:prepend>
             <v-icon color="red">mdi-account-lock-outline</v-icon>
           </template>
           الخروج
-        </v-list-item>
+        </v-list-item> -->
 
       </v-list>
     </v-navigation-drawer>
