@@ -26,6 +26,7 @@
         "vue-toast-notification": "^3.1.2",
         "vue-toastification": "^2.0.0-rc.5",
         "vuetify": "^3.6.10",
-        "vuex": "^4.1.0"
+        "vuex": "^4.1.0",
+        "vuex-persistedstate": "^4.1.0"
     }
 }

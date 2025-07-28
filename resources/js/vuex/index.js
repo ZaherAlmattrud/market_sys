@@ -1,4 +1,5 @@
 import { createStore } from 'vuex'
+import createPersistedState from 'vuex-persistedstate'
 
 const store = createStore({
   state() {
@@ -8,6 +9,7 @@ const store = createStore({
       token: null,
       roles: [],
       permissions: [],
+      avatar: "/storage/uploads/user.jpg"
     }
   },
 
@@ -50,7 +52,10 @@ const store = createStore({
     isAuthenticated: state => !!state.token,
     hasRole: (state) => (role) => state.roles.some(r => r.name === role),
     hasPermission: (state) => (perm) => state.permissions.includes(perm),
-  }
+  },
+  plugins: [createPersistedState()]
 })
+
+  
 
 export default store

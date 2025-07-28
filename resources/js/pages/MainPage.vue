@@ -9,7 +9,7 @@
       </div>
       <input v-model="search" @input="fetchProducts()" placeholder="🔎 ابحث..." class="search-input" />
       <button @click="openForm" class="add-button">
-        <v-icon small class="mr-1">mdi-plus</v-icon>
+        <v-icon v-if="canCreate" small class="mr-1">mdi-plus</v-icon>
         إضافة منتج جديد
       </button>
     </div>
@@ -61,21 +61,9 @@
 
 
           <td>
-            <v-icon
-    small
-    class="mr-2 icon-white-transparent"
-    @click="edit(product)"
-  >mdi-pencil</v-icon>
-  <v-icon
-    small
-    class="mr-2 icon-white-transparent"
-    @click="destroy(product.id)"
-  >mdi-delete</v-icon>
-  <v-icon
-    small
-    class="icon-white-transparent"
-    @click="viewDetails(product.id)"
-  >mdi-information</v-icon>
+            <v-icon v-if="canUpdate" small class="mr-2 icon-white-transparent" @click="edit(product)">mdi-pencil</v-icon>
+            <v-icon v-if="canDelete" small class="mr-2 icon-white-transparent" @click="destroy(product.id)">mdi-delete</v-icon>
+            <v-icon v-if="canShow" small class="icon-white-transparent" @click="viewDetails(product.id)">mdi-information</v-icon>
           </td>
         </tr>
       </tbody>
@@ -91,6 +79,7 @@
 
 <script>
 import BaseForm from "@/components/FormComponent.vue";
+import { mapGetters } from 'vuex';
 
 export default {
   name: "App",
@@ -106,7 +95,7 @@ export default {
         id: null,
         name: "",
         code: "",
-        category_id : "" ,
+        category_id: "",
 
 
       },
@@ -202,12 +191,46 @@ export default {
       ],
     };
   },
+
+  computed: {
+
+    ...mapGetters(['hasRole', 'hasPermission']),
+
+    canCreate() {
+
+      const rolesAllowed = ['SuperAdmin', 'Admin'];
+      return rolesAllowed.some(role => this.hasRole(role));
+
+
+    },
+    canUpdate() {
+
+      const rolesAllowed = ['SuperAdmin'];
+      return rolesAllowed.some(role => this.hasRole(role));
+
+
+    },
+    canDelete() {
+
+      const rolesAllowed = ['SuperAdmin'];
+      return rolesAllowed.some(role => this.hasRole(role));
+
+
+    },
+
+    canShow(){
+       const rolesAllowed = ['SuperAdmin', 'Admin' , 'Employee'];
+      return rolesAllowed.some(role => this.hasRole(role));
+
+    }
+
+  },
   async mounted() {
 
     await this.loadCategories();
     await this.loadInvoices();
     this.fetchProducts();
-     this.fetchExchange();
+    this.fetchExchange();
   },
   methods: {
 
@@ -234,12 +257,12 @@ export default {
       }
     },
 
-    fetchExchange(){
+    fetchExchange() {
 
-         axios
+      axios
         .get(`/api/exchange`)
         .then((res) => {
-         this.exchange = res.data;
+          this.exchange = res.data;
         });
 
     },
@@ -248,7 +271,7 @@ export default {
         .get(`/api/products?page=${page}&search=${this.search}`)
         .then((res) => {
           this.products = res.data;
-       
+
         });
     },
     openForm() {
@@ -310,15 +333,14 @@ export default {
 </script>
 
 <style scoped>
-
-
 .container {
   max-width: 900px;
   margin: 50px auto;
   font-family: 'Roboto', sans-serif;
   padding: 0 15px;
   direction: rtl;
-  background: #ffffff; /* أبيض للخلفية */
+  background: #ffffff;
+  /* أبيض للخلفية */
 }
 
 .search-row {
@@ -331,18 +353,22 @@ export default {
   flex: 3;
   padding: 10px 12px;
   font-size: 14px;
-  border: 1px solid #a3c1f7; /* أزرق فاتح متناسق */
+  border: 1px solid #a3c1f7;
+  /* أزرق فاتح متناسق */
   border-radius: 4px;
   outline: none;
   transition: border-color 0.3s ease;
-  background-color: #f0f5ff; /* خلفية سماوية فاتحة */
-  color: #1a237e; /* أزرق غامق للنص */
+  background-color: #f0f5ff;
+  /* خلفية سماوية فاتحة */
+  color: #1a237e;
+  /* أزرق غامق للنص */
 }
 
 .search-input:focus {
   border-color: #1976d2;
   box-shadow: 0 0 5px rgba(25, 118, 210, 0.5);
-  background-color: #e6f0ff; /* تمييز خلفية عند التركيز */
+  background-color: #e6f0ff;
+  /* تمييز خلفية عند التركيز */
 }
 
 .add-button {
@@ -353,7 +379,8 @@ export default {
   cursor: pointer;
   border: none;
   border-radius: 4px;
-  background-color: #5c9ded; /* أزرق متوسط */
+  background-color: #5c9ded;
+  /* أزرق متوسط */
   color: white;
   transition: background-color 0.3s ease;
   display: flex;
@@ -363,22 +390,27 @@ export default {
 }
 
 .add-button:hover {
-  background-color: #3b73d1; /* أزرق غامق عند المرور */
+  background-color: #3b73d1;
+  /* أزرق غامق عند المرور */
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
-  box-shadow: 0 2px 5px rgba(92, 157, 237, 0.15); /* ظل أزرق خفيف */
+  box-shadow: 0 2px 5px rgba(92, 157, 237, 0.15);
+  /* ظل أزرق خفيف */
   border-radius: 8px;
   overflow: hidden;
-  background: #f9fbff; /* خلفية بيضاء مع لمسة سماوية */
+  background: #f9fbff;
+  /* خلفية بيضاء مع لمسة سماوية */
 }
 
 thead {
-  background-color: #d6e4ff; /* سماوي فاتح */
-  color: #0d47a1; /* أزرق داكن */
+  background-color: #d6e4ff;
+  /* سماوي فاتح */
+  color: #0d47a1;
+  /* أزرق داكن */
   font-weight: 600;
 }
 
@@ -386,12 +418,15 @@ table th,
 table td {
   padding: 12px 15px;
   text-align: center;
-  border-bottom: 1px solid #b3c7ff; /* فاصل أزرق فاتح */
-  color: #1a237e; /* نص أزرق غامق */
+  border-bottom: 1px solid #b3c7ff;
+  /* فاصل أزرق فاتح */
+  color: #1a237e;
+  /* نص أزرق غامق */
 }
 
 tbody tr:hover {
-  background-color: #e6f0ff; /* تمييز صف عند المرور */
+  background-color: #e6f0ff;
+  /* تمييز صف عند المرور */
   cursor: pointer;
 }
 
@@ -406,7 +441,8 @@ tbody tr:hover {
   padding: 6px 10px;
   font-size: 14px;
   border-radius: 4px;
-  background-color: #dae6ff; /* أزرق سماوي فاتح */
+  background-color: #dae6ff;
+  /* أزرق سماوي فاتح */
   color: #0d47a1;
   border: 1px solid transparent;
   transition: all 0.3s ease;
@@ -430,4 +466,3 @@ tbody tr:hover {
   opacity: 0.5;
 }
 </style>
-

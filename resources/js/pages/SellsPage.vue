@@ -38,7 +38,7 @@
 
           <v-dialog v-model="dialog" max-width="700px">
             <template v-slot:activator="{ props }">
-              <v-btn color="primary" variant="flat" class="mb-2" v-bind="props">
+              <v-btn v-if="canCreate" color="primary" variant="flat" class="mb-2" v-bind="props">
                 فاتورة جديدة
               </v-btn>
             </template>
@@ -71,9 +71,9 @@
       </template>
 
       <template v-slot:item.actions="{ item }">
-        <v-icon v-if="loggedIn" large @click="deleteItem(item)">mdi-delete</v-icon>
-        <v-icon v-if="loggedIn" large @click="editItem(item)">mdi-pencil</v-icon>
-        <v-icon large @click="moveToAccountDetails(item)">mdi-account-eye-outline</v-icon>
+        <v-icon  v-if="canDelete"   large @click="deleteItem(item)">mdi-delete</v-icon>
+        <v-icon v-if="canUpdate" large @click="editItem(item)">mdi-pencil</v-icon>
+        <v-icon v-if="canShow" large @click="moveToAccountDetails(item)">mdi-account-eye-outline</v-icon>
       </template>
     </v-data-table>
 
@@ -96,6 +96,9 @@ import { ref, reactive, computed, watch } from "vue";
 import axios from "axios";
 import BaseForm from "@/components/FormComponent.vue";
 import { currencies } from "@/data/currencies.js";
+import { useStore } from 'vuex';
+
+const store = useStore();
 
 const dialog = ref(false);
 const search = ref("");
@@ -107,6 +110,30 @@ const items = ref([]);
 const users = ref([]);
 const paginationLinks = ref([]);
 const loggedIn = ref(false);
+
+const hasRole = computed(() => store.getters.hasRole);
+const hasPermission = computed(() => store.getters.hasPermission);
+
+const canCreate = computed(() => {
+  const rolesAllowed = ['SuperAdmin', 'Admin'];
+  return rolesAllowed.some(role => hasRole.value(role));
+});
+const canUpdate = computed(() => {
+  const rolesAllowed = ['SuperAdmin' ];
+  return rolesAllowed.some(role => hasRole.value(role));
+});
+const canDelete = computed(() => {
+  const rolesAllowed = ['SuperAdmin' ];
+  return rolesAllowed.some(role => hasRole.value(role));
+});
+
+const canShow = computed(() => {
+  const rolesAllowed = ['SuperAdmin' , 'Admin'];
+  return rolesAllowed.some(role => hasRole.value(role));
+});
+
+
+
 
 const editedItem = reactive({
   id: 0,
