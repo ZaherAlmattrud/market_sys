@@ -20,7 +20,7 @@
       <v-list density="compact" nav>
 
         <!-- المنتجات -->
-        <RouterLink to="/products">
+        <RouterLink v-if="hasRole(['SuperAdmin', 'Admin', 'Employee', 'Customer'])" to="/products">
           <v-list-item class="hover-blue">
             <template v-slot:prepend>
               <v-icon color="blue">mdi-list-box-outline</v-icon>
@@ -30,7 +30,7 @@
         </RouterLink>
 
         <!-- الحسابات -->
-        <RouterLink to="/users">
+        <RouterLink v-if="hasRole(['SuperAdmin', 'Admin', 'Employee'])" to="/users">
           <v-list-item class="hover-purple">
             <template v-slot:prepend>
               <v-icon color="purple">mdi-briefcase-account-outline</v-icon>
@@ -40,7 +40,7 @@
         </RouterLink>
 
         <!-- المبيعات -->
-        <RouterLink to="/SellsPage">
+        <RouterLink v-if="hasRole(['SuperAdmin', 'Admin', 'Employee'])" to="/SellsPage">
           <v-list-item class="hover-indigo">
             <template v-slot:prepend>
               <v-icon color="indigo">mdi-invoice-text-multiple-outline</v-icon>
@@ -50,7 +50,7 @@
         </RouterLink>
 
         <!-- المقبوضات -->
-        <RouterLink to="/arresteds">
+        <RouterLink v-if="hasRole(['SuperAdmin', 'Admin', 'Employee'])" to="/arresteds">
           <v-list-item class="hover-green">
             <template v-slot:prepend>
               <v-icon color="green">mdi-import</v-icon>
@@ -60,7 +60,7 @@
         </RouterLink>
 
         <!-- المشتريات -->
-        <RouterLink to="/invoices">
+        <RouterLink v-if="hasRole(['SuperAdmin', 'Admin', 'Employee'])" to="/invoices">
           <v-list-item class="hover-orange">
             <template v-slot:prepend>
               <v-icon color="orange">mdi-invoice-text-multiple-outline</v-icon>
@@ -70,7 +70,7 @@
         </RouterLink>
 
         <!-- المدفوعات -->
-        <RouterLink to="/paids">
+        <RouterLink v-if="hasRole(['SuperAdmin', 'Admin'])" to="/paids">
           <v-list-item class="hover-red">
             <template v-slot:prepend>
               <v-icon color="red">mdi-export</v-icon>
@@ -80,7 +80,7 @@
         </RouterLink>
 
         <!-- المناطق -->
-        <RouterLink to="/areas">
+        <RouterLink v-if="hasRole(['SuperAdmin', 'Admin', 'Employee'])" to="/areas">
           <v-list-item class="hover-brown">
             <template v-slot:prepend>
               <v-icon color="brown">mdi-map-marker-multiple-outline</v-icon>
@@ -90,7 +90,7 @@
         </RouterLink>
 
         <!-- اليومية -->
-        <RouterLink to="/days">
+        <RouterLink v-if="hasRole(['SuperAdmin', 'Admin'])" to="/days">
           <v-list-item class="hover-lime">
             <template v-slot:prepend>
               <v-icon color="lime">mdi-alarm-panel-outline</v-icon>
@@ -101,7 +101,7 @@
 
 
         <!-- الأصناف -->
-        <RouterLink to="/category">
+        <RouterLink v-if="hasRole(['SuperAdmin', 'Admin'])" to="/category">
           <v-list-item class="hover-deep-purple">
             <template v-slot:prepend>
               <v-icon color="deep-purple">mdi-shape-plus-outline</v-icon>
@@ -111,7 +111,7 @@
         </RouterLink>
 
         <!-- العملات -->
-        <RouterLink to="/exchange">
+        <RouterLink v-if="hasRole(['SuperAdmin', 'Admin'])" to="/exchange">
           <v-list-item class="hover-cyan">
             <template v-slot:prepend>
               <v-icon color="cyan">mdi-currency-usd</v-icon>
@@ -121,7 +121,7 @@
         </RouterLink>
 
         <!-- الأرصدة -->
-        <RouterLink to="/accountsCash">
+        <RouterLink v-if="hasRole(['SuperAdmin', 'Admin'])" to="/accountsCash">
           <v-list-item class="hover-teal">
             <template v-slot:prepend>
               <v-icon color="teal">mdi-briefcase-account-outline</v-icon>
@@ -133,7 +133,7 @@
 
 
         <!-- إدارة الوصول -->
-        <RouterLink to="/authorizationPag">
+        <RouterLink v-if="hasRole(['SuperAdmin'])" to="/authorizationPag">
           <v-list-item class="hover-cyan">
             <template v-slot:prepend>
               <v-icon color="cyan">mdi-account-cog</v-icon>
@@ -144,7 +144,7 @@
 
 
         <!-- إدارة المستخدمين -->
-        <RouterLink to="/usersSetting">
+        <RouterLink v-if="hasRole(['SuperAdmin'])" to="/usersSetting">
           <v-list-item class="hover-purple">
             <template v-slot:prepend>
               <v-icon color="purple">mdi-account-cog</v-icon>
@@ -176,6 +176,8 @@ export default {
     },
   },
   computed: {
+
+
     drawerVisible() {
       return this.$store.getters.drawerVisible;
     },
@@ -190,6 +192,16 @@ export default {
     }
   },
   methods: {
+
+    hasRole(allowedRoles) {
+
+
+      const roles = this.$store.state.roles || [];
+
+      return roles.some(r => allowedRoles.includes(r.name));
+
+
+    },
 
     goToProfile() {
       const user = JSON.parse(localStorage.getItem("user"));
@@ -270,11 +282,11 @@ export default {
 }
 
 .user-name {
-  font-size: 0.85rem; /* حجم أصغر */
+  font-size: 0.85rem;
+  /* حجم أصغر */
   font-weight: 500;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
 </style>
