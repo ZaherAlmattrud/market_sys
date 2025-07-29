@@ -28,28 +28,28 @@ use App\Http\Controllers\RolePermissionController;
 use App\Http\Controllers\AuthController;
 
 
-Route::prefix('authorization')->group(function () {
+Route::middleware(['role:superAdmin'])->prefix('authorization')->group(function () {
 
 
 
     Route::get('/roles', [RolePermissionController::class, 'roles']);
-      Route::get('/roles/{id}', [RolePermissionController::class, 'getRole']);
-            Route::get('/roles/permissions/{id}', [RolePermissionController::class, 'getPermissionsForRole']);
+    Route::get('/roles/{id}', [RolePermissionController::class, 'getRole']);
+    Route::get('/roles/permissions/{id}', [RolePermissionController::class, 'getPermissionsForRole']);
     Route::post('/roles/create', [RolePermissionController::class, 'createRole']);
-       Route::put('/roles/update', [RolePermissionController::class, 'updateRole']);
+    Route::put('/roles/update', [RolePermissionController::class, 'updateRole']);
     Route::delete('/roles/delete/{id}', [RolePermissionController::class, 'deleteRole']);
-     Route::post('/roles/updatePermissions/{roleId}', [RolePermissionController::class, 'updateRolePermissions']);
+    Route::post('/roles/updatePermissions/{roleId}', [RolePermissionController::class, 'updateRolePermissions']);
 
 
     Route::get('/permissions', [RolePermissionController::class, 'permissions']);
     Route::post('/permissions/create', [RolePermissionController::class, 'createPermission']);
     Route::delete('/permissions/delete/{id}', [RolePermissionController::class, 'deletePermission']);
 
-    Route::post('/assign-role', [RolePermissionController::class, 'assignRole']);//->middleware('role:admin');
-    Route::post('/remove-role', [RolePermissionController::class, 'removeRole']);//->middleware('role:admin');
+    Route::post('/assign-role', [RolePermissionController::class, 'assignRole']); //->middleware('role:admin');
+    Route::post('/remove-role', [RolePermissionController::class, 'removeRole']); //->middleware('role:admin');
 
-    Route::post('/give-permission', [RolePermissionController::class, 'givePermission']);//->middleware('role:admin');
-    Route::post('/remove-permission', [RolePermissionController::class, 'removePermission']);//->middleware('role:admin');
+    Route::post('/give-permission', [RolePermissionController::class, 'givePermission']); //->middleware('role:admin');
+    Route::post('/remove-permission', [RolePermissionController::class, 'removePermission']); //->middleware('role:admin');
 });
 
 Route::prefix('auth')->group(function () {

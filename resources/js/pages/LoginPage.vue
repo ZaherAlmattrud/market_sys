@@ -10,8 +10,11 @@
           </v-card-title>
           <v-card-text>
             <v-form @submit.prevent="login">
-              <v-text-field v-model="username" label="أسم المستخدم" required variant="outlined"
-                prepend-inner-icon="mdi-account"></v-text-field>
+              <v-text-field v-model="username"  :usernametype="showUserName ? 'text' : 'password'" label="أسم المستخدم" required variant="outlined"
+                prepend-inner-icon="mdi-account"
+                :append-inner-icon="showUsername ? 'mdi-eye-off' : 'mdi-eye'"
+                 @click:append-inner="toggleUserName"
+                ></v-text-field>
 
               <v-text-field v-model="password" :type="showPassword ? 'text' : 'password'" label="كلمة المرور" required
                 variant="outlined" prepend-inner-icon="mdi-lock"
@@ -115,6 +118,13 @@ export default {
   togglePassword() {
     this.showPassword = !this.showPassword;
   },
+
+  toggleUsername(){
+
+     this.showUserName= !this.showUserName;
+
+
+  },
     // login() {
     //   if (this.username === 'zaher' && this.password === '123qwe7891') {
     //     localStorage.setItem('user', JSON.stringify({ username: this.username }));
@@ -176,6 +186,12 @@ export default {
     togglePassword() {
       this.showPassword = !this.showPassword;
     },
+      toggleUsername(){
+
+     this.showUserName= !this.showUserName;
+
+
+  },
   },
 };
 </script>
