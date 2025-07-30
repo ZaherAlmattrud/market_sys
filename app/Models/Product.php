@@ -25,7 +25,8 @@ class Product extends Model  implements Auditable
         'code',
         'profit',
         'date',
-        'photo'
+        'photo',
+          'photo_name'
 
 
     ];
