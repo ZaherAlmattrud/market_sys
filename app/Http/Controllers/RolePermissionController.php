@@ -15,7 +15,7 @@ class RolePermissionController extends Controller
     public function getPermissionsForRole($id)
     {
 
-        $role = Role::with('permissions')->find($id);
+        $role =  Role::with('permissions')->find($id);
 
         if (!$role) {
             return response()->json(['message' => 'الدور غير موجود'], 404);

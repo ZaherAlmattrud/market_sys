@@ -63,7 +63,7 @@ class AuthController extends Controller
 
         if (! $user || ! Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([
-                'mobile' => ['رقم الهاتف أو كلمة المرور غير صحيحة.'],
+                'mobile' => ['البيانات غير صحيحة'],
             ]);
         }
 

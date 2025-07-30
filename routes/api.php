@@ -28,7 +28,7 @@ use App\Http\Controllers\RolePermissionController;
 use App\Http\Controllers\AuthController;
 
 
-Route::middleware(['role:superAdmin'])->prefix('authorization')->group(function () {
+Route::middleware(['auth:sanctum', 'role:SuperAdmin'])->prefix('authorization')->group(function () {
 
 
 
@@ -53,32 +53,45 @@ Route::middleware(['role:superAdmin'])->prefix('authorization')->group(function 
 });
 
 Route::prefix('auth')->group(function () {
+
     Route::post('register', [AuthController::class, 'register']);      // تسجيل مستخدم جديد
-    Route::post('login', [AuthController::class, 'login']);            // تسجيل الدخول
-
-    Route::middleware('auth:sanctum')->group(function () {
-        Route::post('logout', [AuthController::class, 'logout']);          // تسجيل الخروج من الجلسة الحالية
-        Route::post('logout-all', [AuthController::class, 'logoutAll']);   // تسجيل الخروج من كل الأجهزة
-        Route::get('me', [AuthController::class, 'me']);                   // بيانات المستخدم الحالي
-        Route::post('update-password', [AuthController::class, 'updatePassword']); // تحديث كلمة المرور
+ 
+        Route::post('login', [AuthController::class, 'login']);            // تسجيل الدخول
 
 
-
-
-    });
+  
 });
+
+
+Route::middleware('auth:sanctum')->prefix('auth')->group(function () {
+
+    Route::post('logout', [AuthController::class, 'logout']);          // تسجيل الخروج من الجلسة الحالية
+    Route::post('logout-all', [AuthController::class, 'logoutAll']);   // تسجيل الخروج من كل الأجهزة
+    Route::get('me', [AuthController::class, 'me']);                   // بيانات المستخدم الحالي
+    Route::post('update-password', [AuthController::class, 'updatePassword']); // تحديث كلمة المرور
+
+
+
+
+});
+
 
 Route::middleware('auth:sanctum')->group(function () {
 
 
 
-    Route::get('/getLastFiveActivityLog', [ActivityLogController::class, 'getLastFiveActivityLog']);
 
     //================================================================================//
+
     Route::get('/getAllAreas', [AreasController::class, 'getAll']);
     Route::post('/createArea', [AreasController::class, 'create']);
-    Route::put('/updateArea/{id}', [AreasController::class, 'update']);
-    Route::delete('/deleteArea/{id}', [AreasController::class, 'delete']);
+
+    Route::middleware('role:SuperAdmin')->group(function () {
+
+        Route::put('/updateArea/{id}', [AreasController::class, 'update']);
+        Route::delete('/deleteArea/{id}', [AreasController::class, 'delete']);
+    });
+
     //================================================================================//
     Route::get('/getAllUserTypes', [ApisController::class, 'getAllUserTypes']);
 
@@ -93,11 +106,14 @@ Route::middleware('auth:sanctum')->group(function () {
         // إنشاء نوع جديد
         Route::post('/', [UserTypesController::class, 'create']);
 
-        // تعديل نوع موجود
-        Route::put('/{id}', [UserTypesController::class, 'update']);
+        Route::middleware('role:SuperAdmin')->group(function () {
 
-        // حذف نوع مستخدم
-        Route::delete('/{id}', [UserTypesController::class, 'delete']);
+            // تعديل نوع موجود
+            Route::put('/{id}', [UserTypesController::class, 'update']);
+
+            // حذف نوع مستخدم
+            Route::delete('/{id}', [UserTypesController::class, 'delete']);
+        });
     });
     //================================================================================//
 
@@ -106,48 +122,87 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/getAllSystemUsers', [UsersController::class, 'getAllSystemUsers']);
     Route::get('/getAllUsers', [UsersController::class, 'getAll']);
     Route::post('/createUser', [UsersController::class, 'create']);
-    Route::put('/updateUser/{id}', [UsersController::class, 'update']);
-    Route::delete('/deleteUser/{id}', [UsersController::class, 'delete']);
     Route::get('getUserInfo/{id}', [UsersController::class, 'getUserInfo']);
+
+
+    Route::middleware('role:SuperAdmin')->group(function () {
+
+        Route::put('/updateUser/{id}', [UsersController::class, 'update']);
+        Route::delete('/deleteUser/{id}', [UsersController::class, 'delete']);
+    });
 
     //===============================================================================
 
     Route::get('/getAllAccounts', [AccountController::class, 'getAll']);
-    Route::put('/updateAccount/{id}', [AccountController::class, 'update']);
     Route::get('/getAccountSummary', [AccountController::class, 'getAccountSummaryTotal']);
-    Route::delete('/clearAccount/{id}', [AccountController::class, 'clearAccount']);
     Route::get('/getAllAccountsCash', [AccountController::class, 'getAllAccountsCash']);
+
+    Route::middleware('role:SuperAdmin')->group(function () {
+
+        Route::delete('/clearAccount/{id}', [AccountController::class, 'clearAccount']);
+        Route::put('/updateAccount/{id}', [AccountController::class, 'update']);
+    });
+
 
 
 
     //===============================================================================
     Route::get('/getAccountDetails/{accountId}', [AccountDetailsController::class, 'getAccountDetails']);
     Route::post('/createAccountDetail/{accountId}', [AccountDetailsController::class, 'create']);
-    Route::put('/updateAccountDetail/{accountDetailId}', [AccountDetailsController::class, 'update']);
-    Route::delete('/deleteAccountDetail/{accountDetailId}', [ApisController::class, 'deleteAccountDetail']);
     Route::get('/getAccountSummary/{accountId}', [ApisController::class, 'getAccountSummary']);
+
+
+    Route::middleware('role:SuperAdmin')->group(function () {
+
+        Route::put('/updateAccountDetail/{accountDetailId}', [AccountDetailsController::class, 'update']);
+        Route::delete('/deleteAccountDetail/{accountDetailId}', [ApisController::class, 'deleteAccountDetail']);
+    });
+
+
+
     //===============================================================================
     Route::get('/getAllPaids', [ApisController::class, 'getAllPaids']);
     Route::post('/createPaid', [ApisController::class, 'createPaid']);
-    Route::put('/updatePaid/{paidId}', [PaidsController::class, 'update']);
-    Route::delete('/deletePaid/{paidId}', [ApisController::class, 'deletePaid']);
+
+    Route::middleware('role:SuperAdmin')->group(function () {
+
+        Route::put('/updatePaid/{paidId}', [PaidsController::class, 'update']);
+        Route::delete('/deletePaid/{paidId}', [ApisController::class, 'deletePaid']);
+    });
+
+
     //===============================================================================
     Route::get('/getAllArresteds', [ApisController::class, 'getAllArresteds']);
     Route::post('/createArrested', [ApisController::class, 'createArrested']);
-    Route::put('/updateArrested/{ArrestedId}', [ArrestedsController::class, 'update']);
-    Route::delete('/deleteArrested/{ArrestedId}', [ApisController::class, 'deleteArrested']);
+
+    Route::middleware('role:SuperAdmin')->group(function () {
+        Route::put('/updateArrested/{ArrestedId}', [ArrestedsController::class, 'update']);
+        Route::delete('/deleteArrested/{ArrestedId}', [ApisController::class, 'deleteArrested']);
+    });
+
+
     //===============================================================================
     Route::get('/getAllCategoriesForList', [CategoriesController::class, 'getAllCategoriesForList']);
     Route::get('/getAllCategories', [ApisController::class, 'getAllCategories']);
     Route::post('/createCategory', [ApisController::class, 'createCategory']);
-    Route::put('/updateCategory/{CategoryId}', [ApisController::class, 'updateCategory']);
-    Route::delete('/deleteCategory/{CategoryId}', [ApisController::class, 'deleteCategory']);
+
+
+    Route::middleware('role:SuperAdmin')->group(function () {
+
+        Route::put('/updateCategory/{CategoryId}', [ApisController::class, 'updateCategory']);
+        Route::delete('/deleteCategory/{CategoryId}', [ApisController::class, 'deleteCategory']);
+    });
     //=============================================================================
     Route::get('/getAllInvoices', [ApisController::class, 'getAllInvoices']);
     Route::get('/getInvoiceImgLink/{invoiceId}', [ApisController::class, 'getInvoiceImgLink']);
     Route::post('/createInvoice', [ApisController::class, 'createInvoice']);
-    Route::post('/updateInvoice/{InvoiceId}', [InvoicesController::class, 'update']);
-    Route::delete('/deleteInvoice/{InvoiceId}', [InvoicesController::class, 'delete']);
+
+    Route::middleware('role:SuperAdmin')->group(function () {
+
+
+        Route::post('/updateInvoice/{InvoiceId}', [InvoicesController::class, 'update']);
+        Route::delete('/deleteInvoice/{InvoiceId}', [InvoicesController::class, 'delete']);
+    });
 
     Route::get('/getAllInvoicesForList', [InvoicesController::class, 'getAllInvoicesForList']);
     Route::get('/invoice/photo/{id}', [InvoicesController::class, 'getPhoto']);
@@ -155,36 +210,46 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //=============================================================================
 
-    Route::put('/updateProduct/{ProductId}', [ProductsController::class, 'update']);
-
     Route::get('/getAllProductsForList', [ProductsController::class, 'getAllProductsForList']);
     Route::get('/products/{id}/price', [ProductsController::class, 'getCalculatedPrice']);
-    // Route::get('/getProductImgLink/{productId}', [ApisController::class, 'getProductImgLink']);
     Route::get('/getAllProductsHealthy', [ApisController::class, 'getAllProductsHealthy']);
     Route::post('/createProduct', [ProductsController::class, 'create']);
-
-    Route::delete('/deleteProduct/{ProductId}', [ApisController::class, 'deleteProduct']);
-
-
     Route::get('/products', [ProductsController::class, 'getAll']);
     Route::get('/products/{id}', [ProductsController::class, 'show']);
     Route::post('/products', [ProductsController::class, 'save']);
-    Route::patch('/products/{id}', [ProductsController::class, 'update']);
-    Route::delete('/products/{id}', [ProductsController::class, 'delete']);
 
+    Route::middleware('role:SuperAdmin')->group(function () {
+
+
+
+        Route::put('/updateProduct/{ProductId}', [ProductsController::class, 'update']);
+        Route::delete('/deleteProduct/{ProductId}', [ApisController::class, 'deleteProduct']);
+        Route::patch('/products/{id}', [ProductsController::class, 'update']);
+        Route::delete('/products/{id}', [ProductsController::class, 'delete']);
+    });
     //=============================================================================
     Route::get('/report', [ApisController::class, 'getReport']);
     //=============================================================================
     Route::get('/getAllDays', [DayController::class, 'getAll']);
     Route::post('/createDay', [DayController::class, 'create']);
-    Route::put('/updateDay/{Id}', [DayController::class, 'update']);
-    Route::delete('/deleteDay/{Id}', [DayController::class, 'delete']);
+
+
+    Route::middleware('role:SuperAdmin')->group(function () {
+
+        Route::put('/updateDay/{Id}', [DayController::class, 'update']);
+        Route::delete('/deleteDay/{Id}', [DayController::class, 'delete']);
+    });
     //=============================================================================
 
     Route::get('/getAll', [ExchangeController::class, 'getAll']);
     Route::post('/createExchange', [ExchangeController::class, 'create']);
-    Route::put('/updateExchange/{Id}', [ExchangeController::class, 'update']);
-    Route::delete('/deleteExchange/{Id}', [ExchangeController::class, 'delete']);
+
+
+    Route::middleware('role:SuperAdmin')->group(function () {
+
+        Route::put('/updateExchange/{Id}', [ExchangeController::class, 'update']);
+        Route::delete('/deleteExchange/{Id}', [ExchangeController::class, 'delete']);
+    });
 
     //=============================================================================
     Route::get('/getAllSells', [SellController::class, 'index']);
@@ -196,14 +261,26 @@ Route::middleware('auth:sanctum')->group(function () {
     //=============================================================================
     Route::get('/getAllSellDetails/{sellId}', [SellDetailController::class, 'index']);
     Route::post('/createSellDetail/{sellId}', [SellDetailController::class, 'store']);
-    Route::put('/updateSellDetail/{Id}', [SellDetailController::class, 'update']);
-    Route::delete('/deleteSellDetail/{Id}', [SellDetailController::class, 'destroy']);
+
+    Route::middleware('role:SuperAdmin')->group(function () {
+
+
+        Route::put('/updateSellDetail/{Id}', [SellDetailController::class, 'update']);
+        Route::delete('/deleteSellDetail/{Id}', [SellDetailController::class, 'destroy']);
+    });
     //=============================================================================
 
     Route::get('/exchange', [ExchangeController::class, 'getExchange']);
 
     //=============================================================================
 
+    Route::middleware('role:SuperAdmin')->group(function () {
 
-    Route::get('audits', [AuditController::class, 'index']);
+
+        Route::get('audits', [AuditController::class, 'index']);
+        Route::get('/getLastFiveActivityLog', [AuditController::class, 'getLastFive']);
+    });
+
+    //=============================================================================
+
 });

@@ -11,8 +11,16 @@ return Application::configure(basePath: dirname(__DIR__))
         api: __DIR__ . '/../routes/api.php',
         commands: __DIR__ . '/../routes/console.php',
         health: '/up',
-    )
-    ->withMiddleware(function (Middleware $middleware) {
+
+
+    )->withMiddleware(function (Middleware $middleware) {
+        // تسجيل Middleware الخاصة بـ Spatie
+         $middleware->alias([
+        'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
+        'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
+        'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
+    ]);
+    })->withMiddleware(function (Middleware $middleware) {
         //
 
     })->withMiddleware(function (Middleware $middleware) {
