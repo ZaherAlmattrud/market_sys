@@ -9,6 +9,8 @@ class ErrorLog extends Model
     //
 
 
+      public $table = 'error_logs';
+
      public $timestamps = false;
     
     protected $fillable = [

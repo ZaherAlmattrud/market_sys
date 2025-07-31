@@ -4,6 +4,8 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Middleware\HandleCors;
+use App\Models\ErrorLog;
+use Illuminate\Support\Facades\Auth;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -28,4 +30,16 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
+
+      $exceptions->report(function (Throwable $exception) {
+            ErrorLog::create([
+            'message' => $exception->getMessage(),
+            'trace' => $exception->getTraceAsString(),
+            'file' => $exception->getFile(),
+            'line' => $exception->getLine(),
+            'type' => get_class($exception),
+            'user' => optional(Auth::user())->user_name ?? 'guest',
+            'date' => now(),
+        ]);
+        });
     })->create();

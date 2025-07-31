@@ -23,16 +23,7 @@ class Handler extends ExceptionHandler
 
     public function render($request, Throwable $exception)
     {
-
-
-        ErrorLog::create([
-            'message' => $exception->getMessage(),
-            'trace' => $exception->getTraceAsString(),
-            'file' => $exception->getFile(),
-            'line' => $exception->getLine(),
-            'type' => get_class($exception),
-            'user'=> Auth::check() ? Auth::user()->user_name : 'guest',
-        ]);
+ 
 
         if ($exception instanceof ValidationException) {
             return response()->json([
@@ -43,4 +34,25 @@ class Handler extends ExceptionHandler
 
         return parent::render($request, $exception);
     }
+
+ public function report(Throwable $exception): void
+{
+    // تسجيل الخطأ في قاعدة بيانات مثلاً
+    try {
+        ErrorLog::create([
+            'message' => $exception->getMessage(),
+            'trace' => $exception->getTraceAsString(),
+            'file' => $exception->getFile(),
+            'line' => $exception->getLine(),
+            'type' => get_class($exception),
+            'user' => optional(Auth::user())->user_name ?? 'guest',
+            'date' => now(),
+        ]);
+    } catch (\Throwable $e) {
+        // لا تفشل العملية إذا فشل تسجيل الخطأ نفسه
+    }
+
+    parent::report($exception);
+}
+
 }
