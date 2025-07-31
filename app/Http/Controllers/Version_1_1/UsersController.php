@@ -53,9 +53,9 @@ class UsersController extends Controller
         $search = $request->query('search');
         $pageSize = $request->query('pageSize', 6); // عدد النتائج في الصفحة (افتراضي 6)
 
-        $query = User::with(['userType','roles'])
-            ->whereHas('userType', function ($q) {
-                $q->whereNotIn('type_name', ['مورد', 'تاجر', 'زبون']);
+        $query = User::with(['roles'])
+            ->whereHas('roles', function ($q) {
+               // $q->whereNotIn('type_name', [ 'تاجر', 'زبون']);
             });
 
         if ($search) {

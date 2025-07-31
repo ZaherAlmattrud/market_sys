@@ -79,7 +79,7 @@ class AccountController extends Controller
                         'id' => $item->id,
                         'area' =>  $area  ?  $area->name : 'دمشق',
                         'person_name' =>   $item->user_name,
-                        'account_user_type' =>  $item->userType->type_name,
+                        'account_user_type' =>  $item->userType ?  $item->userType->type_name : null,
                         'total' =>   $dd['total'],
                         'debts' =>  $dd['total']
 
@@ -532,7 +532,7 @@ class AccountController extends Controller
 
 
         $total = null;
-        if ($userType->type_name !== "تاجر") {
+        if ($userType ? $userType->type_name !== "تاجر" : false ) {
 
 
             $total_SYP =   $outcomeTotalSYP -  $incomeTotalSYP;
